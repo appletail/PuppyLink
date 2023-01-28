@@ -9,5 +9,5 @@ interface CardProps {
   CardImg?: imgProps
   CardTitle: string
   CardContents?: string[]
-  CardFooter?: string
+  CardFooter?: JSX.Element
 }

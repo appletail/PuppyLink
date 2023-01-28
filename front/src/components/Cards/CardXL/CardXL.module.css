@@ -20,6 +20,7 @@
 }
 
 #card-img {
+  margin-bottom: 1.875rem;
   width: 17.375rem;
   height: 17rem;
   object-fit: cover;
