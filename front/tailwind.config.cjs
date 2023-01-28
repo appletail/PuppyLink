@@ -6,6 +6,7 @@ module.exports = {
   ],
   theme: {
     extend: {
+
     },
     colors: {
       transparent: 'transparent',
@@ -35,7 +36,7 @@ module.exports = {
       footnote: ['13px', { fontWeight: '400', lineHeight: '18px', letterSpacing: '-0.08px' }],
       'footnote-bold': ['12px', { fontWeight: '600', lineHeight: '20px' }],
       subheadline: ['12px', { fontWeight: '400', lineHeight: '16px', letterSpacing: '-0.24px' }],
-      'subheadline-bold': ['12px', { fontWeight: '500', lineHeight: '16px', letterSpacing: '-0.5px' }],
+      'subheadline-bold': ['15px', { fontWeight: '600', lineHeight: '16px', letterSpacing: '-0.5px' }],
       callout: ['12px', { fontWeight: '400', lineHeight: '16px', letterSpacing: '-0.32px' }],
       'callout-bold': ['16px', { fontWeight: '600', lineHeight: '21px', letterSpacing: '-0.32px' }],
 

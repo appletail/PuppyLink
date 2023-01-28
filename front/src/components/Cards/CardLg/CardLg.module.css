@@ -1,0 +1,18 @@
+.LgBox {
+  @apply 
+    w-[21.875rem] h-48
+    rounded-lg
+  bg-white
+    pt-5
+    drop-shadow-lg;
+}
+
+.LgTitle {
+  @apply
+    mb-6 px-5
+    text-title2-bold;
+}
+
+.LgContents {
+  @apply px-5 text-body;
+} 
