@@ -22,16 +22,22 @@ function App() {
       <h1>Vite + React</h1>
       <div className={styles.card}>
         <button type="submit" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+          count is src{count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+        <p className="font-Pretendard">
+          Edit src <code className="font-Pretendard">src/App.tsx</code> and save to test HMR
         </p>
       </div>
       <p className={`${styles.readTheDocs} bg-pink-400`}>
         Click on the Vite and React logos to learn more
       </p>
-    </div>
+      <div style={{ fontSize: "1.0625rem", }}>몇 픽셀일까</div>
+      <div>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat et, culpa id, temporibus nihil, quisquam sit dolorem voluptas laboriosam dicta ratione autem optio cum sapiente quidem praesentium. Ratione, ipsam iusto!</p>
+        <br />
+        <p className=" font">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat et, culpa id, temporibus nihil, quisquam sit dolorem voluptas laboriosam dicta ratione autem optio cum sapiente quidem praesentium. Ratione, ipsam iusto!</p>
+      </div>
+    </div >
   );
 }
 
