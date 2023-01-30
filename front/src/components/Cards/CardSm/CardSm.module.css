@@ -1,0 +1,20 @@
+.SmBox {
+  @apply 
+    w-40 h-[5.4375rem]
+    rounded-lg
+  bg-white
+    pt-4 pb-4 px-3
+    drop-shadow-md
+    flex flex-col
+    justify-between;
+}
+
+.SmTitle {
+  @apply
+    mb-4
+    text-subheadline-bold;
+}
+
+.SmContents {
+  @apply text-caption1;
+}

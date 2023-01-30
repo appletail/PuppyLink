@@ -1,0 +1,27 @@
+.XLBox {
+  @apply 
+    w-[18.875rem] h-[30rem]
+    rounded-lg
+  bg-white
+    p-3
+    drop-shadow-lg
+    flex flex-col
+    justify-between;
+}
+
+.XLTitle {
+  @apply
+    mb-6
+    text-title3-bold;
+}
+
+.XLContents {
+  @apply text-footnote;
+}
+
+#card-img {
+  margin-bottom: 1.875rem;
+  width: 17.375rem;
+  height: 17rem;
+  object-fit: cover;
+}
