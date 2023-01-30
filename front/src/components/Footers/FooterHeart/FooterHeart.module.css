@@ -1,0 +1,27 @@
+.Line {
+  @apply bg-grey
+  h-[1px]
+  border-none;
+}
+
+.Btns {
+  @apply flex
+  justify-between
+  pt-2
+  space-x-2
+     text-grey
+  text-caption2;
+}
+
+.User {
+  @apply flex
+
+  gap-1;
+}
+
+.Heart {
+  @apply flex
+  items-center
+  justify-between
+  gap-2;
+}
