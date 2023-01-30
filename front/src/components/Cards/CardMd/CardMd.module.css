@@ -1,6 +1,5 @@
 .MdBox {
-  @apply 
-    w-64 h-40
+  @apply w-64 h-40
     rounded-lg
   bg-white
     pt-5 pb-2 px-4
@@ -10,8 +9,7 @@
 }
 
 .MdTitle {
-  @apply
-    mb-4
+  @apply mb-4
     text-title3-bold;
 }
 

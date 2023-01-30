@@ -1,0 +1,12 @@
+.Line {
+  @apply bg-grey
+  h-[1px]
+  border-none;
+}
+
+.Btns {
+  @apply flex
+  justify-end
+  pt-2
+  space-x-2;
+}
