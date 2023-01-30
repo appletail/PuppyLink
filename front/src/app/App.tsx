@@ -1,4 +1,4 @@
-import { cards } from '@/components';
+import { cards, imgs } from '@/components';
 
 function App() {
 
@@ -21,6 +21,8 @@ function App() {
         CardImg={{ src: 'https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' }}
         CardTitle='Title'
       />
+      <imgs.ImgLg src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
+      <imgs.ImgSm src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
     </div>
   )
 }

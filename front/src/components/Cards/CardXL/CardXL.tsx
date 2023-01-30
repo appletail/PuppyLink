@@ -1,4 +1,6 @@
 import XLStyle from './CardXL.module.css'
+import { imgs } from '@/components';
+
 
 interface CardXL extends CardProps {
   CardImg: imgProps
@@ -9,9 +11,8 @@ function CardXL({ CardImg, CardTitle, CardContents, CardFooter }: CardXL): JSX.E
   return (
     <div className={XLStyle.XLBox}>
       <div>
-        <img
+        <imgs.ImgLg
           alt={CardImg?.alt}
-          id={XLStyle['card-img']}
           src={CardImg.src}
         />
         <div className={XLStyle.XLTitle}>{CardTitle}</div>
