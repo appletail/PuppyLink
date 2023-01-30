@@ -3,11 +3,15 @@ import { imgs } from '@/components';
 
 
 interface CardXL extends CardProps {
-  CardImg: imgProps
+  CardImg: imgProps;
 }
 
-function CardXL({ CardImg, CardTitle, CardContents, CardFooter }: CardXL): JSX.Element {
-
+function CardXL({
+  CardImg,
+  CardTitle,
+  CardContents,
+  CardFooter,
+}: CardXL): JSX.Element {
   return (
     <div className={XLStyle.XLBox}>
       <div>
@@ -17,16 +21,14 @@ function CardXL({ CardImg, CardTitle, CardContents, CardFooter }: CardXL): JSX.E
         />
         <div className={XLStyle.XLTitle}>{CardTitle}</div>
         <div className={XLStyle.XLContents}>
-          {
-            CardContents?.map((content, idx) => {
-              return <p key={`${idx}-${new Date().getTime()}`}>{content}</p>
-            })
-          }
+          {CardContents?.map((content, idx) => {
+            return <p key={`${idx}-${new Date().getTime()}`}>{content}</p>;
+          })}
         </div>
       </div>
       <div>{CardFooter}</div>
-    </div >
+    </div>
   );
 }
 
-export default CardXL
+export default CardXL;
