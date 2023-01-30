@@ -19,9 +19,11 @@ export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
 export const labels = { Label };
 export const footers = { FooterBtn, FooterHeart };
 
+import ImgLg from './Imgs/ImgLg/ImgLg';
+import ImgSm from './Imgs/ImgSm/ImgSm';
 
-import ImgLg from './Imgs/ImgLg/ImgLg'
-import ImgSm from './Imgs/ImgSm/ImgSm'
+export const imgs = { ImgLg, ImgSm };
 
-export const imgs = { ImgLg, ImgSm }
-
+import Input from './Inputs/Input/Input';
+import InputBtn from './Inputs/InputBtn/InputBtn';
+export const inputs = { Input, InputBtn };
