@@ -95,11 +95,9 @@ module.exports = {
                 "components": ["Link"],
             },
         ],
-        "jsx-a11y/anchor-is-valid": [
-            "warn",
-            {
-                "components": ["Link"],
-            },
-        ],
+        "jsx-a11y/anchor-is-valid": ["error", {
+            "components": ["Link"],
+            "specialLink": ["to"]
+        }]
     },
 }
