@@ -1,4 +1,10 @@
-interface BtnProps {
+type ButtonTypes = React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>;
+
+interface BtnProps extends ButtonTypes {
+  // onClick: () => void;
   BtnValue: string;
 }
 interface imgProps {
@@ -26,4 +32,11 @@ interface FooterProps {
 
 interface LabelProps {
   LabelValue: string;
+}
+
+interface InputProps {
+  placeholder: string;
+  button?: JSX.Element;
+  helper?: string;
+  InputType: string;
 }

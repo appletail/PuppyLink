@@ -15,9 +15,9 @@ function FooterHeart({
 }: FooterHeart): JSX.Element {
   const HeartIcon =
     IsLiked === true ? (
-      <FaHeart color="#EA4335" />
+      <FaHeart className="fill-red" />
     ) : (
-      <FiHeart color="#333333" />
+      <FiHeart className="stroke-grey" />
     );
 
   return (
