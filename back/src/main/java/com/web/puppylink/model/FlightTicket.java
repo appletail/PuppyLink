@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "flightTicket")
@@ -18,6 +18,7 @@ import java.sql.Date;
 public class FlightTicket {
 
     @Id
+    @Column(name = "ticketNo")
     private String  ticketNo;
     @Column(name = "passengerName")
     @NotNull

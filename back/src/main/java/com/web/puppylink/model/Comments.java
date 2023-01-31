@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "comments")
@@ -16,19 +16,18 @@ import java.sql.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Comments {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "commentNo")
-    private String  commentNo;
+    private int     commentNo;
     @Column(name = "letter")
     private String  letter;
 
     @ManyToOne
-    @JoinColumn(name = "board_boardNo")
+    @JoinColumn(name = "boardNo")
     private Board   boardNo;
     @ManyToOne
-    @JoinColumn(name = "member_email")
+    @JoinColumn(name = "email")
     private Member  email;
     @Column(name = "regDate")
     @Temporal(TemporalType.TIMESTAMP)

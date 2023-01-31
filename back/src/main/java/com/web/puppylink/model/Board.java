@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "board")
@@ -19,6 +19,7 @@ public class Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "boardNo")
     private int     boardNo;
     @Column(name = "subject")
     private String  subject;
@@ -30,9 +31,9 @@ public class Board {
     private String  likes;
     @Column(name = "regDate")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date    regDate;
+    private Date regDate;
     @ManyToOne
-    @JoinColumn(name = "member_email")
+    @JoinColumn(name = "email")
     private Member  email;
 
 }

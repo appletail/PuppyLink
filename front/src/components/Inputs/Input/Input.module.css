@@ -1,0 +1,25 @@
+.Div {
+  @apply w-[21.875rem]
+  flex
+  flex-col
+  gap-1;
+}
+
+.InputBox {
+  @apply w-full
+  p-4
+  /* shadow */
+  appearance-none
+  border
+  border-main-30
+  rounded-lg
+  text-body
+  focus:border-none focus:outline-main-50 focus:shadow
+  invalid:border-red invalid:text-red;
+}
+
+.Helper {
+  @apply text-red
+    text-caption1
+    pl-2;
+}

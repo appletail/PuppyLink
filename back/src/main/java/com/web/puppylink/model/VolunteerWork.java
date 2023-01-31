@@ -18,8 +18,9 @@ public class VolunteerWork {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "volunteerNo")
     private int volunteerNo;
-    @Column(name = "depDate", columnDefinition = "출발일")
+    @Column(name = "depDate")
     @NotNull
     private String          depDate;
     @Column(name = "dest")
@@ -39,11 +40,11 @@ public class VolunteerWork {
     private String          regDate;
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "member_email")
+    @JoinColumn(name = "email")
     private Member          email;
 
     @OneToOne
-    @JoinColumn(name = "flightTicket_ticketNo")
+    @JoinColumn(name = "ticketNo")
     private FlightTicket    ticketNo;
 
 
