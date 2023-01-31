@@ -10,8 +10,8 @@ function NotFoundPage() {
   const goToBack = () => navigate(-1)
 
   return (
-    <div className='px-5'>
-      <div className='flex flex-col justify-between'>
+    <div>
+      <div className={NotFoundStyle.Wrapper}>
         <div>
           <div className={NotFoundStyle.Header}>
             <p>페이지를 찾을 수 없습니다.</p>
@@ -23,7 +23,7 @@ function NotFoundPage() {
             </p>
           </div>
         </div>
-        <div className='flex justify-center'>
+        <div className={NotFoundStyle.NavBottom}>
           <BtnLg
             BtnValue='이전 페이지로 돌아가기'
             onClick={goToBack}

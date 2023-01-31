@@ -1,8 +1,26 @@
+.Wrapper {
+  @apply 
+    flex flex-col 
+    justify-between 
+    h-screen 
+    pt-12 pb-14 px-5;
+}
+
 .Header {
   @apply
-    text-title1-bold;
+    text-title1-bold
+    mt-12;
 }
 
 .Content {
-  @apply text-body;
+  @apply 
+    text-body
+    mt-10 px-2;
+}
+
+.NavBottom {
+  @apply 
+    flex 
+    justify-center
+    mb-11;
 }
