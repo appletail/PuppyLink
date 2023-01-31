@@ -1,5 +1,5 @@
 package com.web.puppylink.service;
 
-public class VolunteerService {
+public interface VolunteerService {
 
 }

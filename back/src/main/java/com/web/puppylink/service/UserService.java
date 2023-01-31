@@ -1,5 +1,7 @@
 package com.web.puppylink.service;
 
-public class UserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface UserService {
 
 }

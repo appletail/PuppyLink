@@ -19,9 +19,9 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int         favoriteNo;
     @ManyToOne
-    @JoinColumn(name = "foundation_businessNo")
+    @JoinColumn(name = "businessNo")
     private Foundation  businessNo;
     @ManyToOne
-    @JoinColumn(name = "member_email")
+    @JoinColumn(name = "email")
     private Member      email;
 }
