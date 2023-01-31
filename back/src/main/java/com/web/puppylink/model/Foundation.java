@@ -26,8 +26,7 @@ public class Foundation {
     @Column(name = "presidentName")
     private String          presidentName;
     @Column(name = "startDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date            startDate;
+    private String            startDate;
     @OneToOne
     @JoinColumn(name = "email")
     private Member          email;

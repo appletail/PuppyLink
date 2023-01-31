@@ -1,4 +1,4 @@
-package com.web.puppylink.model.user;
+package com.web.puppylink.model.MemberReqeust;
 
 
 import lombok.*;
