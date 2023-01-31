@@ -1,4 +1,4 @@
-package com.web.puppylink.model.user;
+package com.web.puppylink.model.MemberReqeust;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
@@ -19,7 +19,7 @@ public class SignupRequest {
     String password;
     @ApiModelProperty(required = true)
     @NotNull
-    String uid;
+    String nickname;
 
     public String getEmail() {
         return email;
@@ -37,11 +37,12 @@ public class SignupRequest {
         this.password = password;
     }
 
-    public String getUid() {
-        return uid;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
+
 }
