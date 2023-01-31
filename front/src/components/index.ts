@@ -26,4 +26,5 @@ export const imgs = { ImgLg, ImgSm };
 export const labels = { Label };
 export const inputs = { Input, InputBtn };
 
-export { default as NavBottom } from './navbar/bottom/NavBottom';
+export { default as NavBottom } from './Navbar/Bottom/NavBottom';
+export { default as Detail } from './Detail/Detail';

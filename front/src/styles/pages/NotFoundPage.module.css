@@ -1,0 +1,8 @@
+.Header {
+  @apply
+    text-title1-bold;
+}
+
+.Content {
+  @apply text-body;
+}

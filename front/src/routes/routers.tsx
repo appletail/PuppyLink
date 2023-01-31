@@ -2,16 +2,18 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import RootLayout from './RootLayout';
 
-import Components from '@/pages/ComponentCollects';
+import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 
 const routers = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         path: '/components',
-        element: <Components />,
+        element: <ComponentCollectsPage />,
       }
     ]
   },

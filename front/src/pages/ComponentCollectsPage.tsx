@@ -1,9 +1,9 @@
 import { buttons, cards, labels, footers, imgs, NavBottom, inputs } from '@/components';
 
 
-function Components() {
+function ComponentCollectsPage() {
   return (
-    <div className="Components">
+    <div className="ComponentCollectsPage">
       <footers.FooterHeart HeartCount={123} IsLiked={true} Username="harim" />
 
       <labels.Label LabelValue="비행기 경로 확인" />
@@ -79,8 +79,8 @@ function Components() {
 
       <inputs.Input
         InputType="text"
-        helper="외않되??"
-        placeholder="아이디를 입력해주세요"
+        helper="asdf??"
+        placeholder="r개편함"
       />
       <inputs.Input
         InputType="password"
@@ -103,4 +103,4 @@ function Components() {
   );
 }
 
-export default Components;
+export default ComponentCollectsPage;
