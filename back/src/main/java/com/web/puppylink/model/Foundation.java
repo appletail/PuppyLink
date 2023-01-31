@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "foundation")
@@ -19,6 +19,7 @@ public class Foundation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "businessNo")
     private int             businessNo;
     @Column(name = "businessName")
     private String          businessName;
@@ -27,6 +28,8 @@ public class Foundation {
     @Column(name = "startDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date            startDate;
-    @OneToMany(mappedBy = "favorite")
-    private List<Favorite>  favoriteList;
+    @OneToOne
+    @JoinColumn(name = "email")
+    private Member          email;
+
 }
