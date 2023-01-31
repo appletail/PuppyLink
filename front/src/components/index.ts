@@ -13,10 +13,10 @@ import FooterHeart from './Footers/FooterHeart/FooterHeart';
 
 import ImgLg from './Imgs/ImgLg/ImgLg'
 import ImgSm from './Imgs/ImgSm/ImgSm'
-import Label from './Labels/Label';
 
 import Input from './Inputs/Input/Input';
 import InputBtn from './Inputs/InputBtn/InputBtn';
+import Label from './Labels/Label';
 
 
 export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
