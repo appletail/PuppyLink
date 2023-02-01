@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.util.List;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -43,6 +42,7 @@ public class Member {
     private Set<Authority>      authorities;
 
     @Column(name = "joinDate")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date                joinDate;
 
 }

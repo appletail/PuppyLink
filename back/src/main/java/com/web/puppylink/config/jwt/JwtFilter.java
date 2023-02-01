@@ -34,6 +34,7 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String jwt = resolveToken(request);
             String requestURI = request.getRequestURI();
+            logger.info("토큰 확인 하기 : {}" , jwt );
             // jwt 유효한지 검사
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Authentication authentication = tokenProvider.getAuthentication(jwt);

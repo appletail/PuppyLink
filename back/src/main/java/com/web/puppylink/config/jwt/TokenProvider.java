@@ -1,7 +1,6 @@
 package com.web.puppylink.config.jwt;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoder;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -109,6 +107,7 @@ public class TokenProvider implements InitializingBean {
     public boolean validateToken(String token) throws ExpiredJwtException {
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            logger.info("claimsJws 정보 : {}", claimsJws );
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch ( io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");
