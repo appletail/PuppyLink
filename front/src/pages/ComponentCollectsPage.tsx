@@ -1,9 +1,9 @@
-import { buttons, cards, labels, footers, imgs, NavBottom } from '@/components';
+import { buttons, cards, labels, footers, imgs, NavBottom, inputs } from '@/components';
 
 
-function Components() {
+function ComponentCollectsPage() {
   return (
-    <div className="Components">
+    <div className="ComponentCollectsPage">
       <footers.FooterHeart HeartCount={123} IsLiked={true} Username="harim" />
 
       <labels.Label LabelValue="비행기 경로 확인" />
@@ -76,9 +76,31 @@ function Components() {
       />
       <imgs.ImgLg src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
       <imgs.ImgSm src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
+
+      <inputs.Input
+        InputType="text"
+        helper="asdf??"
+        placeholder="r개편함"
+      />
+      <inputs.Input
+        InputType="password"
+        helper="비밀번호를 입력하세뇨"
+        placeholder="비밀번호를 입력해주세요"
+      />
+
+      <inputs.InputBtn
+        InputType="text"
+        placeholder="버튼눌러보세요?"
+        button={
+          <buttons.BtnSm
+            BtnValue="검증하기"
+            onClick={() => console.log('hello world!')}
+          />
+        }
+      />
       <NavBottom />
     </div>
   );
 }
 
-export default Components;
+export default ComponentCollectsPage;

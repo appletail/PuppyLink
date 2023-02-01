@@ -1,17 +1,22 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from '@/app/App';
-import Components from '@/pages/ComponentCollects';
+import RootLayout from './RootLayout';
+
+import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 
 const routers = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <RootLayout />,
+    errorElement: <NotFoundPage />,
+    children: [
+      {
+        path: '/components',
+        element: <ComponentCollectsPage />,
+      }
+    ]
   },
-  {
-    path: '/components',
-    element: <Components />,
-  }
 ]);
 
 export default routers;

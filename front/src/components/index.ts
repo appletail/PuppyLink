@@ -13,10 +13,10 @@ import FooterHeart from './Footers/FooterHeart/FooterHeart';
 
 import ImgLg from './Imgs/ImgLg/ImgLg'
 import ImgSm from './Imgs/ImgSm/ImgSm'
-import Label from './Labels/Label';
 
 import Input from './Inputs/Input/Input';
 import InputBtn from './Inputs/InputBtn/InputBtn';
+import Label from './Labels/Label';
 
 
 export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
@@ -26,4 +26,5 @@ export const imgs = { ImgLg, ImgSm };
 export const labels = { Label };
 export const inputs = { Input, InputBtn };
 
-export { default as NavBottom } from './navbar/bottom/NavBottom';
+export { default as NavBottom } from './Navbar/Bottom/NavBottom';
+export { default as Detail } from './Detail/Detail';
