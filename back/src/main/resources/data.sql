@@ -5,7 +5,8 @@ values ('user', '$2a$08$lDnHPz7eUkSi6ao14Twuau08mzhWrL4kyZGGU5xfiGALO/Vxd5DOi', 
 
 insert into authority (authority_name) values ('ROLE_USER');
 insert into authority (authority_name) values ('ROLE_ADMIN');
+insert into authority (authority_name) values ('ROLE_MANAGER');
 
 insert into user_authority (email, authority_name) values ('user@gmail.com', 'ROLE_USER');
 insert into user_authority (email, authority_name) values ('admin@gmail.com', 'ROLE_ADMIN');
-insert into user_authority (email, authority_name) values ('user@gmail.com', 'ROLE_USER');
+insert into user_authority (email, authority_name) values ('user@gmail.com', 'ROLE_USER');      

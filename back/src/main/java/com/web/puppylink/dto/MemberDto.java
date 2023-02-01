@@ -12,6 +12,12 @@ public class MemberDto {
     private String name;
     private String phone;
     private String nickName;
+    
+    // 단체 회원가입 정보
+    private String businessNo;
+    private String businessName;
+    private String presidentName;
+    private String startDate;
 
 
 }

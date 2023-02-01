@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.Foundation;
 
-public class FoundationRepository  {
+public interface FoundationRepository extends JpaRepository<Foundation, String> {
 
+	Optional<Foundation>  findFoundationByBusinessNo(String businessNo);
 }
+
 //
 //public class FoundationRepository extends PagingAndSortingRepository {
 //
