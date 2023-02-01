@@ -22,6 +22,6 @@ public class Favorite {
     @JoinColumn(name = "businessNo")
     private Foundation  businessNo;
     @ManyToOne
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "members_email", referencedColumnName = "email")
     private Member      email;
 }

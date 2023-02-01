@@ -35,7 +35,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         }
 
         List<GrantedAuthority> grantedAuthorityList = member.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityNo()))
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
 
         return new User(member.getEmail(), member.getPassword(), grantedAuthorityList);

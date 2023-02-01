@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 
@@ -18,31 +19,36 @@ import java.util.Set;
 public class Member {
 
     @Id
-    @Column(name = "email")
+    @Column(name = "email" , length = 100)
     private String              email;
-    @Column(name = "password")
+    @Column(name = "password", length = 100)
     @JsonIgnore
     @ToString.Exclude
     private String	            password;
-    @Column(name = "name")
+    @Column(name = "name" , length = 100)
+    @NotNull
     private String	            name;
-    @Column(name = "phone")
+    @Column(name = "phone", length = 50)
+    @NotNull
     private String	            phone;
-    @Column(name = "nickName")
+
+    @Column(name = "nickName" , length = 100)
+    @NotNull
     private String	            nickName;
 
     @Column(name = "activated")
+    @NotNull
     private boolean             activated;
 
     @ManyToMany
     @JoinTable(
             name = "members_authority",
-            joinColumns = {@JoinColumn(name = "email", referencedColumnName = "email")},
+            joinColumns = {@JoinColumn(name = "members_email", referencedColumnName = "email")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority>      authorities;
 
-    @Column(name = "joinDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date                joinDate;
+    @Column(name = "joinDate", length = 50)
+    @NotNull
+    private String              joinDate;
 
 }

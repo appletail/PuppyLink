@@ -18,24 +18,22 @@ import java.util.Date;
 public class FlightTicket {
 
     @Id
-    @Column(name = "ticketNo")
+    @Column(name = "ticketNo" , length = 100)
     private String  ticketNo;
-    @Column(name = "passengerName")
+    @Column(name = "passengerName" , length = 100)
     @NotNull
     private String  passengerName;
-    @Column(name = "bookingReference")
+    @Column(name = "bookingReference" , length = 100)
     @NotNull
     private String  bookingReference;
-    @Column(name = "depCity")
+    @Column(name = "depCity" , length = 100)
     private String  depCity;
-    @Column(name = "depDate")
-    @Temporal(TemporalType.DATE)
-    private Date    depDate;
-    @Column(name = "arriveCity")
+    @Column(name = "depDate", length = 50)
+    private String  depDate;
+    @Column(name = "arriveCity" ,length = 100)
     @NotNull
     private String  arriveCity;
-    @Column(name = "arriveDate")
-    @Temporal(TemporalType.DATE)
-    private Date    arriveDate;
+    @Column(name = "arriveDate" , length = 50)
+    private String  arriveDate;
 
 }

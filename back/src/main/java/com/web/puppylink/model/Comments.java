@@ -20,18 +20,17 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "commentNo")
     private int     commentNo;
-    @Column(name = "letter")
+    @Column(name = "letter", length = 1000)
     private String  letter;
 
     @ManyToOne
-    @JoinColumn(name = "boardNo")
+    @JoinColumn(name = "board_boardNo", referencedColumnName = "boardNo")
     private Board   boardNo;
     @ManyToOne
-    @JoinColumn(name = "email")
+    @JoinColumn(name = "members_email", referencedColumnName = "email")
     private Member  email;
-    @Column(name = "regDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date    regDate;
+    @Column(name = "regDate", length = 50)
+    private String  regDate;
 
 
 }

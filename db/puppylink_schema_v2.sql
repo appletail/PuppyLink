@@ -19,13 +19,15 @@ USE `puppylink` ;
 -- Table `puppylink`.`members`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `puppylink`.`members` (
-  `email` VARCHAR(100) NOT NULL,
-  `password` VARCHAR(40) NOT NULL,
+  `email` VARCHAR(60) NOT NULL,
+  `password` VARCHAR(100) NOT NULL,
   `name` VARCHAR(40) NULL DEFAULT NULL,
   `phone` VARCHAR(50) NULL DEFAULT NULL,
   `nickName` VARCHAR(100) NULL DEFAULT NULL,
-  `joinDate` DATE NULL DEFAULT NULL,
+  `joinDate` VARCHAR(50) NULL DEFAULT NULL,
   `activated` TINYINT(10) NULL,
+  `profileURL` VARCHAR(100) NULL DEFAULT NULL,
+  `memberscol` VARCHAR(45) NULL,
   PRIMARY KEY (`email`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
@@ -40,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `puppylink`.`board` (
   `contents` VARCHAR(2000) NULL DEFAULT NULL,
   `pictureURL` VARCHAR(100) NULL DEFAULT NULL,
   `likes` INT NULL DEFAULT NULL,
-  `regDate` DATE NULL DEFAULT NULL,
+  `regDate` VARCHAR(50) NULL DEFAULT NULL,
   `members_email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`boardNo`),
   INDEX `fk_board_ members1_idx` (`members_email` ASC) VISIBLE,
@@ -57,7 +59,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 CREATE TABLE IF NOT EXISTS `puppylink`.`comments` (
   `commentNo` INT NOT NULL AUTO_INCREMENT,
   `letter` VARCHAR(1000) NULL DEFAULT NULL,
-  `regDate` DATE NULL DEFAULT NULL,
+  `regDate` VARCHAR(50) NULL DEFAULT NULL,
   `board_boardNo` INT NOT NULL,
   `members_email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`commentNo`),
@@ -78,9 +80,10 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `puppylink`.`foundDation` (
   `businessNo` INT NOT NULL,
-  `presidentName` VARCHAR(45) NULL DEFAULT NULL,
+  `presidentName` VARCHAR(45) NOT NULL,
   `businessName` VARCHAR(100) NULL DEFAULT NULL,
-  `startName` DATE NULL DEFAULT NULL,
+  `profileURL` VARCHAR(100) NULL DEFAULT NULL,
+  `startName` VARCHAR(50) NULL DEFAULT NULL,
   `members_email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`businessNo`),
   INDEX `fk_foundDation_ members1_idx` (`members_email` ASC) VISIBLE,
@@ -118,8 +121,8 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `puppylink`.`flightTicket` (
   `ticketNo` VARCHAR(100) NOT NULL,
-  `passengerName` VARCHAR(45) NOT NULL,
-  `bookingReference` VARCHAR(45) NOT NULL,
+  `passengerName` VARCHAR(100) NOT NULL,
+  `bookingReference` VARCHAR(100) NOT NULL,
   `depCity` VARCHAR(45) NULL DEFAULT NULL,
   `depDate` VARCHAR(45) NULL DEFAULT NULL,
   `arriveCity` VARCHAR(45) NOT NULL,
@@ -130,28 +133,34 @@ DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `puppylink`.`volunteerWork`
+-- Table `puppylink`.`volunteer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `puppylink`.`volunteerWork` (
+CREATE TABLE IF NOT EXISTS `puppylink`.`volunteer` (
   `volunteerNo` INT NOT NULL AUTO_INCREMENT,
-  `depCity` VARCHAR(100) NOT NULL,
   `dest` VARCHAR(45) NOT NULL,
-  `destTime` VARCHAR(45) NOT NULL,
-  `status` TINYINT NULL DEFAULT NULL,
+  `destTime` VARCHAR(45) NULL DEFAULT NULL,
+  `status` VARCHAR(50) NOT NULL,
   `fileURL` VARCHAR(45) NULL DEFAULT NULL,
-  `flightName` VARCHAR(45) NULL DEFAULT NULL,
-  `regDate` VARCHAR(45) NULL DEFAULT NULL,
+  `flightName` VARCHAR(45) NOT NULL,
+  `regDate` VARCHAR(45) NOT NULL,
   `members_email` VARCHAR(100) NOT NULL,
-  `flightTicket_ticketNo` VARCHAR(100) NOT NULL,
+  `flightTicket_ticketNo` VARCHAR(100) NULL DEFAULT NULL,
+  `foundDation_businessNo` INT NOT NULL,
   PRIMARY KEY (`volunteerNo`),
   INDEX `fk_volunteerWork_ members1_idx` (`members_email` ASC) VISIBLE,
   INDEX `fk_volunteerWork_flightTicket1_idx` (`flightTicket_ticketNo` ASC) VISIBLE,
+  INDEX `fk_volunteer_foundDation1_idx` (`foundDation_businessNo` ASC) VISIBLE,
   CONSTRAINT `fk_volunteerWork_ members1`
     FOREIGN KEY (`members_email`)
     REFERENCES `puppylink`.`members` (`email`),
   CONSTRAINT `fk_volunteerWork_flightTicket1`
     FOREIGN KEY (`flightTicket_ticketNo`)
-    REFERENCES `puppylink`.`flightTicket` (`ticketNo`))
+    REFERENCES `puppylink`.`flightTicket` (`ticketNo`),
+  CONSTRAINT `fk_volunteer_foundDation1`
+    FOREIGN KEY (`foundDation_businessNo`)
+    REFERENCES `puppylink`.`foundDation` (`businessNo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
