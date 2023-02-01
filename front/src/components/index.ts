@@ -11,13 +11,17 @@ import CardXL from './Cards/CardXL/CardXL';
 import FooterBtn from './Footers/FooterBtn/FooterBtn';
 import FooterHeart from './Footers/FooterHeart/FooterHeart';
 
-import ImgLg from './Imgs/ImgLg/ImgLg'
-import ImgSm from './Imgs/ImgSm/ImgSm'
+import ImgLg from './Imgs/ImgLg/ImgLg';
+import ImgSm from './Imgs/ImgSm/ImgSm';
 
 import Input from './Inputs/Input/Input';
 import InputBtn from './Inputs/InputBtn/InputBtn';
 import Label from './Labels/Label';
 
+import NavLogo from './Navbar/Top/NavLogo';
+import NavCreate from './Navbar/Top/NavCreate';
+import NavDetail from './Navbar/Top/NavDetail';
+import NavBack from './Navbar/Top/NavBack';
 
 export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
 export const cards = { CardSm, CardMd, CardLg, CardXL };
@@ -25,6 +29,7 @@ export const footers = { FooterBtn, FooterHeart };
 export const imgs = { ImgLg, ImgSm };
 export const labels = { Label };
 export const inputs = { Input, InputBtn };
+export const NavTop = { NavLogo, NavCreate, NavDetail, NavBack };
 
 export { default as NavBottom } from './Navbar/Bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
