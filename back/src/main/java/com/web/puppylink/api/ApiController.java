@@ -71,7 +71,7 @@ public class ApiController {
         	JSONArray body2 = new JSONArray();
         	JSONObject outerBody = new JSONObject();
         	
-            body.put("b_no", Integer.toString(request.getBusinessNo()));
+            body.put("b_no", request.getBusinessNo());
             body.put("start_dt", request.getStartDate());
             body.put("p_nm", request.getPresidentName());
             body.put("p_nm2", "");

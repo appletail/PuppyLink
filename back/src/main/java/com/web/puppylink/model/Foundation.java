@@ -1,7 +1,10 @@
 package com.web.puppylink.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.web.puppylink.model.Member.MemberBuilder;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,15 +16,15 @@ import java.util.Set;
 @Entity
 @Table(name = "foundation")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Foundation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "businessNo")
-    private int             businessNo;
+    private String             businessNo;
     @Column(name = "profileURL")
     private String          profileURL;
     @Column(name = "businessName" , length = 100)
