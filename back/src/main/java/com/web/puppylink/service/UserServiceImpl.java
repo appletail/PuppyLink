@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
@@ -34,9 +35,14 @@ public class UserServiceImpl implements UserService{
             throw new RuntimeException("이미 가입되어 있는 유저가 존재합니다.");
         }
 
+        // 초기 날짜 설정
+        Date date = new Date();
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
+        String now = simple.format(date);
+
         // 중요
         Authority authority = Authority.builder()
-                .authorityNo("ROLE_USER")
+                .authorityName("ROLE_USER")
                 .build();
 
         Member memberInfo  = Member.builder()
@@ -46,7 +52,7 @@ public class UserServiceImpl implements UserService{
                 .phone(member.getPhone())
                 .nickName(member.getNickName())
                 .activated(true)
-                .joinDate(new Date())
+                .joinDate(now)
                 .authorities(Collections.singleton(authority))
                 .build();
 
