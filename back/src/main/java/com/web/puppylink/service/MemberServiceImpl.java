@@ -6,26 +6,28 @@ import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.repository.FoundationRepository;
-import com.web.puppylink.repository.UserRepository;
+import com.web.puppylink.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
 @Component("userService")
-public class UserServiceImpl implements UserService{
+public class MemberServiceImpl implements MemberService{
 
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final FoundationRepository foundationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, FoundationRepository foundationRepository) {
-        this.userRepository = userRepository;
+    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, FoundationRepository foundationRepository) {
+        this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.foundationRepository = foundationRepository;
     }
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService{
     public Member signup(MemberDto member) {
 
         // 회원이 존재하는지 확인
-        if( userRepository.findAuthoritiesByEmail(member.getEmail()).orElse(null) != null ) {
+        if( memberRepository.findAuthoritiesByEmail(member.getEmail()).orElse(null) != null ) {
             throw new RuntimeException("이미 가입되어 있는 유저가 존재합니다.");
         }
 
@@ -43,15 +45,12 @@ public class UserServiceImpl implements UserService{
         Foundation foundationInfo;
         Member memberInfo;
         
-        Date date = new Date();
-        SimpleDateFormat simple = new SimpleDateFormat("yyyy-mm-dd");
-        String now = simple.format(date);
+        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 
-        
         // 봉사자 회원가입 
         if(member.getBusinessName() == null) {
             authority = Authority.builder()
-                    .authorityNo("ROLE_USER")
+                    .authorityName("ROLE_USER")
                     .build();
             
             memberInfo  = Member.builder()
@@ -73,7 +72,7 @@ public class UserServiceImpl implements UserService{
             }
         	
             authority = Authority.builder()
-                    .authorityNo("ROLE_MANAGER")
+                    .authorityName("ROLE_MANAGER")
                     .build();
 
             memberInfo  = Member.builder()
@@ -87,7 +86,7 @@ public class UserServiceImpl implements UserService{
                     .authorities(Collections.singleton(authority))
                     .build();
             
-            userRepository.save(memberInfo);
+            memberRepository.save(memberInfo);
             
             foundationInfo = Foundation.builder()
             		.businessNo(member.getBusinessNo())
@@ -99,17 +98,17 @@ public class UserServiceImpl implements UserService{
             
             foundationRepository.save(foundationInfo);
         }
-        
-        return userRepository.save(memberInfo);
+
+        return memberRepository.save(memberInfo);
     }
 
     @Override
     public Optional<Member> getMemberWithAuthorities(String email) {
-        return userRepository.findAuthoritiesByEmail(email);
+        return memberRepository.findAuthoritiesByEmail(email);
     }
 
     @Override
     public Optional<Member> getMyMemberWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findAuthoritiesByEmail);
+        return SecurityUtil.getCurrentUsername().flatMap(memberRepository::findAuthoritiesByEmail);
     }
 }

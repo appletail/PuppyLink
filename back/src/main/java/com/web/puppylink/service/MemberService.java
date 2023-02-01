@@ -5,7 +5,7 @@ import com.web.puppylink.model.Member;
 
 import java.util.Optional;
 
-public interface UserService {
+public interface MemberService {
 
 
     Member signup(MemberDto member);

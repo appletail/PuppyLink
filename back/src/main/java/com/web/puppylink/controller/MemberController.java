@@ -6,7 +6,7 @@ import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
-import com.web.puppylink.service.UserServiceImpl;
+import com.web.puppylink.service.MemberServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -32,23 +32,23 @@ import io.swagger.annotations.ApiResponses;
 
 //@CrossOrigin(origins = { "http://localhost:8081" })
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/members")
+public class MemberController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final UserServiceImpl userService;
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-    public UserController(
+    private final MemberServiceImpl userService;
+    private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
+    public MemberController(
             TokenProvider tokenProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder,
-            UserServiceImpl userService) {
+            MemberServiceImpl userService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userService = userService;
     }
 
-    @PostMapping("/loginProc")
+    @PostMapping("/login")
     @ApiOperation(value = "로그인")
     public Object login(@RequestBody LoginDto login) {
 
