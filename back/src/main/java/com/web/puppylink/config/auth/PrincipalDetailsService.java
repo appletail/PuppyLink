@@ -1,7 +1,7 @@
 package com.web.puppylink.config.auth;
 
 import com.web.puppylink.model.Member;
-import com.web.puppylink.repository.UserRepository;
+import com.web.puppylink.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 @Component("userDetailsService")
 public class PrincipalDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
-    public PrincipalDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public PrincipalDetailsService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findAuthoritiesByEmail(email)
+        return memberRepository.findAuthoritiesByEmail(email)
                 .map(member -> createUser(email,member))
                 .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
     }

@@ -36,6 +36,7 @@ public class Foundation {
     private String          startDate;
     @OneToOne
     @JoinColumn(name = "members_email", referencedColumnName = "email")
+//    @JoinColumn(name = "email")
     private Member          email;
 
 }
