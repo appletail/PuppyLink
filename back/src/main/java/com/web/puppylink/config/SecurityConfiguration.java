@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()                                        // httpservletrequest로 접근하는 것을 제한하겠다.
-                .antMatchers("/users/loginProc").permitAll()    // 해당 uri로 접근은 인증을 하지 않겠다.!
+                .antMatchers("/users/loginProc").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
                 .antMatchers("/users/signup").permitAll()
                 .anyRequest().authenticated()                               // 나머지는 인증을 해야한다.
 

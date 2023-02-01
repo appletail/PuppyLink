@@ -1,7 +1,16 @@
 package com.web.puppylink.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.model.Member;
+
+import java.util.Optional;
 
 public interface UserService {
+
+
+    Member signup(MemberDto member);
+    Optional<Member> getMemberWithAuthorities(String email);
+    Optional<Member> getMyMemberWithAuthorities();
+
 
 }
