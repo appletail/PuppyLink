@@ -1,19 +1,7 @@
-import { ReactNode } from "react";
-import { Control, FieldName, FieldValues, RegisterOptions, useController } from "react-hook-form"
+import { useController } from "react-hook-form"
 
 
-export type UseControllerProps<
-  TFieldValues extends FieldValues = FieldValues
-> = {
-  name: FieldName<TFieldValues>;
-  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
-  onFocus?: () => void;
-  defaultValue?: unknown;
-  control?: Control<TFieldValues>;
-};
-
-
-function WhereFooter({ name, control }: UseControllerProps): JSX.Element {
+function DestFooter({ name, control }: UseControllerProps): JSX.Element {
   const { field: { value, onChange } } = useController({ name, control })
 
   return (
@@ -30,4 +18,4 @@ function WhereFooter({ name, control }: UseControllerProps): JSX.Element {
   )
 }
 
-export default WhereFooter
+export default DestFooter

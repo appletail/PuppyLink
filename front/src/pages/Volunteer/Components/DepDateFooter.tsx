@@ -1,18 +1,7 @@
-import { Control, FieldName, FieldValues, RegisterOptions, useController } from "react-hook-form"
+import { useController } from "react-hook-form"
 
 
-export type UseControllerProps<
-  TFieldValues extends FieldValues = FieldValues
-> = {
-  name: FieldName<TFieldValues>;
-  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
-  onFocus?: () => void;
-  defaultValue?: unknown;
-  control?: Control<TFieldValues>;
-};
-
-
-function WhenFooter({ name, control, rules }: UseControllerProps): JSX.Element {
+function DepDateFooter({ name, control, rules }: UseControllerProps): JSX.Element {
 
   const { field: { value, onChange } } = useController({ name, control })
 
@@ -45,4 +34,4 @@ function WhenFooter({ name, control, rules }: UseControllerProps): JSX.Element {
   )
 }
 
-export default WhenFooter
+export default DepDateFooter

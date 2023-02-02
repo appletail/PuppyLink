@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 
-import Airlines from './Components/AirlineSelect';
-import { WhereTitle, WhenTitle } from './Components/FlightTitles';
-import Groups from './Components/GroupSelect';
-import WhenFooter from './Components/WhenFooter';
-import WhereFooter from './Components/WhereFooter';
+import DepDateFooter from './Components/DepDateFooter';
+import DestFooter from './Components/DestFooter';
+import FlightName from './Components/FilghtName';
+import { DestTitle, DepDateTitle } from './Components/FlightTitles';
+import Foundation from './Components/FoundationSelect';
 
 import { cards, buttons } from '@/components';
 
@@ -12,10 +12,10 @@ import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 function VolUserResi() {
   const requiredData = {
-    where: 'JFK',
-    when: '2023-02-04',
-    airline: 'korair',
-    group: 'kara',
+    dest: 'JFK',
+    depDate: '2023-02-04',
+    filghtName: 'korair',
+    foundation: 'kara',
     isAgree: true
   }
   // 각각 컴포넌트 아래에 form 프롭스해야함
@@ -31,18 +31,18 @@ function VolUserResi() {
       </button>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
         <div className={VolUserStyle.FlightWrapper}>
-          <cards.CardSm CardFooter={<WhereFooter control={control} name="where" />} CardTitle={<WhereTitle />} />
-          <cards.CardSm CardTitle={<WhenTitle />} CardFooter={<WhenFooter control={control} name="when" rules={{
+          <cards.CardSm CardFooter={<DestFooter control={control} name="dest" />} CardTitle={<DestTitle />} />
+          <cards.CardSm CardTitle={<DepDateTitle />} CardFooter={<DepDateFooter control={control} name="depDate" rules={{
             required: { value: true, message: "날짜를 입력하세요." },
           }} />} />
         </div>
         <p className={VolUserStyle.SelectTitle}>항공사 선택하기</p>
         <div className={VolUserStyle.FlightSelect}>
-          <Airlines control={control} name="airline" />
+          <FlightName control={control} name="filghtName" />
         </div>
         <p className={VolUserStyle.SelectTitle}>단체 선택하기</p>
         <div className={VolUserStyle.GroupSelect}>
-          <Groups />
+          <Foundation control={control} name="foundation" />
         </div>
         <div className={VolUserStyle.Terms}>
           <input className="chk" id="termsService" type="checkbox" {...register("termsService")} />

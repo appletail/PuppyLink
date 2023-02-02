@@ -1,6 +1,6 @@
 import { FaPlaneDeparture, FaRegCalendar } from 'react-icons/fa'
 
-export function WhereTitle() {
+export function DestTitle() {
   return (
     <div className="flex">
       <FaPlaneDeparture className="fill-main-100" />
@@ -9,7 +9,7 @@ export function WhereTitle() {
   )
 }
 
-export function WhenTitle() {
+export function DepDateTitle() {
   return (
     <div className="flex">
       <FaRegCalendar className="fill-main-100" />
