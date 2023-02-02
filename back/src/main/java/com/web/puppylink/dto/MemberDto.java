@@ -19,5 +19,7 @@ public class MemberDto {
     private String presidentName;
     private String startDate;
 
+    // 인증번호
+    private String auth;
 
 }
