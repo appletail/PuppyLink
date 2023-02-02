@@ -38,7 +38,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public boolean getConfirmAuthByEamil(String email,String auth) {
-
+        logger.info("RedisService redis compare value : {} , auth : {}", email, auth);
         HashOperations<String, String, String> redisMap = redisTemplate.opsForHash();
         String confirmAuth = redisMap.get(EMAIL_HASH, email);
         if (confirmAuth.equals(auth)) {
