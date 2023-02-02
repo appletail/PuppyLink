@@ -97,6 +97,21 @@ public class MemberController {
     public ResponseEntity<Member> getAdminInfo(@PathVariable String email) {
         return ResponseEntity.ok(userService.getMemberWithAuthorities(email).get());
     }
+    
+    
+    @GetMapping("/checkEmail/{email}")
+    @ApiOperation(value = "이메일 중복조회")
+    public String emailCheck(@PathVariable  String email) {
+    	logger.debug("UserController duplicate email check : {}", email);
+        return userService.duplicateCheckEmail(email);
+    }
+    
+    @GetMapping("/checkNickname/{nickName}")
+    @ApiOperation(value = "닉네임 중복조회")
+    public String nickNameCheck(@PathVariable String nickName) {
+    	logger.debug("UserController duplicate nickName check : {}", nickName);
+    	return userService.duplicateCheckNickName(nickName);
+    }
 
 //    @PutMapping("/account/pwdchange")
 //    @ApiOperation(value = "비밀번호 변경")
@@ -109,22 +124,5 @@ public class MemberController {
 //        return new ResponseEntity<>(result, HttpStatus.OK);
 //    }
 //
-//    @GetMapping("/account/uid")
-//    @ApiOperation(value = "UID 중복 조회")
-//    public Object uidcheck(@RequestParam(required = true) final String uid) {
-//    	System.out.println("UID..");
-//        Optional<User> userOpt = userDao.findUserByUid(uid);
-//        ResponseEntity response = null;
-//
-//        if (userOpt.isPresent()) {
-//            final BasicResponse result = new BasicResponse();
-//            result.status = true;
-//            result.data = "success";
-//            response = new ResponseEntity<>(result, HttpStatus.OK);
-//        } else {
-//            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
-//
-//        return response;
-//    }
+
 }
