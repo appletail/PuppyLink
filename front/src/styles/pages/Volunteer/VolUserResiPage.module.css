@@ -2,12 +2,12 @@
   @apply 
     absolute 
     left-1/2 
-    translate-x-[-50%];
+    translate-x-[-50%]
+    flex flex-col;
 }
 
 .GoToMyRegi {
   @apply 
-    bg-main-30
     rounded-lg
     h-[5.4375rem]
     w-[21.875rem]
@@ -27,17 +27,18 @@
 
 .FlightSelect{
   @apply
-    mb-9;
+    mb-9 flex gap-3;
 
 }
 
 .GroupSelect {
   @apply
-    mb-9;
+    mb-9 flex gap-3;
 
 }
 
 .Terms {
   @apply
-    mb-9;
+    flex
+    mb-9 gap-1;
 }

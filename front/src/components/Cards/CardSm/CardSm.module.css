@@ -4,12 +4,11 @@
   bg-white
     pt-4 pb-4 px-3
     drop-shadow-md
-    flex flex-col
-    justify-between;
+    flex flex-col justify-center;
 }
 
 .SmTitle {
-  @apply mb-4
+  @apply mb-3 flex justify-center
     text-subheadline-bold;
 }
 

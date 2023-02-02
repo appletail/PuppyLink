@@ -1,7 +1,7 @@
 import { FaPlaneDeparture } from 'react-icons/fa';
 
+import { ReactComponent as Korair } from '@/assets/Korair.svg'
 import { buttons, cards, labels, footers, imgs, NavBottom, inputs } from '@/components';
-
 
 function ComponentCollectsPage() {
   const whereareyou = (
@@ -14,7 +14,7 @@ function ComponentCollectsPage() {
   return (
     <div className="ComponentCollectsPage">
       <footers.FooterHeart HeartCount={123} IsLiked={true} Username="harim" />
-
+      <Korair />
       <labels.Label LabelValue="비행기 경로 확인" />
       <buttons.BtnSm BtnValue="hello" />
       <buttons.BtnBsm BtnValue="hello" />
