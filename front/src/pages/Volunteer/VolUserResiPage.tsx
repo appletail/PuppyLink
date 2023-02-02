@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form';
 
 import DepDateFooter from './Components/DepDateFooter';
 import DestFooter from './Components/DestFooter';
-import FlightName from './Components/FilghtName';
-import { DestTitle, DepDateTitle } from './Components/FlightTitles';
+import FlightName from './Components/FilghtNameSelect';
+import { DestTitle, DepDateTitle } from './Components/FlightCardTitles';
 import Foundation from './Components/FoundationSelect';
 
 import { cards, buttons } from '@/components';
@@ -16,10 +16,9 @@ function VolUserResi() {
     depDate: '2023-02-04',
     filghtName: 'korair',
     foundation: 'kara',
-    isAgree: true
+    termsService: true
   }
-  // 각각 컴포넌트 아래에 form 프롭스해야함
-  // 선택하기 아래에 하나 선택하면 다른거 선택풀리게 해야함
+
   const { control, handleSubmit, register } = useForm()
 
 
@@ -31,10 +30,17 @@ function VolUserResi() {
       </button>
       <form onSubmit={handleSubmit((data) => console.log(data))}>
         <div className={VolUserStyle.FlightWrapper}>
-          <cards.CardSm CardFooter={<DestFooter control={control} name="dest" />} CardTitle={<DestTitle />} />
-          <cards.CardSm CardTitle={<DepDateTitle />} CardFooter={<DepDateFooter control={control} name="depDate" rules={{
-            required: { value: true, message: "날짜를 입력하세요." },
-          }} />} />
+          <cards.CardSm
+            CardFooter={<DestFooter control={control} name="dest" />}
+            CardTitle={<DestTitle />} />
+          <cards.CardSm
+            CardTitle={<DepDateTitle />}
+            CardFooter={<DepDateFooter
+              control={control}
+              name="depDate"
+              rules={{ required: { value: true, message: "날짜를 입력하세요." }, }}
+            />}
+          />
         </div>
         <p className={VolUserStyle.SelectTitle}>항공사 선택하기</p>
         <div className={VolUserStyle.FlightSelect}>
@@ -45,7 +51,7 @@ function VolUserResi() {
           <Foundation control={control} name="foundation" />
         </div>
         <div className={VolUserStyle.Terms}>
-          <input className="chk" id="termsService" type="checkbox" {...register("termsService")} />
+          <input id="termsService" type="checkbox" {...register("termsService")} />
           <label htmlFor="termsService">주의사항을 읽었고 개인정보 제공에 동의합니다.</label>
         </div>
         <buttons.BtnLg BtnValue="신청하기" />

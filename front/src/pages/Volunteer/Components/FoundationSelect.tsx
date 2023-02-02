@@ -7,22 +7,26 @@ import { ReactComponent as React } from '@/assets/react.svg'
 
 function FoundationSelect({ name, control, rules }: UseControllerProps): JSX.Element {
 
-  const { field: { onChange } } = useController({ name, control })
+  const { field: { value, onChange } } = useController({ name, control })
 
   const foundations = [
-    { foundation: Korair, key: 'KorairLogo', isTrue: false },
-    { foundation: Asiana, key: 'AsianaLogo', isTrue: false },
-    { foundation: AirCanada, key: 'AirCanadaLogo', isTrue: false },
-    { foundation: React, key: 'ReactLogo', isTrue: false },
+    { foundation: Korair, value: 'Kara', isTrue: false },
+    { foundation: Asiana, value: 'WeAct', isTrue: false },
+    { foundation: AirCanada, value: 'WelComeDog', isTrue: false },
+    { foundation: React, value: 'Care', isTrue: false },
   ]
+
+  const isChecked = function (curValue: string): boolean {
+    return curValue === value ? true : false
+  }
 
   const foundationsBtn = foundations.map((item) => {
     return (
-      <div key={item.key}>
-        <input key={item.key} className='hidden' id={item.key} type="radio" onChange={onChange} />
-        <label htmlFor={item.key}>
+      <div key={item.value}>
+        <input className='hidden' id={item.value} name="foundation" type="radio" value={item.value} onChange={onChange} />
+        <label htmlFor={item.value}>
           <item.foundation
-            className={`rounded-full `}
+            className={isChecked(item.value) ? 'bg-white rounded-full brightness-[.60]' : ''}
           />
         </label>
       </div>

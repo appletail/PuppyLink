@@ -4,9 +4,10 @@ import { ReactComponent as AirCanada } from '@/assets/AirCanada.svg'
 import { ReactComponent as Asiana } from '@/assets/Asiana.svg'
 import { ReactComponent as Korair } from '@/assets/Korair.svg'
 
-function FilghtName({ name, control, rules }: UseControllerProps): JSX.Element {
 
-  const { field: { onChange } } = useController({ name, control })
+function FilghtNameSelect({ name, control, rules }: UseControllerProps): JSX.Element {
+
+  const { field: { value, onChange } } = useController({ name, control })
 
   const airlines = [
     { airline: Korair, value: 'Korair', isTrue: false },
@@ -14,13 +15,17 @@ function FilghtName({ name, control, rules }: UseControllerProps): JSX.Element {
     { airline: AirCanada, value: 'AirCanada', isTrue: false },
   ]
 
-  const airlineBtn = airlines.map((item) => {
+  const isChecked = function (curValue: string): boolean {
+    return curValue === value ? true : false
+  }
+
+  const airlineBtn = airlines.map((item, idx) => {
     return (
       <div key={item.value}>
-        <input className='hidden' id={item.value} type="radio" value={item.value} onChange={onChange} />
+        <input className='hidden' id={item.value} name="filghtName" type="radio" value={item.value} onChange={onChange} />
         <label htmlFor={item.value}>
           <item.airline
-            className={`rounded-full `}
+            className={isChecked(item.value) ? 'bg-white rounded-full brightness-[.60]' : ''}
           />
         </label>
       </div>
@@ -33,4 +38,4 @@ function FilghtName({ name, control, rules }: UseControllerProps): JSX.Element {
   )
 }
 
-export default FilghtName
+export default FilghtNameSelect
