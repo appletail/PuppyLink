@@ -11,7 +11,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
@@ -55,10 +55,6 @@ jwt:
   #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400
-      
-  h2:
-    console:
-      enabled: true
 
 api:
   serviceKey: dcDOac8qR1Hlkma1oUeF%2BzRbGEis9zq%2BZKa0NoKAwmCORC9AIPE4FYfn3b3bNpI%2BlseM4g%2BZ%2BTUX8CT3tFZDsw%3D%3D
