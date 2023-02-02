@@ -19,9 +19,30 @@ spring:
       hibernate:
         format_sql: true
         show-sql: true
+
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: puppylink1114@gmail.com
+    password: kecakievjnmannnd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          debug: true
+          timeout: 5000
+          starttls:
+            enable: true
+            required: true
+
+  redis:
+    host: localhost
+    port: 6379
+
 
 logging:
   level:
@@ -41,5 +62,4 @@ jwt:
 
 api:
   serviceKey: dcDOac8qR1Hlkma1oUeF%2BzRbGEis9zq%2BZKa0NoKAwmCORC9AIPE4FYfn3b3bNpI%2BlseM4g%2BZ%2BTUX8CT3tFZDsw%3D%3D
-
 

@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Optional;
 
-@Component("userService")
+@Component("memberService")
 public class MemberServiceImpl implements MemberService{
 
 
@@ -26,7 +26,10 @@ public class MemberServiceImpl implements MemberService{
     private final FoundationRepository foundationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, FoundationRepository foundationRepository) {
+    public MemberServiceImpl(
+            MemberRepository memberRepository,
+            PasswordEncoder passwordEncoder,
+            FoundationRepository foundationRepository) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.foundationRepository = foundationRepository;
