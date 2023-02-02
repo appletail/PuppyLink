@@ -4,6 +4,7 @@ import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import LoginPage from '@/pages/LoginPage';
 
 const routers = createBrowserRouter([
   {
@@ -14,8 +15,12 @@ const routers = createBrowserRouter([
       {
         path: '/components',
         element: <ComponentCollectsPage />,
-      }
-    ]
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+    ],
   },
 ]);
 

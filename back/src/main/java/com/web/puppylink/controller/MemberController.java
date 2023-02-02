@@ -25,9 +25,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.web.puppylink.config.jwt.JwtFilter;
+import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.dto.LoginDto;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.BasicResponse;
+import com.web.puppylink.model.Member;
+import com.web.puppylink.service.UserServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
