@@ -12,5 +12,6 @@ public interface MemberDao extends JpaRepository<Member, String> {
 
     Optional<Member> findMemberByEmailAndPassword(String email, String password);
     Optional<Member> findMemberByEmailAndNickName(String email, String nickName);
-    Optional<Member> findMemberByNickName(String NickName);
+    Optional<Member> findMemberByNickName(String NickName);							// 닉네임 중복검사
+    Optional<Member> findMemberByEmail(String email);								// 이메일 중복검사
 }

@@ -59,9 +59,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()                                        // httpservletrequest로 접근하는 것을 제한하겠다.
-                .antMatchers("/users/loginProc").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
-                .antMatchers("/users/signup").permitAll()
+                .antMatchers("/members/login").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
+                .antMatchers("/members/signup").permitAll()
                 .antMatchers("/foundation/validate").permitAll()
+                .antMatchers("/members/checkEmail").permitAll()
+                .antMatchers("/members/checkNickname").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
                 .anyRequest().authenticated()                               // 나머지는 인증을 해야한다.
 
                 .and()

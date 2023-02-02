@@ -111,4 +111,20 @@ public class MemberServiceImpl implements MemberService{
     public Optional<Member> getMyMemberWithAuthorities() {
         return SecurityUtil.getCurrentUsername().flatMap(memberRepository::findAuthoritiesByEmail);
     }
+
+    @Override
+	public String duplicateCheckEmail(String email) {
+    	if(!memberRepository.existsByEmail(email)) {
+    		return "사용 가능한 이메일입니다.";
+    	}
+		return "이미 사용중인 이메일입니다. 다른 이메일을 작성해주세요.";
+	}
+
+    @Override
+	public String duplicateCheckNickName(String nickName) {
+    	if(!memberRepository.existsByNickName(nickName)) {
+    		return "사용 가능한 닉네임입니다.";
+    	}
+		return "이미 사용중인 닉네임입니다. 다른 닉네임을 사용해주세요.";
+	}
 }
