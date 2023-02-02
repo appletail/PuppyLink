@@ -1,5 +1,6 @@
 package com.web.puppylink.config.jwt;
 
+import com.web.puppylink.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -17,7 +18,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import com.web.puppylink.model.Member;
-import com.web.puppylink.repository.UserRepository;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -38,7 +38,7 @@ public class TokenProvider implements InitializingBean {
     private Key key;
 
 	@Autowired
-	UserRepository userRepository;
+    MemberRepository memberRepository;
 	
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
@@ -68,7 +68,7 @@ public class TokenProvider implements InitializingBean {
 		 * System.out.println(authentication.getCredentials() );
 		 */
     	
-        Member member= userRepository.findByEmail(authentication.getName()).orElseThrow(() -> {
+        Member member= memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> {
         	return new IllegalArgumentException("해당 아이디를 찾을 수 없습니다.");
         });
         

@@ -9,7 +9,6 @@ import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.service.MemberServiceImpl;
-import com.web.puppylink.service.RedisService;
 import com.web.puppylink.service.RedisServiceImpl;
 import io.lettuce.core.RedisException;
 import org.slf4j.Logger;
@@ -32,18 +31,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.puppylink.config.jwt.JwtFilter;
-import com.web.puppylink.config.jwt.TokenProvider;
-import com.web.puppylink.dto.LoginDto;
-import com.web.puppylink.dto.MemberDto;
-import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.BasicResponse;
-import com.web.puppylink.model.Member;
-import com.web.puppylink.service.UserServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -88,16 +86,42 @@ public class MemberController {
         String accessToken = tokenProvider.createToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
+        //refresh토큰을 DB에 저장합니다
+        memberService.updateRefresh(authentication.getName(), refreshToken);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+        httpHeaders.add("refreshToken", "Bearer " + refreshToken);
 
-        return new ResponseEntity<>(new TokenDto(accessToken), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenDto("Bearer " +accessToken, "Bearer " + refreshToken), httpHeaders, HttpStatus.OK);
     }
+    @GetMapping("/reissuance")
+    public ResponseEntity<Map<String, String>> refresh(HttpServletRequest request, HttpServletResponse response) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-    public Object reIssueAccessToken(@RequestBody String refreshToken) {
-        return null;
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("JWT Token이 존재하지 않습니다.");
+        }
+        String refreshToken = authorizationHeader.substring(7);
+        Map<String, String> tokens = memberService.refresh(refreshToken, tokenProvider);
+        System.out.println("accessToken : " + tokens.get("accessToken"));
+        System.out.println("refreshToken : " + tokens.get("refreshToken"));
+
+        response.setHeader("accessToken", tokens.get("accessToken"));
+        if (tokens.get("refreshToken") != null) {
+            response.setHeader("refreshToken", tokens.get("refreshToken"));
+        }
+
+
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+//        httpHeaders.add("refreshToken", "Bearer " + refreshToken);
+//
+//        return new ResponseEntity<>(new TokenDto("Bearer " +accessToken, "Bearer " + refreshToken), httpHeaders, HttpStatus.OK);
+
+
+        return ResponseEntity.ok(tokens);
     }
-
     @PostMapping("logout")
     @ApiOperation(value = "로그아웃 진행")
     public Object logout() {

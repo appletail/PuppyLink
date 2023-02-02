@@ -1,8 +1,10 @@
 package com.web.puppylink.service;
 
+import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Member;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface MemberService {
@@ -13,6 +15,8 @@ public interface MemberService {
     Optional<Member> getMyMemberWithAuthorities();
 	String duplicateCheckEmail(String email);
 	String duplicateCheckNickName(String nickName);
+    void updateRefresh(String email, String refresh);
+    Map<String, String> refresh(String refreshToken, TokenProvider tokenProvider);
 
 
 }
