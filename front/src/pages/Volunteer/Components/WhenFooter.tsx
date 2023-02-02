@@ -1,5 +1,20 @@
-function WhenFooter(): JSX.Element {
+import { Control, FieldName, FieldValues, RegisterOptions, useController } from "react-hook-form"
 
+
+export type UseControllerProps<
+  TFieldValues extends FieldValues = FieldValues
+> = {
+  name: FieldName<TFieldValues>;
+  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
+  onFocus?: () => void;
+  defaultValue?: unknown;
+  control?: Control<TFieldValues>;
+};
+
+
+function WhenFooter({ name, control, rules }: UseControllerProps): JSX.Element {
+
+  const { field: { value, onChange } } = useController({ name, control })
 
   const addZero = function (num: number): string {
     return num < 10 ? '0' + num : num.toString()
@@ -23,7 +38,9 @@ function WhenFooter(): JSX.Element {
         className="text-caption1"
         min={date}
         name="trip-start"
-        type="date" />
+        type="date"
+        value={value || ''}
+        onChange={onChange} />
     </div>
   )
 }
