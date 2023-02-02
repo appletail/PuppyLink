@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { NavBottom } from '@/components'
+import { NavBottom, NavTop } from '@/components'
 import BtnLg from '@/components/Buttons/BtnLg/BtnLg'
 import NotFoundStyle from '@/styles/pages/NotFoundPage.module.css'
 
@@ -11,6 +11,7 @@ function NotFoundPage() {
 
   return (
     <div>
+      <NavTop.NavLogo />
       <div className={NotFoundStyle.Wrapper}>
         <div>
           <div className={NotFoundStyle.Header}>
