@@ -67,6 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/members/login").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
                 .antMatchers("/members/signup").permitAll()
                 .antMatchers("/members/mail").permitAll()
+                .antMatchers("/members/mail").permitAll()
                 .antMatchers("/members/checkEmail").permitAll()
                 .antMatchers("/members/checkNickname").permitAll()
                 .antMatchers("/members/reissuance").permitAll()

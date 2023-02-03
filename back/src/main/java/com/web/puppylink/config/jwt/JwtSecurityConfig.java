@@ -10,6 +10,7 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
     private TokenProvider tokenProvider;
 
     public JwtSecurityConfig(TokenProvider tokenProvider) {
+//    	System.out.println(" JwtSecurityConfig : 토큰 ? 여기로오나요??");
         this.tokenProvider = tokenProvider;
     }
 

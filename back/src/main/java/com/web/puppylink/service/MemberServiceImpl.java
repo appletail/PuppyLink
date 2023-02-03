@@ -138,17 +138,17 @@ public class MemberServiceImpl implements MemberService{
 	}
 
     @Override
-    @javax.transaction.Transactional
+    @Transactional
     public void updateRefresh(String email, String refresh) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> {
             return new IllegalArgumentException("회원 찾기 실패");
         });
         member.setRefreshToken(refresh);
         //더티 체킹 : 변한 부분 DB에 자동 커밋됩니다
-        System.out.println("UserServiceImpl] member.setRefreshToken(refresh) : " + member.getRefreshToken());
     }
 
     @Override
+    @Transactional
     public Map<String, String> refresh(String refreshToken, TokenProvider tokenProvider) {
         // 1. refresh 토큰의 유효성 검사
         // 1-1. 만료된 Refresh Token일시 Error Response
@@ -230,11 +230,24 @@ public class MemberServiceImpl implements MemberService{
             // 토큰의 익스파이어 타임을 설정
             String newRefreshToken = tokenProvider.createRefreshToken(authentication);
             accessTokenResponseMap.put("refreshToken", newRefreshToken);
-            updateRefresh(claims.getSubject(), newRefreshToken);
+            System.out.println("claims.getSubject() : "+ claims.getSubject());
+            this.updateRefresh(claims.getSubject(), newRefreshToken);
             System.out.println("newRefreshToken 발급 : " + newRefreshToken);
         }
         accessTokenResponseMap.put("accessToken", newAccessToken);
         return accessTokenResponseMap;
     }
+
+	@Override
+	@Transactional
+	public void update(String newPassword, String nickName) {
+		 Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+			return new IllegalArgumentException("회원 찾기 실패");
+		});
+
+		 String encPassword = passwordEncoder.encode(newPassword);
+		member.setPassword(encPassword);
+	}
+
 
 }
