@@ -30,7 +30,7 @@ public class RedisTemplateTest {
         ValueOperations<String, MailDto> valueOperations =  redisTemplate.opsForValue();
         String key = "setKey";
 
-        valueOperations.set(key, new MailDto("test03@naver.com",1231231));
+        // valueOperations.set(key, new MailDto("test03@naver.com",1231231));
 
         MailDto value = valueOperations.get(key);
         if ( value instanceof MailDto ) {
@@ -46,7 +46,7 @@ public class RedisTemplateTest {
         SetOperations<String, MailDto> setOperations = redisTemplate.opsForSet();
         String key = "111dfsdf";
 
-        setOperations.add("key", new MailDto("test01@naver.com",1234123));
+        // setOperations.add("key", new MailDto("test01@naver.com",1234123));
 
         List<MailDto> list = setOperations.pop(key,5);
 

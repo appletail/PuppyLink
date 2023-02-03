@@ -119,11 +119,7 @@ public class GoogleVisionApi {
 					ticket.setArriveCity(array[arriveCityIndex]);
 					ticket.setArriveDate(array[arriveDateIndex]);
 					ticket.setFlight(array[flightIndex]);
-					
-<<<<<<< HEAD
 
-=======
->>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
 //					System.out.println("Passenger Name : "+array[passengerNameIndex]);
 //					System.out.println("Ticket Number : "+array[ticketNoIndex]);
 //					System.out.println("Booking Reference : "+array[bookingReferenceIndex]);
