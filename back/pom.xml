@@ -177,6 +177,7 @@
 			<artifactId>gson</artifactId>
 			<version>2.6.2</version>
 		</dependency>
+<<<<<<< HEAD
 		
 		<!-- AWS s3-->
 	    <dependency>
@@ -185,6 +186,18 @@
 	        <version>2.2.6.RELEASE</version>
 	    </dependency>
 
+=======
+>>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
+		<!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-vision -->
+		<dependency>
+		    <groupId>com.google.cloud</groupId>
+		    <artifactId>google-cloud-vision</artifactId>
+		    <version>3.7.0</version>
+		</dependency>
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
 	</dependencies>
 
 	<build>

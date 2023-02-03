@@ -53,7 +53,6 @@ import io.swagger.annotations.ApiResponses;
 @CrossOrigin(origins = { "http://localhost:8081" })
 @RestController
 public class ApiController {
-
     private @Value("${api.serviceKey}") String apiKey;
     
     @PostMapping("/foundation/validate")
