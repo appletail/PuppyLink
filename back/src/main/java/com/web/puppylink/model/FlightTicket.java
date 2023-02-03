@@ -35,5 +35,7 @@ public class FlightTicket {
     private String  arriveCity;
     @Column(name = "arriveDate" , length = 50)
     private String  arriveDate;
-
+    @Column(name = "flight" ,length = 50)
+    @NotNull
+    private String  flight;
 }
