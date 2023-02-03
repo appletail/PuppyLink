@@ -7,7 +7,7 @@ import { ReactComponent as Korair } from '@/assets/Korair.svg'
 
 function FilghtNameSelect({ name, control, rules }: UseControllerProps): JSX.Element {
 
-  const { field: { value, onChange } } = useController({ name, control })
+  const { field: { value, onChange } } = useController({ name, control, rules })
 
   const airlines = [
     { airline: Korair, value: 'Korair', isTrue: false },
@@ -19,7 +19,7 @@ function FilghtNameSelect({ name, control, rules }: UseControllerProps): JSX.Ele
     return curValue === value ? true : false
   }
 
-  const airlineBtn = airlines.map((item, idx) => {
+  const airlineBtn = airlines.map((item) => {
     return (
       <div key={item.value}>
         <input className='hidden' id={item.value} name="filghtName" type="radio" value={item.value} onChange={onChange} />

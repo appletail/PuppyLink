@@ -7,13 +7,13 @@ import { ReactComponent as React } from '@/assets/react.svg'
 
 function FoundationSelect({ name, control, rules }: UseControllerProps): JSX.Element {
 
-  const { field: { value, onChange } } = useController({ name, control })
+  const { field: { value, onChange } } = useController({ name, control, rules })
 
   const foundations = [
-    { foundation: Korair, value: 'Kara', isTrue: false },
-    { foundation: Asiana, value: 'WeAct', isTrue: false },
-    { foundation: AirCanada, value: 'WelComeDog', isTrue: false },
-    { foundation: React, value: 'Care', isTrue: false },
+    { foundation: Korair, value: '1612314155', isTrue: false },
+    { foundation: Asiana, value: '1562345234523', isTrue: false },
+    { foundation: AirCanada, value: '1344523422', isTrue: false },
+    { foundation: React, value: '14324542345', isTrue: false },
   ]
 
   const isChecked = function (curValue: string): boolean {

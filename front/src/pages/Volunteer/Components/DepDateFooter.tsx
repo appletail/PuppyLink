@@ -3,7 +3,7 @@ import { useController } from "react-hook-form"
 
 function DepDateFooter({ name, control, rules }: UseControllerProps): JSX.Element {
 
-  const { field: { value, onChange } } = useController({ name, control })
+  const { field: { value, onChange } } = useController({ name, control, rules })
 
   const addZero = function (num: number): string {
     return num < 10 ? '0' + num : num.toString()
