@@ -4,6 +4,7 @@ target/
 !**/src/main/**
 !**/src/test/**
 .DS_Store
+aws.yml
 
 ### STS ###
 .apt_generated

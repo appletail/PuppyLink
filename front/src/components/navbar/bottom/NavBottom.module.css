@@ -1,0 +1,15 @@
+.Wrapper {
+  @apply
+    fixed bottom-0 left-0 right-0
+    h-14 w-screen
+    border-t-[0.0313rem]
+   bg-white
+   border-t-grey
+   flex justify-evenly;
+}
+
+.NavBtn {
+  @apply 
+    h-14 w-14 
+    flex justify-center items-center;
+}

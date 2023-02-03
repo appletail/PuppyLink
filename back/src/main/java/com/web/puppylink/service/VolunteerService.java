@@ -1,5 +1,9 @@
 package com.web.puppylink.service;
 
-public class VolunteerService {
+import com.web.puppylink.model.Volunteer;
 
+public interface VolunteerService {
+
+	 Volunteer submitFile(String nickName, String imagePath);
+	 
 }

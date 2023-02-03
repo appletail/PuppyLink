@@ -1,0 +1,38 @@
+.Div {
+  @apply w-[21.875rem]
+  flex
+  flex-col
+  gap-1;
+}
+
+.BoxDiv {
+  @apply border
+  text-body
+  border-main-30
+  rounded-lg
+  flex
+  justify-between
+  items-center
+  pr-4;
+}
+
+.BoxDiv:focus-within {
+  @apply border-2 border-main-50 shadow
+  invalid:border-red invalid:text-red;
+}
+
+.InputBox {
+  @apply p-4
+  /* shadow */
+  appearance-none
+  border-none
+  rounded-lg
+  text-body
+  focus:outline-none;
+}
+
+.Helper {
+  @apply text-red
+    text-caption1
+    pl-2;
+}
