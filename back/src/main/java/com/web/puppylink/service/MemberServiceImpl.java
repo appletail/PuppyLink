@@ -128,19 +128,13 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-	public String duplicateCheckEmail(String email) {
-    	if(!memberRepository.existsByEmail(email)) {
-    		return "사용 가능한 이메일입니다.";
-    	}
-		return "이미 사용중인 이메일입니다. 다른 이메일을 작성해주세요.";
+	public boolean duplicateCheckEmail(String email) {
+    	return memberRepository.existsByEmail(email);
 	}
 
     @Override
-	public String duplicateCheckNickName(String nickName) {
-    	if(!memberRepository.existsByNickName(nickName)) {
-    		return "사용 가능한 닉네임입니다.";
-    	}
-		return "이미 사용중인 닉네임입니다. 다른 닉네임을 사용해주세요.";
+	public boolean duplicateCheckNickName(String nickName) {
+    	return memberRepository.existsByNickName(nickName);
 	}
 
     @Override

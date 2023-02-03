@@ -95,6 +95,7 @@ public class MemberController {
 
         return new ResponseEntity<>(new TokenDto("Bearer " +accessToken, "Bearer " + refreshToken), httpHeaders, HttpStatus.OK);
     }
+    
     @GetMapping("/reissuance")
     public ResponseEntity<Map<String, String>> refresh(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -171,6 +172,27 @@ public class MemberController {
             return new ResponseEntity<>("ERROR",HttpStatus.BAD_REQUEST);
         }
     }
+    
+    @GetMapping("/checkEmail/{email}")
+    @ApiOperation(value = "이메일 중복조회")
+    public boolean emailCheck(@PathVariable  String email) {
+    	logger.debug("UserController duplicate email check : {}", email);
+    	if(memberService.duplicateCheckEmail(email)) {
+    		return false;
+    	}
+    	return true;
+    }
+    
+    @GetMapping("/checkNickname/{nickName}")
+    @ApiOperation(value = "닉네임 중복조회")
+    public boolean nickNameCheck(@PathVariable String nickName) {
+    	logger.debug("UserController duplicate nickName check : {}", nickName);
+    	if(memberService.duplicateCheckNickName(nickName)){
+    		return false;
+    	}
+    	return true;
+    }
+
 
 //    @PutMapping("/account/pwdchange")
 //    @ApiOperation(value = "비밀번호 변경")
