@@ -1,16 +1,12 @@
 package com.web.puppylink.controller;
 
-import com.web.puppylink.config.jwt.JwtFilter;
-import com.web.puppylink.config.jwt.TokenProvider;
-import com.web.puppylink.config.util.MailUtil;
-import com.web.puppylink.dto.LoginDto;
-import com.web.puppylink.dto.MailDto;
-import com.web.puppylink.dto.MemberDto;
-import com.web.puppylink.dto.TokenDto;
-import com.web.puppylink.model.Member;
-import com.web.puppylink.service.MemberServiceImpl;
-import com.web.puppylink.service.RedisServiceImpl;
-import io.lettuce.core.RedisException;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -23,25 +19,33 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.puppylink.config.jwt.JwtFilter;
+import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.config.util.MailUtil;
+import com.web.puppylink.dto.LoginDto;
+import com.web.puppylink.dto.MailDto;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.BasicResponse;
+import com.web.puppylink.model.Member;
+import com.web.puppylink.service.MemberService;
+import com.web.puppylink.service.RedisServiceImpl;
 
+import io.lettuce.core.RedisException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -55,14 +59,14 @@ public class MemberController {
 
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     private final JavaMailSender javaMailSender;
     private final RedisServiceImpl redisService;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     public MemberController(
             TokenProvider tokenProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder,
-            MemberServiceImpl memberService,
+            MemberService memberService,
             JavaMailSender javaMailSender,
             RedisServiceImpl redisService) {
         this.tokenProvider = tokenProvider;
@@ -107,6 +111,9 @@ public class MemberController {
         Map<String, String> tokens = memberService.refresh(refreshToken, tokenProvider);
         System.out.println("accessToken : " + tokens.get("accessToken"));
         System.out.println("refreshToken : " + tokens.get("refreshToken"));
+//        if(tokens.get("refreshToken") != null) {
+//        	memberService.updateRefresh(authorizationHeader, tokens.get("refreshToken"));
+//        }
 
         response.setHeader("accessToken", tokens.get("accessToken"));
         if (tokens.get("refreshToken") != null) {
@@ -172,6 +179,13 @@ public class MemberController {
             return new ResponseEntity<>("ERROR",HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/{nickName}/change")
+    @ApiOperation(value = "비밀번호 변경")
+    public ResponseEntity<Integer> update(@RequestBody String newPassword, @PathVariable String nickName) {
+    	memberService.update(newPassword, nickName);
+    	return new ResponseEntity<Integer>(1, HttpStatus.OK);
+    }
     
     @GetMapping("/checkEmail/{email}")
     @ApiOperation(value = "이메일 중복조회")
@@ -192,35 +206,4 @@ public class MemberController {
     	}
     	return true;
     }
-
-
-//    @PutMapping("/account/pwdchange")
-//    @ApiOperation(value = "비밀번호 변경")
-//    public Object pwdchange(@Valid @RequestBody User user) {
-//		userDao.save(user);
-//
-//    	final BasicResponse result = new BasicResponse();
-//        result.status = true;
-//        result.data = "success";
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/account/uid")
-//    @ApiOperation(value = "UID 중복 조회")
-//    public Object uidcheck(@RequestParam(required = true) final String uid) {
-//    	System.out.println("UID..");
-//        Optional<User> userOpt = userDao.findUserByUid(uid);
-//        ResponseEntity response = null;
-//
-//        if (userOpt.isPresent()) {
-//            final BasicResponse result = new BasicResponse();
-//            result.status = true;
-//            result.data = "success";
-//            response = new ResponseEntity<>(result, HttpStatus.OK);
-//        } else {
-//            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//        }
-//
-//        return response;
-//    }
 }

@@ -17,6 +17,7 @@ public interface MemberService {
 	boolean duplicateCheckNickName(String nickName);
     void updateRefresh(String email, String refresh);
     Map<String, String> refresh(String refreshToken, TokenProvider tokenProvider);
+	void update(String newPassword, String nickName2);
 
 
 }
