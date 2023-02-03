@@ -13,8 +13,8 @@ public interface MemberService {
     Member signup(MemberDto member);
     Optional<Member> getMemberWithAuthorities(String email);
     Optional<Member> getMyMemberWithAuthorities();
-	String duplicateCheckEmail(String email);
-	String duplicateCheckNickName(String nickName);
+	boolean duplicateCheckEmail(String email);
+	boolean duplicateCheckNickName(String nickName);
     void updateRefresh(String email, String refresh);
     Map<String, String> refresh(String refreshToken, TokenProvider tokenProvider);
 
