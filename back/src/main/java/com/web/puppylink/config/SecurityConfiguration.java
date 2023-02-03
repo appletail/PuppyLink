@@ -1,29 +1,33 @@
 package com.web.puppylink.config;
 
-import com.web.puppylink.config.jwt.JwtAccessDeniedHandler;
-import com.web.puppylink.config.jwt.JwtAuthenticationEntryPoint;
-import com.web.puppylink.config.jwt.JwtSecurityConfig;
-import com.web.puppylink.config.jwt.TokenProvider;
-import org.springframework.boot.autoconfigure.security.servlet.SpringBootWebSecurityConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.web.puppylink.config.jwt.JwtAccessDeniedHandler;
+import com.web.puppylink.config.jwt.JwtAuthenticationEntryPoint;
+import com.web.puppylink.config.jwt.JwtSecurityConfig;
+import com.web.puppylink.config.jwt.TokenProvider;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private CorsConfig corsConfig;
+	
     private final TokenProvider tokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+	
     public SecurityConfiguration(TokenProvider tokenProvider,
                                  JwtAccessDeniedHandler jwtAccessDeniedHandler,
                                  JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
@@ -47,7 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+        		.addFilter(corsConfig.corsFilter())        
+        		.csrf().disable()
 
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -59,9 +64,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()                                        // httpservletrequest로 접근하는 것을 제한하겠다.
-                .antMatchers("/users/loginProc").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
-                .antMatchers("/users/signup").permitAll()
+                .antMatchers("/members/login").permitAll()    			// 해당 uri로 접근은 인증을 하지 않겠다.!
+                .antMatchers("/members/signup").permitAll()
+                .antMatchers("/members/mail").permitAll()
+                .antMatchers("/members/checkEmail").permitAll()
+                .antMatchers("/members/checkNickname").permitAll()
+                .antMatchers("/members/reissuance").permitAll()
                 .antMatchers("/foundation/validate").permitAll()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/swagger/**").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
                 .anyRequest().authenticated()                               // 나머지는 인증을 해야한다.
 
                 .and()

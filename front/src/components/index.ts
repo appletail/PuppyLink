@@ -16,6 +16,7 @@ import ImgSm from './Imgs/ImgSm/ImgSm';
 
 import Input from './Inputs/Input/Input';
 import InputBtn from './Inputs/InputBtn/InputBtn';
+import InputForm from './Inputs/Input/InputForm';
 import Label from './Labels/Label';
 
 import NavBack from './Navbar/Top/NavBack';
@@ -28,7 +29,7 @@ export const cards = { CardSm, CardMd, CardLg, CardXL };
 export const footers = { FooterBtn, FooterHeart };
 export const imgs = { ImgLg, ImgSm };
 export const labels = { Label };
-export const inputs = { Input, InputBtn };
+export const inputs = { Input, InputBtn, InputForm };
 export const NavTop = { NavLogo, NavCreate, NavDetail, NavBack };
 
 export { default as NavBottom } from './Navbar/Bottom/NavBottom';
