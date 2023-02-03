@@ -1,13 +1,11 @@
 import { useForm } from 'react-hook-form';
 
-import DepDateFooter from './Components/DepDateFooter';
-import DestFooter from './Components/DestFooter';
-import FlightName from './Components/FilghtNameSelect';
-import { DestTitle, DepDateTitle } from './Components/FlightCardTitles';
-import Foundation from './Components/FoundationSelect';
+import { ToastContainer, toast } from 'react-toastify';
 
+import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
+
+import 'react-toastify/dist/ReactToastify.css';
 import { cards, buttons } from '@/components';
-
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 function VolUserResi() {
@@ -21,7 +19,16 @@ function VolUserResi() {
 
   const { control, handleSubmit, register, formState: { errors } } = useForm()
 
-
+  const notify = () => toast.error('모든 항목을 작성해주세요.', {
+    position: "bottom-center",
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: 0,
+    theme: "colored",
+  })
   return (
     <div>
       <button className={`${VolUserStyle.GoToMyRegi} bg-main-30`} type="button">
@@ -36,7 +43,7 @@ function VolUserResi() {
               control={control}
               name="dest"
               rules={{
-                validate: (v: string) => v != undefined || '도착지를 선택해주세요.',
+                validate: (v: string) => v != undefined,
               }}
             />} />
           {errors.dest && <span>{`${errors.dest.message}`}</span>}
@@ -46,7 +53,7 @@ function VolUserResi() {
               control={control}
               name="depDate"
               rules={{
-                validate: (v: string) => v != undefined || '출국일을 선택해주세요.',
+                validate: (v: string) => v != undefined,
               }}
             />}
           />
@@ -58,7 +65,7 @@ function VolUserResi() {
             control={control}
             name="filghtName"
             rules={{
-              validate: (v: string) => v != undefined || '항공사를 선택해주세요.',
+              validate: (v: string) => v != undefined,
             }}
           />
           {errors.filghtName && <span>{`${errors.filghtName.message}`}</span>}
@@ -69,7 +76,7 @@ function VolUserResi() {
             control={control}
             name="businessNo"
             rules={{
-              validate: (v: string) => v != undefined || '단체를 선택해주세요.',
+              validate: (v: string) => v != undefined,
             }}
           />
           {errors.businessNo && <span>{`${errors.businessNo.message}`}</span>}
@@ -79,13 +86,14 @@ function VolUserResi() {
             id="termsService"
             type="checkbox"
             {...register("termsService", {
-              validate: v => v || '약관에 동의해주세요.'
+              validate: v => v
             })}
           />
           <label htmlFor="termsService">주의사항을 읽었고 개인정보 제공에 동의합니다.</label>
           {errors.termsService && <span>{`${errors.termsService.message}`}</span>}
         </div>
-        <buttons.BtnLg BtnValue="신청하기" />
+        <buttons.BtnLg BtnValue="신청하기" onClick={notify} />
+        <ToastContainer />
       </form>
     </div >
   );

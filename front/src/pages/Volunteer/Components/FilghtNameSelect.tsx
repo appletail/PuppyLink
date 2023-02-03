@@ -10,9 +10,9 @@ function FilghtNameSelect({ name, control, rules }: UseControllerProps): JSX.Ele
   const { field: { value, onChange } } = useController({ name, control, rules })
 
   const airlines = [
-    { airline: Korair, value: 'Korair', isTrue: false },
-    { airline: Asiana, value: 'Asiana', isTrue: false },
-    { airline: AirCanada, value: 'AirCanada', isTrue: false },
+    { airline: Korair, value: 'Korair' },
+    { airline: Asiana, value: 'Asiana' },
+    { airline: AirCanada, value: 'AirCanada' },
   ]
 
   const isChecked = function (curValue: string): boolean {

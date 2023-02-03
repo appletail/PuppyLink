@@ -10,10 +10,10 @@ function FoundationSelect({ name, control, rules }: UseControllerProps): JSX.Ele
   const { field: { value, onChange } } = useController({ name, control, rules })
 
   const foundations = [
-    { foundation: Korair, value: '1612314155', isTrue: false },
-    { foundation: Asiana, value: '1562345234523', isTrue: false },
-    { foundation: AirCanada, value: '1344523422', isTrue: false },
-    { foundation: React, value: '14324542345', isTrue: false },
+    { foundation: Korair, value: '1612314155' },
+    { foundation: Asiana, value: '1562345234523' },
+    { foundation: AirCanada, value: '1344523422' },
+    { foundation: React, value: '14324542345' },
   ]
 
   const isChecked = function (curValue: string): boolean {
