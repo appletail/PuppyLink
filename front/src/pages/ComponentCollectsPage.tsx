@@ -1,11 +1,20 @@
+import { FaPlaneDeparture } from 'react-icons/fa';
+
+import { ReactComponent as Korair } from '@/assets/Korair.svg'
 import { buttons, cards, labels, footers, imgs, NavBottom, inputs } from '@/components';
 
-
 function ComponentCollectsPage() {
+  const whereareyou = (
+    <div className="flex">
+      <FaPlaneDeparture />
+      <p className="ml-2">어디로 가세요?</p>
+    </div>
+  )
+
   return (
     <div className="ComponentCollectsPage">
       <footers.FooterHeart HeartCount={123} IsLiked={true} Username="harim" />
-
+      <Korair />
       <labels.Label LabelValue="비행기 경로 확인" />
       <buttons.BtnSm BtnValue="hello" />
       <buttons.BtnBsm BtnValue="hello" />
@@ -13,7 +22,7 @@ function ComponentCollectsPage() {
       <buttons.BtnLg BtnValue="hello" />
       <cards.CardSm
         CardContents={['Lorem ipsum dolor sit']}
-        CardTitle="Title"
+        CardTitle={whereareyou}
       />
       <cards.CardMd
         CardContents={['Lorem ipsum dolor sit amet, elit.']}

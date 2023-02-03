@@ -19,10 +19,10 @@ import InputBtn from './Inputs/InputBtn/InputBtn';
 import InputForm from './Inputs/Input/InputForm';
 import Label from './Labels/Label';
 
-import NavLogo from './Navbar/Top/NavLogo';
+import NavBack from './Navbar/Top/NavBack';
 import NavCreate from './Navbar/Top/NavCreate';
 import NavDetail from './Navbar/Top/NavDetail';
-import NavBack from './Navbar/Top/NavBack';
+import NavLogo from './Navbar/Top/NavLogo';
 
 export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
 export const cards = { CardSm, CardMd, CardLg, CardXL };

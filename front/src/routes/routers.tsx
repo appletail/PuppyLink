@@ -4,6 +4,7 @@ import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
 import LoginPage from '@/pages/LoginPage';
 
 const routers = createBrowserRouter([
@@ -12,6 +13,10 @@ const routers = createBrowserRouter([
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
+      {
+        path: '/volunteer',
+        element: <VolUserResiPage />,
+      },
       {
         path: '/components',
         element: <ComponentCollectsPage />,

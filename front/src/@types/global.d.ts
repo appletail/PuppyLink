@@ -3,6 +3,16 @@ type ButtonTypes = React.DetailedHTMLProps<
   HTMLButtonElement
 >;
 
+type UseControllerProps<
+  TFieldValues extends FieldValues = FieldValues
+> = {
+  name: FieldName<TFieldValues>;
+  rules?: Exclude<RegisterOptions, 'valueAsNumber' | 'valueAsDate' | 'setValueAs'>;
+  onFocus?: () => void;
+  defaultValue?: unknown;
+  control?: Control<TFieldValues>;
+};
+
 interface BtnProps extends ButtonTypes {
   // onClick: () => void;
   BtnValue: string;

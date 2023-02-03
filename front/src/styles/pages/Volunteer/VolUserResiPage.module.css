@@ -1,0 +1,36 @@
+.GoToMyRegi {
+  @apply 
+    rounded-lg
+    h-[5.4375rem]
+    w-[21.875rem]
+    text-body-bold
+    mt-6 mb-7;
+}
+
+.FlightWrapper {
+  @apply flex
+    gap-4 mb-11;
+}
+
+.SelectTitle {
+  @apply
+    text-title2-bold mb-4;
+}
+
+.FlightSelect{
+  @apply
+    mb-9 flex gap-3;
+
+}
+
+.GroupSelect {
+  @apply
+    mb-9 flex gap-3;
+
+}
+
+.Terms {
+  @apply
+    flex
+    mb-9 gap-1;
+}

@@ -11,7 +11,7 @@ function NavBottom(): JSX.Element {
 
   const icons = [
     { id: 'Home', link: '/', fill: AiFillHome, empty: AiOutlineHome },
-    { id: 'Volunteer', link: '/', fill: RiHandHeartFill, empty: RiHandHeartLine },
+    { id: 'Volunteer', link: '/volunteer', fill: RiHandHeartFill, empty: RiHandHeartLine },
     { id: 'Review', link: '/', fill: IoNewspaperSharp, empty: IoNewspaperOutline },
     { id: 'MyPage', link: '/', fill: IoPerson, empty: IoPersonOutline },
     { id: 'ComponentCollect', link: '/components', fill: FaGrinWink, empty: FaRegGrin },
