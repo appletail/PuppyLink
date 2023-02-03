@@ -1,18 +1,11 @@
-import java.util.Date;
-import java.util.List;
+package com.web.puppylink.service;
 
-<<<<<<< HEAD
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-=======
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
->>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Foundation;
@@ -102,26 +95,26 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return volunteerRepository.save(volunteerInfo);
 	}
 
-<<<<<<< HEAD
-	public Volunteer submitFile(String nickName, String imagePath) {
-		
-		// 닉네임으로 멤버 찾기
-		Member member = memberRepository.findByNickName(nickName);
-//		System.out.println("email= " + email);
-		
-		// 멤버로 volunteer 찾기
-		Volunteer vol = volunteerRepository.findVolunteerByEmail(member);
-		
-		// fileURL 업데이트
-		vol.setFileURL(imagePath);
-		volunteerRepository.save(vol);
-		
-		return vol;
-	}
-}
+//	public Volunteer submitFile(String nickName, String imagePath) {
+//		// 닉네임으로 멤버 찾기
+//		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+//			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+//		});
+//		
+//		// 닉네임으로 멤버 찾기
+////		Member member = memberRepository.findByNickName(nickName);
+////		System.out.println("email= " + email);
+//
+//		// 멤버로 volunteer 찾기
+////		Volunteer vol = volunteerRepository.findVolunteerByEmail(member);
+//		
+//		// fileURL 업데이트
+//		vol.setFileURL(imagePath);
+//		volunteerRepository.save(vol);
+//		
+//		return vol;
+//	}
 
-=======
->>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
 	@Transactional
 	@Override
 	public void delete(int volunteerNo) {
@@ -246,8 +239,4 @@ public class VolunteerServiceImpl implements VolunteerService{
 		
 		return volunteer;
 	}
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059

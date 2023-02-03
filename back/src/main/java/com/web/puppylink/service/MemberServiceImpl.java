@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 
 @Component("memberService")
 public class MemberServiceImpl implements MemberService{
-
-
     private final MemberRepository memberRepository;
     private final FoundationRepository foundationRepository;
     private final PasswordEncoder passwordEncoder;
@@ -50,7 +48,6 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     @Override
     public Member signup(MemberDto member) {
-
         // 회원이 존재하는지 확인
         if( memberRepository.findAuthoritiesByEmail(member.getEmail()).orElse(null) != null ) {
             throw new RuntimeException("이미 가입되어 있는 유저가 존재합니다.");

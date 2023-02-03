@@ -62,7 +62,6 @@ jwt:
 
 api:
   serviceKey: dcDOac8qR1Hlkma1oUeF%2BzRbGEis9zq%2BZKa0NoKAwmCORC9AIPE4FYfn3b3bNpI%2BlseM4g%2BZ%2BTUX8CT3tFZDsw%3D%3D
-<<<<<<< HEAD
 
 cloud:
   aws:
@@ -76,6 +75,3 @@ cloud:
 #      instanceProfile: true
       accessKey: 
       secretKey: 
-=======
-  
->>>>>>> 6850030f9738870a0ecc110bb0fa9c7a5d1e7059
