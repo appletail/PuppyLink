@@ -24,21 +24,17 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // login email를 받아와서 인증에 필요한 데이터를 DB에서 찾아옴
         return memberRepository.findAuthoritiesByEmail(email)
                 .map(member -> createUser(email,member))
                 .orElseThrow(() -> new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다."));
     }
 
-    private User createUser(String email, Member member) {
+    private PrincipalDetails createUser(String email, Member member) {
         if(!member.isActivated()) {
             throw new RuntimeException(email + " -> 활성화되어 있지 않습니다.");
         }
-
-        List<GrantedAuthority> grantedAuthorityList = member.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
-                .collect(Collectors.toList());
-
-        return new User(member.getEmail(), member.getPassword(), grantedAuthorityList);
+        return new PrincipalDetails(member);
     }
 
 }

@@ -1,12 +1,9 @@
 package com.web.puppylink.config.util;
 
-import com.web.puppylink.dto.MailDto;
+import com.web.puppylink.model.redis.Auth;
 import lombok.NoArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.mail.SimpleMailMessage;
 
-import javax.annotation.Resource;
 import java.util.Random;
 
 @NoArgsConstructor
@@ -25,7 +22,7 @@ public class MailUtil {
         return generatedString;
     }
 
-    public static SimpleMailMessage createMail(MailDto mail) {
+    public static SimpleMailMessage createMail(Auth mail) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getEmail());

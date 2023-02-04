@@ -30,6 +30,12 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
 		<!-- redis dependency insection -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
