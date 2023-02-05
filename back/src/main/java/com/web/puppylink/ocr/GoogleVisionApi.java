@@ -1,12 +1,14 @@
 package com.web.puppylink.ocr;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
-import java.sql.Date;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.imageio.ImageIO;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
@@ -22,7 +24,7 @@ public class GoogleVisionApi {
 	private static FlightTicket ticket = new FlightTicket();
 	
 	@SuppressWarnings("deprecation")
-	public GoogleVisionApi(String imageFilePath) {
+	public GoogleVisionApi(String imgUrl) {
 		try {
 			String output = "";
 			String array[] = new String[100];
@@ -30,8 +32,6 @@ public class GoogleVisionApi {
 			int ticketNoIndex = 0;
 			int passengerNameIndex = 0;
 			int bookingReferenceIndex = 0; 
-			
-			// IATA의 규정상, 3글자로 통일된다.
 			int depCityIndex = 0;
 			int depDateIndex = 0;
 			int arriveCityIndex = 0;
@@ -39,14 +39,17 @@ public class GoogleVisionApi {
 			int countCity = 0;
 			int countDate = 0;
 			int countFlight = 0;
-			
-			// FlightTicket에 포함되어 있지 않은 필드!
 			int flightIndex = 0;
 			
-			Date transDepDate, transArriveDate;
+			// imgUrl : 이미지 URL, imgFilePath : 저장할 파일명, imgFormat : 저장할 이미지의 포맷(.jpg, .png..)
+			String imgFilePath = "FlightTicket.PNG";
+			String imgFormat = "PNG";
 		    
 			List<AnnotateImageRequest> requests = new ArrayList<>();
-			ByteString imgBytes = ByteString.readFrom(new FileInputStream(imageFilePath));
+
+			// AWS S3에 업로드 되어 URL로 존재하는 이미지 파일에 접근하여, File 객체로 바로 변환한다.
+			File file = getImageFromUrl(imgUrl, imgFilePath, imgFormat);
+			ByteString imgBytes = ByteString.readFrom(new FileInputStream(file));
 		
 			Image img = Image.newBuilder().setContent(imgBytes).build();
 			Feature feat = Feature.newBuilder().setType(Type.TEXT_DETECTION).build();
@@ -62,15 +65,15 @@ public class GoogleVisionApi {
 						System.out.printf("Error: %s\n", res.getError().getMessage());
 						return;
 				    }
-					System.out.println("Text : ");
+//					System.out.println("Text : ");
 					output = res.getTextAnnotationsList().get(0).getDescription();
-					System.out.println(output);
+//					System.out.println(output);
 				
 					// OCR 분석결과를 각 문장단위로 구별하면서, FlightTicket의 구성 요소에 해당하는 값들을 추출한다.
 					StringTokenizer st = new StringTokenizer(output,"\n");
 					for(int i=0; st.hasMoreTokens(); i++){
 						array[i] = st.nextToken();
-						System.out.println(i + " "+ array[i]);
+//						System.out.println(i + " "+ array[i]);
 						
 						// CASE1. 대한항공(Korean Air)
 						if(array[0].contains("KOREAN AIR")) {
@@ -138,7 +141,28 @@ public class GoogleVisionApi {
 		}
 	}
 	
+	// VolunteerServiceImpl에 OCR 처리 후 생성된 항공권 정보를 객체에 담아 반환한다. 
 	public FlightTicket getFlightTicket() {
 		return ticket;
+	}
+	
+	// AWS S3에 업로드 되어 URL로 존재하는 이미지 파일을 File 객체로 바로 변환하여 반환한다.
+	public File getImageFromUrl(String imgUrl, String imgFilePath, String imgFormat)
+	{
+		try{
+			// STEP1. URL로부터 Image 가져오기
+			BufferedImage image = ImageIO.read(new URL(imgUrl));
+			
+			// STEP2. Image를 저장할 File 객체 생성하기
+			File imgFile = new File(imgFilePath);
+			
+			// STEP3. 해당 File 객체에 URL Image 저장하기
+	        ImageIO.write(image, imgFormat, imgFile);
+	        
+	        return imgFile;
+	        } catch (Exception e){
+	        	e.printStackTrace();
+	        }
+			return null;
 	}
 }

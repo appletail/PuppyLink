@@ -248,7 +248,8 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	@Transactional
 	public void update(String newPassword, String nickName) {
-		 Member member = memberRepository.findByNickName(nickName);
+		 Member member = memberRepository.findByNickName(nickName).orElseThrow(()
+				 -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 
 		 String encPassword = passwordEncoder.encode(newPassword);
 		member.setPassword(encPassword);
