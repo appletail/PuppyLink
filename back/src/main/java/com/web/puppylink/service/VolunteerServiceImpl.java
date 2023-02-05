@@ -225,7 +225,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String path = volunteer.getFileURL();
-		path = "src/image/001.PNG";
+		// [AWS S3] path = "https://puppylink-test.s3.ap-northeast-2.amazonaws.com/ocr-test/flight.PNG";
+		// [LOCAL] path = "src/image/001.PNG";
 		
 		// 2. 항공권 정보에 OCR을 적용하여 주요 정보를 데이터화한다.
 		GoogleVisionApi api = new GoogleVisionApi(path);
