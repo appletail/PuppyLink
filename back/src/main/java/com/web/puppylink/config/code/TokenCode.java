@@ -1,11 +1,11 @@
-package com.web.puppylink.config;
+package com.web.puppylink.config.code;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Code {
+public enum TokenCode {
 
     INDEX_NOT_FOUND(1001, "인덱스가 존재하지 않습니다."),
     BOARD_NOT_FOUND(1002, "게시글을 찾을 수 없습니다."),
@@ -14,11 +14,9 @@ public enum Code {
     EXPIRED_TOKEN(1005, "만료된 토큰입니다."),
     UNSUPPORTED_TOKEN(1006, "변조된 토큰입니다."),
     ACCESS_DENIED(1007, "권한이 없습니다."),
-	WRONG_TOKEN(1008, "잘못된 토큰입니다."),
-	PERMISSION_DENIED(1009, "접근 권한이 없습니다");
+    WRONG_TOKEN(1008, "잘못된 토큰입니다."),
+    PERMISSION_DENIED(1009, "접근 권한이 없습니다");
 
     private int code;
     private String message;
-
-
 }

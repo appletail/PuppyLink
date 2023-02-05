@@ -1,12 +1,9 @@
 package com.web.puppylink.config.jwt;
 
-import com.web.puppylink.config.Code;
 import com.web.puppylink.config.auth.PrincipalDetails;
-import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.repository.MemberRepository;
-import com.web.puppylink.service.RedisService;
 import com.web.puppylink.service.RedisServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -20,14 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import com.web.puppylink.model.Member;
 
 import java.security.Key;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
