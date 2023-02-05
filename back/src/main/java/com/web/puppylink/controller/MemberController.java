@@ -1,12 +1,11 @@
 package com.web.puppylink.controller;
 
 import com.web.puppylink.config.auth.PrincipalDetails;
+import com.web.puppylink.config.code.Code;
 import com.web.puppylink.config.jwt.JwtFilter;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.config.util.MailUtil;
-import com.web.puppylink.dto.LoginDto;
-import com.web.puppylink.dto.MemberDto;
-import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.dto.*;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
@@ -16,12 +15,10 @@ import com.web.puppylink.service.RedisServiceImpl;
 import io.lettuce.core.RedisException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import java.util.Map;
-import java.util.Optional;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -34,40 +31,20 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.web.puppylink.config.jwt.JwtFilter;
-import com.web.puppylink.config.jwt.TokenProvider;
-import com.web.puppylink.config.util.MailUtil;
 import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
-import com.web.puppylink.model.BasicResponse;
-import com.web.puppylink.model.Member;
-import com.web.puppylink.service.MemberService;
-import com.web.puppylink.service.RedisServiceImpl;
+import com.web.puppylink.dto.BasicResponseDto;
 
-import io.lettuce.core.RedisException;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
-@ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
-        @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
-        @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
-
+@ApiResponses(value = {
+        @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponseDto.class),
+        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponseDto.class),
+        @ApiResponse(code = 404, message = "Not Found", response = BasicResponseDto.class),
+        @ApiResponse(code = 500, message = "Failure", response = BasicResponseDto.class)
+})
 //@CrossOrigin(origins = { "http://localhost:8081" })
 @RestController
 @RequestMapping("/members")
@@ -94,6 +71,7 @@ public class MemberController {
 
     @PostMapping("/login")
     @ApiOperation(value = "로그인")
+    @ApiResponse(code = 200, message = "헤더의 AccessToken & RefreshToken을 넣어둠", response = ResponseEntity.class)
     public Object login(@RequestBody LoginDto login) {
 
         logger.debug("MembersController login intro : {}", login);
@@ -117,7 +95,7 @@ public class MemberController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
         // FE응답
-        return new ResponseEntity<>(new TokenDto("Bearer " +accessToken, "Bearer " + refreshToken), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>("SUCCESS", httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/reissuance")
@@ -162,7 +140,7 @@ public class MemberController {
                 httpHeaders,
                 HttpStatus.OK);
     }
-    @PostMapping("/logout")
+    @DeleteMapping("/logout")
     @ApiOperation(value = "로그아웃 진행")
     public void logout(@RequestBody TokenDto tokenDto) {
         logger.info("토큰 확인하기 : {}", tokenDto);
@@ -185,13 +163,14 @@ public class MemberController {
         redisService.saveAccessToken(accessToken);
     }
 
-    @PostMapping("/signup")
+    @PostMapping()
     @ApiOperation(value = "회원가입")
     public Object signup(@RequestBody MemberDto member) {
         return ResponseEntity.ok(memberService.signup(member));
     }
 
-    @GetMapping("/account")
+    @GetMapping()
+    @ApiOperation(value = "회원조회")
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<Member> getMyInfo() {
         return ResponseEntity.ok(memberService.getMyMemberWithAuthorities().get());
@@ -205,6 +184,10 @@ public class MemberController {
 
     @PostMapping("/mail")
     @ApiOperation(value = "회원가입 인증메일 발송")
+    @ApiImplicitParam(name = "email", value = "사용가능한 이메일", required = true)
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "인증번호가 정상적으로 발송되었습니다.", response = ResponseEntity.class)
+    })
     public ResponseEntity<?> getSignupToAuthentication(@RequestBody() Auth mail) {
         logger.info("MemberController SignupToAuth : {} ", mail);
         try {
@@ -253,5 +236,18 @@ public class MemberController {
     		return false;
     	}
     	return true;
+    }
+
+    @DeleteMapping
+    @ApiOperation( value = "회원탈퇴" )
+    @ApiResponses( value = {@ApiResponse(code = 200, message = "회원탈퇴 성공", response = ResponseEntity.class)})
+    public Object secession(TokenDto tokenDto) {
+        try {
+            memberService.deleteMemberByToken(tokenDto);
+            return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.OK);
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }

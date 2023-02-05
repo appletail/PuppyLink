@@ -10,7 +10,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-import com.web.puppylink.config.Code;
+import com.web.puppylink.config.code.Code;
 
 @Component
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {

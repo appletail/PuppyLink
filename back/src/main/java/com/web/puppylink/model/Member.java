@@ -39,7 +39,10 @@ public class Member {
     @NotNull
     private boolean             activated;
 
-    @ManyToMany
+    @ManyToMany( cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "members_authority",
             joinColumns = {@JoinColumn(name = "members_email", referencedColumnName = "email")},
@@ -56,5 +59,4 @@ public class Member {
     public void updateRefreshToken(String newToken) {
         this.refreshToken = newToken;
     }
-
 }

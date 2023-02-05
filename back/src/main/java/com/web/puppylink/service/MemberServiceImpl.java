@@ -1,33 +1,22 @@
 package com.web.puppylink.service;
 
-import com.web.puppylink.config.SecurityUtil;
+import com.web.puppylink.config.util.SecurityUtil;
+import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.*;
-import com.web.puppylink.model.redis.Auth;
-import com.web.puppylink.model.redis.RefreshToken;
+import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.repository.*;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Key;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component("memberService")
 public class MemberServiceImpl implements MemberService{
@@ -36,6 +25,10 @@ public class MemberServiceImpl implements MemberService{
     private final PasswordEncoder passwordEncoder;
     private final AuthRedisRepository authRedisRepository;
     private final RefreshRedisRepository refreshRedisRepository;
+    @Autowired
+    private TokenProvider tokenProvider;
+    @Autowired
+    private AccessRedisRepository accessRedisRepository;
 
     public MemberServiceImpl(
             MemberRepository memberRepository,
@@ -254,4 +247,21 @@ public class MemberServiceImpl implements MemberService{
 		 String encPassword = passwordEncoder.encode(newPassword);
 		member.setPassword(encPassword);
 	}
+
+    @Override
+    public void deleteMemberByToken(TokenDto token) throws Exception {
+        // 토큰에 있는 정보를 가져온다.
+        Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        // 토큰에서 이메일정보를 이용해서 redis에 저장된 RefreshToken 삭제
+        refreshRedisRepository.deleteById(principal.getUsername());
+        // db에서도 유저의 대한 정보를 삭제한다. ( email 사용 )
+        memberRepository.deleteById(principal.getUsername());
+        // Access Token은 블랙리스트에 추가
+        AccessToken accessToken = AccessToken.builder()
+                .accessToken(token.getAccessToken())
+                .expired(tokenProvider.getExpired(token.getAccessToken()))
+                .build();
+        accessRedisRepository.save(accessToken);
+    }
 }
