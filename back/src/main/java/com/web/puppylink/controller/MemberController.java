@@ -12,6 +12,8 @@ import com.web.puppylink.model.redis.Auth;
 import com.web.puppylink.model.redis.RefreshToken;
 import com.web.puppylink.service.MemberServiceImpl;
 import com.web.puppylink.service.RedisServiceImpl;
+import com.web.puppylink.service.VolunteerServiceImpl;
+
 import io.lettuce.core.RedisException;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -37,7 +39,6 @@ import org.springframework.web.bind.annotation.*;
 import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
-import com.web.puppylink.model.BasicResponse;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.service.FoundationServiceImpl;
 import com.web.puppylink.service.MemberService;
@@ -64,6 +65,7 @@ public class MemberController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberServiceImpl memberService;
     private final FoundationServiceImpl foundationService;
+    private final VolunteerServiceImpl volunteerService;
     private final JavaMailSender javaMailSender;
     private final RedisServiceImpl redisService;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -72,12 +74,14 @@ public class MemberController {
             AuthenticationManagerBuilder authenticationManagerBuilder,
             MemberServiceImpl memberService,
             FoundationServiceImpl foundationService,
+            VolunteerServiceImpl volunteerService,
             JavaMailSender javaMailSender,
             RedisServiceImpl redisService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.memberService = memberService;
         this.foundationService = foundationService;
+        this.volunteerService = volunteerService;
         this.javaMailSender = javaMailSender;
         this.redisService = redisService;
     }
@@ -257,9 +261,11 @@ public class MemberController {
     @DeleteMapping
     @ApiOperation( value = "회원탈퇴" )
     @ApiResponses( value = {@ApiResponse(code = 200, message = "회원탈퇴 성공", response = ResponseEntity.class)})
-    public Object secession(TokenDto tokenDto) {
+    public Object secession(TokenDto tokenDto, @RequestParam(required = true) final String email) {
         try {
             memberService.deleteMemberByToken(tokenDto);
+            // s3 필수서류 삭제 
+            volunteerService.deleteALLFile(email);
             return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.OK);
         } catch ( Exception e ) {
             e.printStackTrace();

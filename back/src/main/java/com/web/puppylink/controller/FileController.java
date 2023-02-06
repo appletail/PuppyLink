@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +52,8 @@ public class FileController {
 	
 	@PostMapping("/{nickName}/history/submit")
 	@ApiOperation(value = "봉사자 필수서류 제출")
-	public Object upload(MultipartFile[] multipartFileList, HttpServletRequest request) throws Exception {
+	public Object upload(MultipartFile[] multipartFileList, HttpServletRequest request, @RequestParam(required = true) final int volunteerNo) throws Exception {
+		
 		List<String> imagePathList = new ArrayList<>();
 		String imagePath = "";
 		// 폴더 이름 : nickName으로 생성
@@ -82,13 +84,12 @@ public class FileController {
 			
 		}
 		
-		return ResponseEntity.ok(volunteerService.submitFile(nickName, imagePath));
+		return ResponseEntity.ok(volunteerService.submitFile(nickName, imagePath, volunteerNo));
 	}
 	
 	@DeleteMapping("/{nickName}/history/delete")
     @ApiOperation(value = "봉사자 필수 서류 삭제")
     public void delete(@RequestParam(required = true) final int volunteerNo) {
-		
         volunteerService.deleteFile(volunteerNo);
     }
 	

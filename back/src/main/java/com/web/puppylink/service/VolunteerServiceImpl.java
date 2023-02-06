@@ -103,23 +103,20 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return volunteerRepository.save(volunteerInfo);
 	}
 
-	public List<Volunteer> submitFile(String nickName, String imagePath) {
-		// 닉네임으로 멤버 찾기
+	public Volunteer submitFile(String nickName, String imagePath, int volunteerNo) {
+
 		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		
-		// 멤버(이메일)로 volunteerList 찾기
-		List<Volunteer> volList = volunteerRepository.findVolunteerByEmail(member);
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
 		
-		for (int i = 0; i < volList.size(); i++) {
-			// fileURL 업데이트
-			Volunteer vol = volList.get(i);
-			vol.setFileURL(imagePath);
-			volunteerRepository.save(vol);
-		}
+		volunteer.setFileURL(imagePath);
+		volunteerRepository.save(volunteer);
 		
-		return volList;
+		return volunteer;
 	}
 
 	@Transactional
@@ -217,6 +214,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		String status = volunteer.getStatus();
 		if(status.contentEquals("승인 완료")) {
 			volunteer.setStatus("봉사 완료");
+			deleteFile(volunteerNo);			// s3 필수서류 삭제	
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -256,25 +254,41 @@ public class VolunteerServiceImpl implements VolunteerService{
 		});
 		
 		try{
-			String fileUrl = volunteer.getFileURL();   		// https://puppylink-test.s3.ap-northeast-2.amazonaws.com/{nickName}/파일명
-            String fileKey = fileUrl.split("com/")[1]; 		// {nickName}/파일명
+			String fileUrl = volunteer.getFileURL();   		
+            String fileKey = fileUrl.split("com/")[1]; 		
 
             final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
 
-            // s3 file 삭제
             try {
                 s3.deleteObject(Bucket, fileKey);
             } catch (AmazonServiceException e) {
                 System.err.println(e.getErrorMessage());
                 System.exit(1);
             }
-
-	        } catch (Exception e) {
-	        	e.printStackTrace();
-	        	throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
-//	            throw new BaseException(S3_DELETE_ERROR);
-	        }
+	    } catch (Exception e) {
+	       e.printStackTrace();
+	       throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
+//	       throw new BaseException(S3_DELETE_ERROR);
+	    }
 		
 		volunteer.setFileURL(null);
+	}
+	
+	@Transactional
+	@Override
+	public void deleteALLFile(String email) {
+		Member member = memberRepository.findUserByEmail(email).orElseThrow(()->{
+			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+		});
+		List<Volunteer> volList = volunteerRepository.findVolunteerByEmail(member);
+		
+		for (int i = 0; i < volList.size(); i++) {
+			Volunteer volunteer = volList.get(i);
+			int volunteerNo = volunteer.getVolunteerNo();
+			deleteFile(volunteerNo);						// s3 삭제
+			delete(volunteerNo);							// db 삭제
+		}
+		
+		
 	}
 }
