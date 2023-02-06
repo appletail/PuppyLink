@@ -4,13 +4,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.web.puppylink.config.auth.PrincipalDetails;
+import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Foundation;
@@ -31,6 +36,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 	private final FoundationRepository foundationRepository;
 	private final VolunteerRepository volunteerRepository;
 	private final FlightTicketRepository flightTicketRepository;
+	@Autowired
+    private TokenProvider tokenProvider;
 	
 	public VolunteerServiceImpl(VolunteerRepository volunteerRepository,
 			MemberRepository memberRepository, FoundationRepository foundationRepository,
@@ -276,7 +283,11 @@ public class VolunteerServiceImpl implements VolunteerService{
 	
 	@Transactional
 	@Override
-	public void deleteALLFile(String email) {
+	public void deleteALLFile(TokenDto token) {
+		Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        String email = principal.getUsername();
+        
 		Member member = memberRepository.findUserByEmail(email).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
