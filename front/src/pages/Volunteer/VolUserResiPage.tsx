@@ -1,12 +1,11 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form';
-
 import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
-
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
-import { cards, buttons } from '@/components';
+import { cards, buttons, Modal } from '@/components';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 
@@ -28,7 +27,7 @@ function VolUserResi() {
       })
     }
   }
-
+  const [term, setTerm] = useState(false)
 
   return (
     <div>
@@ -71,7 +70,7 @@ function VolUserResi() {
           />
         </div>
         <div className={VolUserStyle.Terms}>
-          <input id="termsService" type="checkbox"
+          <input id="termsService" type="checkbox" onClick={() => setTerm(!term)}
             {...register("termsService", {
               validate: v => v
             })}
@@ -79,8 +78,15 @@ function VolUserResi() {
           <label htmlFor="termsService">주의사항을 읽었고 개인정보 제공에 동의합니다.</label>
         </div>
         <buttons.BtnLg BtnValue="신청하기" onClick={notify} />
-        <ToastContainer />
       </form>
+      {term
+        &&
+        <Modal
+          CardContents={['1. 출발 전 48시간 이상 남은 시점에 신청해주세요.', '2. 현지의 사정이나 입양견의 상황에 따라 이동봉사가 취소될 수 있습니다.', '3. 단체의 봉사 확정 이후 여권 등 서류를 제출하셔야 합니다.']}
+          CardTitle='유의사항'
+          closeModal={() => setTerm(!term)}
+        />}
+      <ToastContainer />
     </div >
   );
 }
