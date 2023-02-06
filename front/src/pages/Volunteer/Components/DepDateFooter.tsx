@@ -1,7 +1,7 @@
 import { useController } from "react-hook-form"
 
 
-function DepDateFooter({ name, control, rules }: UseControllerProps): JSX.Element {
+function DepDateFooter({ name, control, rules }: UCProps): JSX.Element {
 
   const { field: { value, onChange } } = useController({ name, control, rules })
 

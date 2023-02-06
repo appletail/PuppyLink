@@ -10,13 +10,13 @@ import java.util.Random;
 public class MailUtil {
 
     private static final int leftLimit = 48;    // '0'
-    private static final int rightLimit = 122;  // 'z'
+    private static final int rightLimit = 56;  // 'z'
 
     public static String randomAuth() {
         Random random = new Random();
         String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >=97 ))
-                .limit(6)
+//                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >=97 ))
+                .limit(4)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         return generatedString;

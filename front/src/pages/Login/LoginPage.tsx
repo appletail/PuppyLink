@@ -1,13 +1,14 @@
 import { inputs, buttons } from '@/components';
 import { URL as ServerURL } from '@/states/Server';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { LoginState } from '@/states/LoginState';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
-interface IFormInput {
+interface LoginProps {
   firstName: String;
   email: String;
 }
@@ -23,16 +24,20 @@ function LoginPage() {
     control,
     handleSubmit,
     formState: { errors, isSubmitted },
-  } = useForm<IFormInput>({});
+  } = useForm<LoginProps>({});
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<LoginProps> = (data) => {
     axios({
       method: 'post',
       url: `${URL}/members/login`,
       data: data,
     })
-      .then((res) => {
-        console.log(res);
+      .then((response) => {
+        // const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState)
+        if (response.data.accessToken) {
+          localStorage.setItem('access-token', response.data.accessToken);
+          localStorage.setItem('refresh-token', response.data.refreshToken);
+        }
       })
       .catch((err) => {
         console.log(err);

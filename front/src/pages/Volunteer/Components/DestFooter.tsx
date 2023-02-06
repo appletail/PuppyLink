@@ -1,8 +1,10 @@
 import { useController } from "react-hook-form"
 
 
-function DestFooter({ name, control, rules }: UseControllerProps): JSX.Element {
-  const { field: { value, onChange } } = useController({ name, control, rules })
+function DestFooter({ name, control, rules }: UCProps): JSX.Element {
+  const {
+    field: { value, onChange },
+  } = useController({ name, control, rules });
 
   return (
     <div className="flex flex-col items-center">
@@ -15,7 +17,7 @@ function DestFooter({ name, control, rules }: UseControllerProps): JSX.Element {
         <option value="캐나다 토론토">토론토</option>
       </select>
     </div>
-  )
+  );
 }
 
 export default DestFooter
