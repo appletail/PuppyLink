@@ -65,7 +65,6 @@ public class ApiController {
             outerBody.put("businesses", body2);
         	
             // 확인
-            System.out.println("요청body=" + outerBody.toString());
             String ParamData = outerBody.toString();
             
             try {
@@ -97,14 +96,11 @@ public class ApiController {
     				e.printStackTrace();
     			} 
             	
-            	System.out.println("응답data=: " + result);
-            	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
         	
             JsonArray data = (JsonArray) result.get("data");
-            System.out.println("\ndata=: " + data);
             
 //            JsonElement receiveMsg = data.getAsJsonObject().get("valid_msg");
 //            System.out.println("\nreceiveMsg=: " + receiveMsg.toString());
@@ -122,16 +118,6 @@ public class ApiController {
     	JsonObject convertedObject = new Gson().fromJson(stringJson, JsonObject.class);
     	
     	return convertedObject;
-    	
-//    	// JSONParser로 JSONObject로 변환
-//        JSONParser parser = new JSONParser(stringJson);
-//        System.out.println("parser=" + parser.toString());
-//        
-//        JSONObject jsonObject = (JSONObject) parser.parse();
-//        System.out.println("parseStringToJson=" +jsonObject.toString());
-        
-//		return jsonObject;
-    	
     }
     
 }
