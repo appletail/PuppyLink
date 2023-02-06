@@ -63,11 +63,18 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+      
+  profiles:
+    active: dev   #application-dev.yml을 부름
 
 logging:
   level:
     web: INFO
     root: INFO
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
 
 jwt:
   header: Authorization
@@ -78,16 +85,3 @@ jwt:
 
 api:
   serviceKey: dcDOac8qR1Hlkma1oUeF%2BzRbGEis9zq%2BZKa0NoKAwmCORC9AIPE4FYfn3b3bNpI%2BlseM4g%2BZ%2BTUX8CT3tFZDsw%3D%3D
-
-cloud:
-  aws:
-    s3:
-      bucket: puppylink-test
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-#      instanceProfile: true
-      accessKey: 
-      secretKey: 
