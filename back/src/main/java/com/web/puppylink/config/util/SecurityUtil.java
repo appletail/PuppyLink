@@ -1,7 +1,6 @@
-package com.web.puppylink.config;
+package com.web.puppylink.config.util;
 
 
-import com.web.puppylink.config.jwt.TokenProvider;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @NoArgsConstructor

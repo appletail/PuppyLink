@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, String> {
-
-
     @EntityGraph(attributePaths = "authorities")
-    Optional<Member>  findAuthoritiesByEmail(String email);
+    Optional<Member> findAuthoritiesByEmail(String email);
+    Optional<Member> findUserByEmail(String email);
     Optional<Member> findUserByEmailAndPassword(String email, String password);
+    
     boolean existsByNickName(String nickName);				// 닉네임 중복검사
     boolean existsByEmail(String email);					// 이메일 중복검사
     
     Optional<Member> findByEmail(String email);
-    
+    Optional<Member> findByNickName(String nickName);		// s3
 }
