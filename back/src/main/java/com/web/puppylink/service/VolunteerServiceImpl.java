@@ -2,10 +2,15 @@ package com.web.puppylink.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Foundation;
@@ -19,6 +24,9 @@ import com.web.puppylink.repository.VolunteerRepository;
 
 @Component("volunteerService")
 public class VolunteerServiceImpl implements VolunteerService{
+	private @Value("${cloud.aws.s3.bucket}") String Bucket;
+	private @Value("${cloud.aws.region.static}") String Region;
+	
 	private final MemberRepository memberRepository;
 	private final FoundationRepository foundationRepository;
 	private final VolunteerRepository volunteerRepository;
@@ -95,25 +103,24 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return volunteerRepository.save(volunteerInfo);
 	}
 
-//	public Volunteer submitFile(String nickName, String imagePath) {
-//		// 닉네임으로 멤버 찾기
-//		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
-//			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
-//		});
-//		
-//		// 닉네임으로 멤버 찾기
-////		Member member = memberRepository.findByNickName(nickName);
-////		System.out.println("email= " + email);
-//
-//		// 멤버로 volunteer 찾기
-////		Volunteer vol = volunteerRepository.findVolunteerByEmail(member);
-//		
-//		// fileURL 업데이트
-//		vol.setFileURL(imagePath);
-//		volunteerRepository.save(vol);
-//		
-//		return vol;
-//	}
+	public List<Volunteer> submitFile(String nickName, String imagePath) {
+		// 닉네임으로 멤버 찾기
+		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+		});
+		
+		// 멤버(이메일)로 volunteerList 찾기
+		List<Volunteer> volList = volunteerRepository.findVolunteerByEmail(member);
+		
+		for (int i = 0; i < volList.size(); i++) {
+			// fileURL 업데이트
+			Volunteer vol = volList.get(i);
+			vol.setFileURL(imagePath);
+			volunteerRepository.save(vol);
+		}
+		
+		return volList;
+	}
 
 	@Transactional
 	@Override
@@ -239,5 +246,35 @@ public class VolunteerServiceImpl implements VolunteerService{
 		volunteer.setTicketNo(flightTicket);
 		
 		return volunteer;
+	}
+
+	@Transactional
+	@Override
+	public void deleteFile(int volunteerNo) {
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		try{
+			String fileUrl = volunteer.getFileURL();   		// https://puppylink-test.s3.ap-northeast-2.amazonaws.com/{nickName}/파일명
+            String fileKey = fileUrl.split("com/")[1]; 		// {nickName}/파일명
+
+            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
+
+            // s3 file 삭제
+            try {
+                s3.deleteObject(Bucket, fileKey);
+            } catch (AmazonServiceException e) {
+                System.err.println(e.getErrorMessage());
+                System.exit(1);
+            }
+
+	        } catch (Exception e) {
+	        	e.printStackTrace();
+	        	throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
+//	            throw new BaseException(S3_DELETE_ERROR);
+	        }
+		
+		volunteer.setFileURL(null);
 	}
 }

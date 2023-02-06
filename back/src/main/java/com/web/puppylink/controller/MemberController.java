@@ -37,6 +37,16 @@ import org.springframework.web.bind.annotation.*;
 import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.model.BasicResponse;
+import com.web.puppylink.model.Member;
+import com.web.puppylink.service.FoundationServiceImpl;
+import com.web.puppylink.service.MemberService;
+import com.web.puppylink.service.RedisServiceImpl;
+
+import io.lettuce.core.RedisException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import com.web.puppylink.dto.BasicResponseDto;
 
 @ApiResponses(value = {
@@ -53,6 +63,7 @@ public class MemberController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final MemberServiceImpl memberService;
+    private final FoundationServiceImpl foundationService;
     private final JavaMailSender javaMailSender;
     private final RedisServiceImpl redisService;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -60,11 +71,13 @@ public class MemberController {
             TokenProvider tokenProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder,
             MemberServiceImpl memberService,
+            FoundationServiceImpl foundationService,
             JavaMailSender javaMailSender,
             RedisServiceImpl redisService) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.memberService = memberService;
+        this.foundationService = foundationService;
         this.javaMailSender = javaMailSender;
         this.redisService = redisService;
     }
@@ -166,7 +179,10 @@ public class MemberController {
     @PostMapping()
     @ApiOperation(value = "회원가입")
     public Object signup(@RequestBody MemberDto member) {
-        return ResponseEntity.ok(memberService.signup(member));
+    	if(member.getBusinessName() == null) {
+    		return ResponseEntity.ok(memberService.signup(member));
+    	}
+        return ResponseEntity.ok(foundationService.signup(member));
     }
 
     @GetMapping()

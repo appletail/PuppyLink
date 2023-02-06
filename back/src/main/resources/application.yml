@@ -89,5 +89,5 @@ cloud:
       auto: false
     credentials:
 #      instanceProfile: true
-      accessKey:
+      accessKey: 
       secretKey:

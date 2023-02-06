@@ -55,4 +55,7 @@ public interface VolunteerService {
 	
 	// ※ Google Vision Api를 통해, 업로드된 항공권 이미지에 대한 OCR 결과를 반환 및 저장
 	Volunteer ocr(int volunteerNo);
+
+	// 봉사자 필수서류 삭제
+	void deleteFile(int volunteerNo);
 }
