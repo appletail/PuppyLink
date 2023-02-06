@@ -4,8 +4,14 @@ import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import LoginPage from '@/pages/Login/LoginPage';
+
+import UserTabPage from '@/pages/Signup/User/UserTabPage';
+import UserSignup from '@/pages/Signup/User/UserSignupPage';
+import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
+import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
+
 import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
-import LoginPage from '@/pages/LoginPage';
 
 const routers = createBrowserRouter([
   {
@@ -24,6 +30,23 @@ const routers = createBrowserRouter([
       {
         path: '/login',
         element: <LoginPage />,
+      },
+      {
+        path: '/signup/usertab',
+        element: <UserTabPage />,
+      },
+      {
+        path: '/signup/user',
+        element: <UserSignup />,
+      },
+      {
+        path: '/signup/confirm',
+        element: <SignupConfirmPage />,
+      },
+
+      {
+        path: '/signup/success',
+        element: <SignupSuccessPage />,
       },
     ],
   },
