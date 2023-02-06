@@ -71,7 +71,6 @@ public class FileController {
 			
 			// 멤버 nickName으로 버킷 내 폴더 생성
 			fileName = nickName + "/" + uuid; 
-			System.out.println(fileName);
 			
 			// S3에 업로드
 			amazonS3Client.putObject(
@@ -95,7 +94,6 @@ public class FileController {
 	
 	private String getFolderName(String uri, String regex) {
         String[] split = uri.split(regex);
-        
         return split.length < 2 ? "" : split[2];
     }
 }
