@@ -58,4 +58,7 @@ public interface VolunteerService {
 
 	// 봉사자 필수서류 삭제
 	void deleteFile(int volunteerNo);
+
+	// 회원탈퇴 시 s3에 저장된 필수서류 삭제
+	void deleteALLFile(String email);
 }
