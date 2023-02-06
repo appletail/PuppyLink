@@ -164,7 +164,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("접수 완료")) {
+		if(status.contentEquals("접수 완료") || status.contentEquals("서류 미흡") ) {
 			volunteer.setStatus("제출 완료");			
 		}
 		else {
