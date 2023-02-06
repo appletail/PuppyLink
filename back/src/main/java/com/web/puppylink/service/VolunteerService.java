@@ -3,6 +3,7 @@ package com.web.puppylink.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.Volunteer;
 
@@ -60,5 +61,5 @@ public interface VolunteerService {
 	void deleteFile(int volunteerNo);
 
 	// 회원탈퇴 시 s3에 저장된 필수서류 삭제
-	void deleteALLFile(String email);
+	void deleteALLFile(TokenDto token);
 }

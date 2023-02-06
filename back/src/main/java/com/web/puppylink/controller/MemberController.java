@@ -261,11 +261,11 @@ public class MemberController {
     @DeleteMapping
     @ApiOperation( value = "회원탈퇴" )
     @ApiResponses( value = {@ApiResponse(code = 200, message = "회원탈퇴 성공", response = ResponseEntity.class)})
-    public Object secession(TokenDto tokenDto, @RequestParam(required = true) final String email) {
+    public Object secession(TokenDto tokenDto) {
         try {
-            memberService.deleteMemberByToken(tokenDto);
             // s3 필수서류 삭제 
-            volunteerService.deleteALLFile(email);
+            volunteerService.deleteALLFile(tokenDto);
+            memberService.deleteMemberByToken(tokenDto);
             return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.OK);
         } catch ( Exception e ) {
             e.printStackTrace();
