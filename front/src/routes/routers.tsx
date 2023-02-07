@@ -6,10 +6,13 @@ import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import LoginPage from '@/pages/Login/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 
+import GroupTabPage from '@/pages/Signup/Group/GroupTabPage';
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
 import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
+
 import UserSignup from '@/pages/Signup/User/UserSignupPage';
 import UserTabPage from '@/pages/Signup/User/UserTabPage';
+
 
 import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
 
@@ -34,6 +37,11 @@ const routers = createBrowserRouter([
       {
         path: '/signup/usertab',
         element: <UserTabPage />,
+      },
+      
+      {
+        path: '/signup/grouptab',
+        element: <GroupTabPage />,
       },
       {
         path: '/signup/user',
