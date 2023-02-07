@@ -3,13 +3,13 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
-import NotFoundPage from '@/pages/NotFoundPage';
 import LoginPage from '@/pages/Login/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage';
 
-import UserTabPage from '@/pages/Signup/User/UserTabPage';
-import UserSignup from '@/pages/Signup/User/UserSignupPage';
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
 import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
+import UserSignup from '@/pages/Signup/User/UserSignupPage';
+import UserTabPage from '@/pages/Signup/User/UserTabPage';
 
 import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
 

@@ -1,12 +1,15 @@
-import { useEffect } from 'react';
-import { MdMail } from 'react-icons/md';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { URL as ServerURL } from '@/states/Server';
-import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
+
+import { MdMail } from 'react-icons/md';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
+
+
+
+
+import { axBase } from '@/apis/api/axiosInstance'
 
 type ConfirmProps = {
   // confirmNumber: string;
@@ -15,7 +18,6 @@ type ConfirmProps = {
 let submitCount = 0;
 
 function SignupConfirmPage() {
-  const URL = useRecoilValue(ServerURL);
   const location = useLocation();
   const state = location.state;
   const email = state.email;
@@ -41,9 +43,9 @@ function SignupConfirmPage() {
   useEffect(() => {
     if (formState.isValid && !isValidating) {
       // console.log(data.confirmNumber)
-      const sendEmail = axios({
+      axBase({
         method: 'post',
-        url: `${URL}/members`,
+        url: '/members',
         data: {
           email: state.email,
           password: state.password,
@@ -81,7 +83,7 @@ function SignupConfirmPage() {
       <div className="mt-16 text-center  ">
         {/* 상단 부분 */}
         <div className="flex flex-col items-center">
-          <MdMail size="4rem" className="mb-2" />
+          <MdMail className="mb-2" size="4rem" />
           <p className="text-title1-bold pb-1">인증번호를 입력해 주세요</p>
           <div className="text-body p-2">
             <div>회원가입 인증메일이 전송되었습니다.</div>
@@ -93,8 +95,8 @@ function SignupConfirmPage() {
         <div className="p-4">
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
-              type="number"
               className="w-full p-4 appearance-none border-none rounded-lg  text-center text-headline-bold focus:border-none bg-select   focus:outline-select focus:shadow  invalid:border-red invalid:text-red"
+              type="number"
               {...register('confirmNumber', {
                 required: '인증번호를 입력해주세요.',
                 minLength: 4,

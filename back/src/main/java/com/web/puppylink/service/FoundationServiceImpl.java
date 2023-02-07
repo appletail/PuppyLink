@@ -13,6 +13,7 @@ import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
+import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.repository.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
@@ -77,7 +78,7 @@ public class FoundationServiceImpl implements FoundationService{
                 .password(passwordEncoder.encode(member.getPassword()))
                 .name(member.getName())
                 .phone(member.getPhone())
-                .nickName(member.getNickName())
+                .nickName(member.getBusinessName())
                 .activated(true)
                 .joinDate(now)
                 .authorities(Collections.singleton(authority))
@@ -97,4 +98,21 @@ public class FoundationServiceImpl implements FoundationService{
 
         return memberRepository.save(memberInfo);
     }
+
+	@Transactional
+	@Override
+	public Foundation submitProfile(String nickName, String imagePath) {
+
+		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+		});
+		
+		Foundation foundation = foundationRepository.findFoundationByEmail(member).orElseThrow(()->{
+			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
+		});
+		
+		foundation.setProfileURL(imagePath);
+		
+		return foundationRepository.save(foundation);
+	}
 }

@@ -1,6 +1,5 @@
 package com.web.puppylink.dto;
 
-import com.web.puppylink.config.code.Code;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

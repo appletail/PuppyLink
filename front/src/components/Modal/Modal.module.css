@@ -1,0 +1,20 @@
+.Wrapper {
+  @apply 
+    rounded-lg fixed
+    top-0 left-0
+    w-full h-full
+    bg-black bg-opacity-40
+    flex justify-center;
+}
+
+.Body {
+  @apply p-3 absolute bottom-1/4;
+}
+
+.Title {
+  @apply mb-4;
+}
+
+.Content {
+  @apply mb-4 text-subheadline;
+}

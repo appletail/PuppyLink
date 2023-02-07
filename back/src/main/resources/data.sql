@@ -8,8 +8,7 @@ values ('admin@gmail.com', '$2a$08$lDnHPz7eUkSi6ao14Twuau08mzhWrL4kyZGGU5xfiGALO
 insert into members (email, password, name, phone, nickName, joinDate, activated)
 values ('user@gmail.com', '$2a$08$lDnHPz7eUkSi6ao14Twuau08mzhWrL4kyZGGU5xfiGALO/Vxd5DOi', 'user', '01094199571','selly', NOW(), 1);
 
--- 회원가입 될때 기본적으로 ROLE_USER가 디폴트로 저장됨
--- 회원탈퇴할 때 연관삭제되기 때문에 있어야 오류가 나지않음!!!
-insert into members_authority (email, authority_name) values ('admin@gmail.com', 'ROLE_USER');
-insert into members_authority (email, authority_name) values ('admin@gmail.com', 'ROLE_ADMIN');
-insert into members_authority (email, authority_name) values ('user@gmail.com', 'ROLE_USER');
+
+insert into members_authority (members_email, authority_name) values ('admin@gmail.com', 'ROLE_USER');
+insert into members_authority (members_email, authority_name) values ('admin@gmail.com', 'ROLE_ADMIN');
+insert into members_authority (members_email, authority_name) values ('user@gmail.com', 'ROLE_USER');

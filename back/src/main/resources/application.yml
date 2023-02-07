@@ -3,13 +3,10 @@ server:
 
 spring:
 
-#  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://puppy-mariadb:3306/puppylink?serverTimezone=Asia/Seoul
-#    username: puppy
-#    password: ssafy
-#    sql-script-encoding: UTF-8
-#    initialization-mode: embedded
+#  driverClassName: com.mysql.cj.jdbc.Driver
+#  url: jdbc:mysql://puppy-db:3306/puppylink?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+#  username: puppy
+#  password: ssafy
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -19,6 +16,8 @@ spring:
 
   jpa:
     open-in-view: true
+    database: mysql   # 추가 해준 부분
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
       naming:
@@ -28,6 +27,7 @@ spring:
       hibernate:
         format_sql: true
         show-sql: true
+        dialect:
 
   jackson:
     serialization:
@@ -53,8 +53,8 @@ spring:
     host: localhost
     port: 6379
 #  redis:
-#    host: puppy-redis
-#    port: 6379
+#     host: puppy-redis
+#     port: 6379
   cache:
     type: redis
 

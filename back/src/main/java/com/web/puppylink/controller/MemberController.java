@@ -1,26 +1,29 @@
 package com.web.puppylink.controller;
 
 import com.web.puppylink.config.auth.PrincipalDetails;
-import com.web.puppylink.config.code.Code;
+import com.web.puppylink.config.code.CommonCode;
+import com.web.puppylink.config.code.ExceptionCode;
 import com.web.puppylink.config.jwt.JwtFilter;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.config.util.MailUtil;
-import com.web.puppylink.dto.*;
+import com.web.puppylink.dto.BasicResponseDto;
+import com.web.puppylink.dto.LoginDto;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
 import com.web.puppylink.model.redis.RefreshToken;
+import com.web.puppylink.service.FoundationServiceImpl;
 import com.web.puppylink.service.MemberServiceImpl;
 import com.web.puppylink.service.RedisServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
 import io.lettuce.core.RedisException;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -36,25 +39,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import com.web.puppylink.dto.LoginDto;
-import com.web.puppylink.dto.MemberDto;
-import com.web.puppylink.dto.TokenDto;
-import com.web.puppylink.model.Member;
-import com.web.puppylink.service.FoundationServiceImpl;
-import com.web.puppylink.service.MemberService;
-import com.web.puppylink.service.RedisServiceImpl;
+import javax.servlet.http.HttpServletRequest;
 
-import io.lettuce.core.RedisException;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import com.web.puppylink.dto.BasicResponseDto;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @ApiResponses(value = {
-        @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponseDto.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponseDto.class),
-        @ApiResponse(code = 404, message = "Not Found", response = BasicResponseDto.class),
-        @ApiResponse(code = 500, message = "Failure", response = BasicResponseDto.class)
+        @ApiResponse(code = 401, message = "Unauthorized", response = ResponseEntity.class),
+        @ApiResponse(code = 403, message = "Forbidden", response = ResponseEntity.class),
+        @ApiResponse(code = 404, message = "Not Found", response = ResponseEntity.class),
+        @ApiResponse(code = 500, message = "Failure", response = ResponseEntity.class)
 })
 //@CrossOrigin(origins = { "http://localhost:8081" })
 @RestController
@@ -99,27 +95,32 @@ public class MemberController {
         // SecurityContextHolder에 인증이 완료된 Authentication객체를 저장
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        TokenDto token = memberService.getTokenByAuthenticateion(authentication);
         // Authentication 객체를 이용해서 토큰을 생성
-        String accessToken = tokenProvider.createToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
+//        String accessToken = tokenProvider.createToken(authentication);
+//        String refreshToken = tokenProvider.createRefreshToken(authentication);
         // redis에 DB저장하기
         redisService.saveRefreshToken(new RefreshToken().builder()
                 .email(login.getEmail())
-                .refreshToken(refreshToken)
+                .refreshToken(token.getRefreshToken())
                 .build());
         // Header에 토큰을 저장
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
-        httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
         httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.AUTHORIZATION_HEADER);
         httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.REFRESHTOKEN_HEADER);
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
-        return new ResponseEntity<>("SUCCESS", httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
+                CommonCode.SUCCESS_LOGIN,null), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/reissuance")
     @ApiOperation(value = "엑세스 토큰 재발급")
-    public ResponseEntity<?> reissuance(HttpServletRequest request, HttpServletResponse response) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "재발급하기 위해서는 Token필요", response = ResponseEntity.class)
+    })
+    public ResponseEntity<?> reissuance(HttpServletRequest request) {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         // refreshToken이 존재하는지 확인
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
@@ -159,8 +160,11 @@ public class MemberController {
                 httpHeaders,
                 HttpStatus.OK);
     }
-    @DeleteMapping("/logout")
+    @PostMapping("/logout")
     @ApiOperation(value = "로그아웃 진행")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "정상적으로 로그아웃되었습니다.", response = BasicResponseDto.class)
+    })
     public void logout(@RequestBody TokenDto tokenDto) {
         logger.info("토큰 확인하기 : {}", tokenDto);
         // AccessToken 객체 생성
@@ -184,11 +188,26 @@ public class MemberController {
 
     @PostMapping()
     @ApiOperation(value = "회원가입")
+    @ApiResponses(value = {
+        @ApiResponse(code=200,message="정상적으로 회원가입이 되었습니다.", response = ResponseEntity.class)
+    })
     public Object signup(@RequestBody MemberDto member) {
-    	if(member.getBusinessName() == null) {
-    		return ResponseEntity.ok(memberService.signup(member));
-    	}
-        return ResponseEntity.ok(foundationService.signup(member));
+        try {
+            if (member.getBusinessName() == null) {
+                // 봉사자를 회원가입합니다.
+                memberService.signup(member);
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.JOIN_MEMBER, null), HttpStatus.OK);
+            } else {
+                // 사업자 회원가입 합니다.
+                foundationService.signup(member);
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.JOIN_MEMBER, null), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+                    ExceptionCode.EXCEPTION_SIGNUP, null), HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @GetMapping()
@@ -210,12 +229,15 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(code=200, message = "인증번호가 정상적으로 발송되었습니다.", response = ResponseEntity.class)
     })
-    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() Auth mail) {
-        logger.info("MemberController SignupToAuth : {} ", mail);
+    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() String email) {
+        logger.info("MemberController SignupToAuth : {} ", email);
         try {
             // 인증번호 생성 및 redis 저장
             String auth = MailUtil.randomAuth();
-            mail.setAuth(auth);
+            Auth mail = Auth.builder()
+                            .email(email)
+                            .auth(auth)
+                            .build();
             redisService.saveAuth(Auth.builder()
                     .email(mail.getEmail())
                     .auth(auth)
@@ -223,13 +245,16 @@ public class MemberController {
             // 가입자에게 보낼 이메일 작성
             SimpleMailMessage message = MailUtil.createMail(mail);
             javaMailSender.send(message);
-            return new ResponseEntity<String>("SUCCESS",HttpStatus.OK);
+            return new ResponseEntity<>(new BasicResponseDto(
+                    CommonCode.SUCCESS_MAIL,null),HttpStatus.OK);
         } catch ( RedisException e ) {
             e.printStackTrace();
-            return new ResponseEntity<String>("FAILED",HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            return new ResponseEntity<>(new BasicResponseDto(
+                    ExceptionCode.EXCEPTION_DATA,null),HttpStatus.EXPECTATION_FAILED);
         } catch ( MailException e ) {
             e.printStackTrace();
-            return new ResponseEntity<>("ERROR",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    ExceptionCode.EXCEPTION_MAIL,null),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -262,16 +287,20 @@ public class MemberController {
 
     @DeleteMapping
     @ApiOperation( value = "회원탈퇴" )
-    @ApiResponses( value = {@ApiResponse(code = 200, message = "회원탈퇴 성공", response = ResponseEntity.class)})
+    @ApiResponses( value = {
+            @ApiResponse(code = 200, message = "회원탈퇴 성공", response = ResponseEntity.class)
+    })
     public Object secession(TokenDto tokenDto) {
         try {
             // s3 필수서류 삭제 
             volunteerService.deleteALLFile(tokenDto);
             memberService.deleteMemberByToken(tokenDto);
-            return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.OK);
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    CommonCode.SUCCESS_SECESSION,null),HttpStatus.OK);
         } catch ( Exception e ) {
             e.printStackTrace();
-            return new ResponseEntity<>(new BasicResponseDto<Code>(Code.EXPIRED_TOKEN,null),HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    CommonCode.FAILED_SECESSION,null),HttpStatus.BAD_REQUEST);
         }
     }
 }

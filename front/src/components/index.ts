@@ -15,8 +15,8 @@ import ImgLg from './Imgs/ImgLg/ImgLg';
 import ImgSm from './Imgs/ImgSm/ImgSm';
 
 import Input from './Inputs/Input/Input';
-import InputBtn from './Inputs/InputBtn/InputBtn';
 import InputForm from './Inputs/Input/InputForm';
+import InputBtn from './Inputs/InputBtn/InputBtn';
 import InputFormBtn from './Inputs/InputBtn/InputFormBtn';
 import Label from './Labels/Label';
 
@@ -35,3 +35,4 @@ export const NavTop = { NavLogo, NavCreate, NavDetail, NavBack };
 
 export { default as NavBottom } from './navbar/bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
+export { default as Modal } from './Modal/Modal';

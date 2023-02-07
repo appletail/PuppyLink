@@ -14,7 +14,8 @@ import java.util.Optional;
 public interface MemberService {
 
 
-    Member signup(MemberDto member);
+    Member signup(MemberDto member) throws Exception;
+    TokenDto getTokenByAuthenticateion(Authentication authentication);
     Optional<Member> getMemberWithAuthorities(String email);
     Optional<Member> getMyMemberWithAuthorities();
 	boolean duplicateCheckEmail(String email);

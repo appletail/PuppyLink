@@ -9,4 +9,5 @@ import com.web.puppylink.model.Member;
 public interface FoundationService {
 	List<Foundation> getFoundationAll();
 	Member signup(MemberDto member);
+	Foundation submitProfile(String nickName, String imagePath);
 }
