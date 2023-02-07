@@ -23,7 +23,6 @@
 //    private RedisTemplate<String, MailDto> redisTemplate;
 //
 //    private static final String PREFIX = "email:";
-//
 //    @Test
 //    public void RedisConnectionTest() {
 //

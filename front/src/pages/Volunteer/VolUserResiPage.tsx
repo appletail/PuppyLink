@@ -1,26 +1,70 @@
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
+import { ToastContainer, toast } from 'react-toastify';
 
-import DepDateFooter from './Components/DepDateFooter';
-import DestFooter from './Components/DestFooter';
-import FlightName from './Components/FilghtNameSelect';
-import { DestTitle, DepDateTitle } from './Components/FlightCardTitles';
-import Foundation from './Components/FoundationSelect';
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios'
+import { useRecoilValue } from 'recoil';
 
-import { cards, buttons } from '@/components';
+import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
+import { cards, buttons, Modal } from '@/components';
+import { URL as ServerURL } from '@/states/Server';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 function VolUserResi() {
-  const requiredData = {
-    dest: '미국 워싱턴',
-    depDate: '2023-02-04:00:00:00',
-    filghtName: 'korair',
-    businessNo: '1148209801',
-    termsService: true
+
+  const { control, handleSubmit, register, formState: { isValid } } = useForm()
+
+  interface foundation {
+    businessNo: string
+    businessName: string
+    presidentName: string
+    startDate: Date
+    description: string
+    image?: string
   }
 
-  const { control, handleSubmit, register, formState: { errors } } = useForm()
+  const URL = useRecoilValue(ServerURL);
 
+  const [foundations, setFoundations] = useState<foundation[]>([])
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${URL}/foundation/all`
+    })
+      .then((res) => {
+        setFoundations([...res.data])
+      })
+      .catch((err) => console.log(err.response.data))
+  }, [])
+
+  const notify = () => {
+    if (!isValid) {
+      toast.error('모든 항목을 작성해주세요.', {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        theme: "colored",
+      })
+    }
+  }
+  const [term, setTerm] = useState(false)
+
+  const volunteerSubmit = (data: object) => {
+    data = { ...data, email: 'admin' }
+    axios({
+      method: 'post',
+      url: `${URL}/volunteer/submit`,
+      data: data
+    })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.response.data))
+  }
 
   return (
     <div>
@@ -28,65 +72,57 @@ function VolUserResi() {
         <p className="text-body-bold text-white">내 봉사 확인하기</p>
         <p className="text-caption1 text-black">현황 확인 및 서류 제출하기</p>
       </button>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit((data) => volunteerSubmit(data))}>
         <div className={VolUserStyle.FlightWrapper}>
           <cards.CardSm
             CardTitle={<DestTitle />}
-            CardFooter={<DestFooter
-              control={control}
-              name="dest"
+            CardFooter={<DestFooter control={control} name="dest"
               rules={{
-                validate: (v: string) => v != undefined || '도착지를 선택해주세요.',
+                validate: (v: string) => v != undefined && v != 'none',
               }}
             />} />
-          {errors.dest && <span>{`${errors.dest.message}`}</span>}
           <cards.CardSm
             CardTitle={<DepDateTitle />}
-            CardFooter={<DepDateFooter
-              control={control}
-              name="depDate"
+            CardFooter={<DepDateFooter control={control} name="depTime"
               rules={{
-                validate: (v: string) => v != undefined || '출국일을 선택해주세요.',
+                validate: (v: string) => v != undefined,
               }}
             />}
           />
-          {errors.depDate && <span>{`${errors.depDate.message}`}</span>}
         </div>
         <p className={VolUserStyle.SelectTitle}>항공사 선택하기</p>
         <div className={VolUserStyle.FlightSelect}>
-          <FlightName
-            control={control}
-            name="filghtName"
+          <FlightName control={control} name="flightName"
             rules={{
-              validate: (v: string) => v != undefined || '항공사를 선택해주세요.',
+              validate: (v: string) => v != undefined,
             }}
           />
-          {errors.filghtName && <span>{`${errors.filghtName.message}`}</span>}
         </div>
         <p className={VolUserStyle.SelectTitle}>단체 선택하기</p>
         <div className={VolUserStyle.GroupSelect}>
-          <Foundation
-            control={control}
+          <Foundation control={control} foundations={foundations}
             name="businessNo"
-            rules={{
-              validate: (v: string) => v != undefined || '단체를 선택해주세요.',
-            }}
+            rules={{ validate: (v: string) => v != undefined, }}
           />
-          {errors.businessNo && <span>{`${errors.businessNo.message}`}</span>}
         </div>
         <div className={VolUserStyle.Terms}>
-          <input
-            id="termsService"
-            type="checkbox"
+          <input id="termsService" type="checkbox" onClick={() => setTerm(!term)}
             {...register("termsService", {
-              validate: v => v || '약관에 동의해주세요.'
+              validate: v => v
             })}
           />
           <label htmlFor="termsService">주의사항을 읽었고 개인정보 제공에 동의합니다.</label>
-          {errors.termsService && <span>{`${errors.termsService.message}`}</span>}
         </div>
-        <buttons.BtnLg BtnValue="신청하기" />
+        <buttons.BtnLg BtnValue="신청하기" onClick={notify} />
       </form>
+      {term
+        &&
+        <Modal
+          CardContents={['1. 출발 전 48시간 이상 남은 시점에 신청해주세요.', '2. 현지의 사정이나 입양견의 상황에 따라 이동봉사가 취소될 수 있습니다.', '3. 단체의 봉사 확정 이후 여권 등 서류를 제출하셔야 합니다.']}
+          CardTitle='유의사항'
+          closeModal={() => setTerm(!term)}
+        />}
+      <ToastContainer />
     </div >
   );
 }

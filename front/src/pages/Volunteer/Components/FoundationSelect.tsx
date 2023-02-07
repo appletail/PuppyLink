@@ -1,50 +1,75 @@
-import { useController } from 'react-hook-form';
+import { useState, useEffect } from 'react'
+import { useController } from 'react-hook-form'
 
-import { ReactComponent as AirCanada } from '@/assets/AirCanada.svg';
-import { ReactComponent as Asiana } from '@/assets/Asiana.svg';
-import { ReactComponent as Korair } from '@/assets/Korair.svg';
-import { ReactComponent as React } from '@/assets/react.svg';
+import { Modal } from '@/components'
 
-function FoundationSelect({ name, control, rules }: UCProps): JSX.Element {
-  const {
-    field: { value, onChange },
-  } = useController({ name, control, rules });
 
-  const foundations = [
-    { foundation: Korair, value: '1612314155', isTrue: false },
-    { foundation: Asiana, value: '1562345234523', isTrue: false },
-    { foundation: AirCanada, value: '1344523422', isTrue: false },
-    { foundation: React, value: '14324542345', isTrue: false },
-  ];
+interface foundation {
+  businessNo: string
+  businessName: string
+  presidentName: string
+  startDate: Date
+  description: string
+  image?: string
+}
+interface FoundationProps extends UCProps {
+  foundations: foundation[]
+}
+
+function FoundationSelect({ name, control, rules, foundations }: FoundationProps): JSX.Element {
+
+  const { field: { value, onChange } } = useController({ name, control, rules })
 
   const isChecked = function (curValue: string): boolean {
     return curValue === value ? true : false;
   };
 
-  const foundationsBtn = foundations.map((item) => {
-    return (
-      <div key={item.value}>
-        <input
-          className="hidden"
-          id={item.value}
-          name="foundation"
-          type="radio"
-          value={item.value}
-          onChange={onChange}
-        />
-        <label htmlFor={item.value}>
-          <item.foundation
-            className={
-              isChecked(item.value)
-                ? 'bg-white rounded-full brightness-[.60]'
-                : ''
-            }
-          />
-        </label>
+
+  const [modalOn, setModal] = useState<boolean[]>([])
+  useEffect(() => {
+    setModal(Array(foundations.length).fill(false))
+  }, [foundations])
+  const foundationsBtn = foundations.map((item, idx) => {
+    const title = (
+      <div className="flex justify-between items-center text-title3-bold">
+        <p>{item?.businessName}</p>
+        <img alt="foundation" src={`https://puppylink-test.s3.ap-northeast-2.amazonaws.com/foundation-profile/${item?.businessName}`} />
       </div>
-    );
-  });
-  return <>{foundationsBtn}</>;
+    )
+
+    return (
+      <div key={item?.businessNo}>
+        <input className='hidden' id={item?.businessNo} name="foundation" type="radio" value={item?.businessNo} onChange={onChange}
+          onClick={() =>
+            setModal(modalOn.reduce((acc: boolean[], cur, modalIdx) => {
+              modalIdx === idx ? acc.push(true) : acc.push(false)
+              return acc
+            }, []))
+          } />
+        <label htmlFor={item?.businessNo}>
+          <img alt="foundation" className={isChecked(item?.businessNo) ? 'bg-white rounded-full brightness-[.60]' : ''} src={`https://puppylink-test.s3.ap-northeast-2.amazonaws.com/foundation-profile/${item?.businessName}`} />
+
+        </label>
+        {modalOn[idx]
+          &&
+          <Modal
+            CardContents={[item?.description]}
+            CardTitle={title}
+            closeModal={() =>
+              setModal(modalOn.reduce((acc: boolean[]) => {
+                acc.push(false)
+                return acc
+              }, []))}
+          />}
+      </div>
+    )
+  })
+
+  return (
+    <>
+      {foundationsBtn}
+    </>
+  )
 }
 
 export default FoundationSelect;

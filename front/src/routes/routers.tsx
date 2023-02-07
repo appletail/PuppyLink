@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import LoginPage from '@/pages/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import LoginPage from '@/pages/Login/LoginPage';
 

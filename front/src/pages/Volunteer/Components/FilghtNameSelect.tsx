@@ -11,10 +11,10 @@ function FilghtNameSelect({ name, control, rules }: UCProps): JSX.Element {
   } = useController({ name, control, rules });
 
   const airlines = [
-    { airline: Korair, value: 'Korair', isTrue: false },
-    { airline: Asiana, value: 'Asiana', isTrue: false },
-    { airline: AirCanada, value: 'AirCanada', isTrue: false },
-  ];
+    { airline: Korair, value: 'Korair' },
+    { airline: Asiana, value: 'Asiana' },
+    { airline: AirCanada, value: 'AirCanada' },
+  ]
 
   const isChecked = function (curValue: string): boolean {
     return curValue === value ? true : false;
