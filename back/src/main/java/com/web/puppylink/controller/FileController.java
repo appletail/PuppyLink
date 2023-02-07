@@ -58,7 +58,7 @@ public class FileController {
 	@Autowired
 	AmazonS3Client amazonS3Client;
 	
-	@PostMapping("/{nickName}/history/submit")
+	@PostMapping("/{nickName}/history")
 	@ApiOperation(value = "봉사자 필수서류 제출")
 	public Object upload(MultipartFile[] multipartFileList, HttpServletRequest request, @RequestParam(required = true) final int volunteerNo) throws Exception {
 		
@@ -99,7 +99,7 @@ public class FileController {
         return split.length < 2 ? "" : split[2];
     }
 	
-	@DeleteMapping("/{nickName}/history/delete")
+	@DeleteMapping("/{nickName}/history")
     @ApiOperation(value = "봉사자 필수 서류 삭제")
     public void delete(@RequestParam(required = true) final int volunteerNo) {
         volunteerService.deleteFile(volunteerNo);
