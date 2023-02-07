@@ -6,13 +6,7 @@ import routers from './routes/routers';
 import '@/styles/global.css';
 import '@/index.css';
 
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
+import { RecoilRoot } from 'recoil';
 
 const container = document.getElementById('root') as HTMLElement;
 

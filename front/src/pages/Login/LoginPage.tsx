@@ -1,3 +1,5 @@
+
+import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { ErrorMessage } from '@hookform/error-message';
@@ -13,6 +15,12 @@ interface LoginProps {
 }
 
 function LoginPage() {
+  // recoil에서 서버주소 가져오기
+
+  const navigate = useNavigate();
+  const goSignup = () => {
+    navigate('/signup/userTab');
+  };
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -30,10 +38,11 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
-        // const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState)
-        if (response.data.accessToken) {
-          localStorage.setItem('access-token', response.data.accessToken);
-          localStorage.setItem('refresh-token', response.data.refreshToken);
+        const access_token = response.headers.authorization;
+        const refresh_token = response.headers.refreshtoken;
+        if (access_token) {
+          localStorage.setItem('access-token', access_token);
+          localStorage.setItem('refresh-token', refresh_token);
         }
       })
       .catch((err) => {
@@ -95,7 +104,9 @@ function LoginPage() {
         </div>
         <div className="flex justify-between">
           <p>아직 회원이 아니신가요?</p>
-          <p className="text-main-100">회원가입</p>
+          <div className="text-main-100" onClick={goSignup}>
+            회원가입
+          </div>
         </div>
       </div>
     </div>
