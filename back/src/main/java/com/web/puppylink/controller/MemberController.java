@@ -48,6 +48,9 @@ import com.web.puppylink.service.RedisServiceImpl;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponseDto.class),
         @ApiResponse(code = 403, message = "Forbidden", response = BasicResponseDto.class),

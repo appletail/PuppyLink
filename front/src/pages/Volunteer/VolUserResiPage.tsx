@@ -4,12 +4,11 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios'
-import { useRecoilValue } from 'recoil';
 
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
+import { axBase } from '@/apis/api/axiosInstance'
 import { cards, buttons, Modal } from '@/components';
-import { URL as ServerURL } from '@/states/Server';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 function VolUserResi() {
@@ -25,13 +24,11 @@ function VolUserResi() {
     image?: string
   }
 
-  const URL = useRecoilValue(ServerURL);
 
   const [foundations, setFoundations] = useState<foundation[]>([])
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: `${URL}/foundation/all`
+    axBase({
+      url: '/foundation/all'
     })
       .then((res) => {
         setFoundations([...res.data])
