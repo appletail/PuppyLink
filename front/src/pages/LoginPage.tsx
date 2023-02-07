@@ -1,15 +1,17 @@
-import { inputs, buttons } from '@/components';
-import { URL as ServerURL } from '@/states/Server';
-import { useRecoilValue } from 'recoil';
-
 import { useForm, SubmitHandler } from 'react-hook-form';
+
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+
+import { inputs, buttons } from '@/components';
+import { URL as ServerURL } from '@/states/Server';
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
 interface IFormInput {
-  firstName: String;
-  email: String;
+  firstName: string;
+  email: string;
+  password: string
 }
 
 function LoginPage() {
@@ -22,7 +24,7 @@ function LoginPage() {
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitted },
+    formState: { errors },
   } = useForm<IFormInput>({});
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
@@ -45,13 +47,15 @@ function LoginPage() {
 
       {/* 로그인 form */}
       <form
-        onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 mb-5"
+        onSubmit={handleSubmit(onSubmit)}
       >
         {/* 이메일 입력받는 부분 */}
         <inputs.InputForm
-          name="email"
           control={control}
+          name="email"
+          placeholder="이메일"
+          type="email"
           rules={{
             required: { value: true, message: '이메일을 입력해주세요' },
             pattern: {
@@ -59,20 +63,18 @@ function LoginPage() {
               message: '이메일 형식을 입력해주세요',
             },
           }}
-          type="email"
-          placeholder="이메일"
         />
         <ErrorMessage errors={errors} name="email" />
 
         {/* 비밀번호 입력받는 부분 */}
         <inputs.InputForm
-          name="password"
           control={control}
+          name="password"
+          placeholder="비밀번호"
+          type="password"
           rules={{
             required: { value: true, message: '비밀번호를 입력해주세요' },
           }}
-          type="password"
-          placeholder="비밀번호"
         />
         <ErrorMessage errors={errors} name="password" />
         <buttons.BtnLg BtnValue="로그인" />

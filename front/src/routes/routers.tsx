@@ -3,9 +3,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import LoginPage from '@/pages/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
-import LoginPage from '@/pages/LoginPage';
 
 const routers = createBrowserRouter([
   {

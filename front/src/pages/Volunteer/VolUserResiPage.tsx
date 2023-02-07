@@ -1,17 +1,43 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios'
+import { useRecoilValue } from 'recoil';
+
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
 import { cards, buttons, Modal } from '@/components';
+import { URL as ServerURL } from '@/states/Server';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
-
 
 function VolUserResi() {
 
   const { control, handleSubmit, register, formState: { isValid } } = useForm()
+
+  interface foundation {
+    businessNo: string
+    businessName: string
+    presidentName: string
+    startDate: Date
+    description: string
+    image?: string
+  }
+
+  const URL = useRecoilValue(ServerURL);
+
+  const [foundations, setFoundations] = useState<foundation[]>([])
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `${URL}/foundation/all`
+    })
+      .then((res) => {
+        setFoundations([...res.data])
+      })
+      .catch((err) => console.log(err.response.data))
+  }, [])
 
   const notify = () => {
     if (!isValid) {
@@ -29,13 +55,24 @@ function VolUserResi() {
   }
   const [term, setTerm] = useState(false)
 
+  const volunteerSubmit = (data: object) => {
+    data = { ...data, email: 'admin' }
+    axios({
+      method: 'post',
+      url: `${URL}/volunteer/submit`,
+      data: data
+    })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.response.data))
+  }
+
   return (
     <div>
       <button className={`${VolUserStyle.GoToMyRegi} bg-main-30`} type="button">
         <p className="text-body-bold text-white">내 봉사 확인하기</p>
         <p className="text-caption1 text-black">현황 확인 및 서류 제출하기</p>
       </button>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit((data) => volunteerSubmit(data))}>
         <div className={VolUserStyle.FlightWrapper}>
           <cards.CardSm
             CardTitle={<DestTitle />}
@@ -46,7 +83,7 @@ function VolUserResi() {
             />} />
           <cards.CardSm
             CardTitle={<DepDateTitle />}
-            CardFooter={<DepDateFooter control={control} name="depDate"
+            CardFooter={<DepDateFooter control={control} name="depTime"
               rules={{
                 validate: (v: string) => v != undefined,
               }}
@@ -55,7 +92,7 @@ function VolUserResi() {
         </div>
         <p className={VolUserStyle.SelectTitle}>항공사 선택하기</p>
         <div className={VolUserStyle.FlightSelect}>
-          <FlightName control={control} name="filghtName"
+          <FlightName control={control} name="flightName"
             rules={{
               validate: (v: string) => v != undefined,
             }}
@@ -63,10 +100,9 @@ function VolUserResi() {
         </div>
         <p className={VolUserStyle.SelectTitle}>단체 선택하기</p>
         <div className={VolUserStyle.GroupSelect}>
-          <Foundation control={control} name="businessNo"
-            rules={{
-              validate: (v: string) => v != undefined,
-            }}
+          <Foundation control={control} foundations={foundations}
+            name="businessNo"
+            rules={{ validate: (v: string) => v != undefined, }}
           />
         </div>
         <div className={VolUserStyle.Terms}>
