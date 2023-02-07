@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import  { useEffect } from 'react';
 import { MdMail } from 'react-icons/md';
 import { useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { URL as ServerURL } from '@/states/Server';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 type ConfirmProps = {
   // confirmNumber: string;
@@ -15,7 +18,7 @@ let submitCount = 0;
 function SignupConfirmPage() {
   const URL = useRecoilValue(ServerURL);
   const location = useLocation();
-  const state = location.state
+  const state = location.state;
   const email = state.email;
 
   const {
@@ -34,24 +37,43 @@ function SignupConfirmPage() {
   };
 
   const data = watch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (formState.isValid && !isValidating) {
       // console.log(data.confirmNumber)
       const sendEmail = axios({
         method: 'post',
-        url: `${URL}/members/signup`,
+        url: `${URL}/members`,
         data: {
           email: state.email,
           password: state.password,
           name: state.name,
           phone: state.phone,
           nickName: state.nickName,
-          auth: data.confirmNumber
+          auth: data.confirmNumber,
         },
       })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        .then(() => {
+          navigate('/signup/success', {
+            replace: true,
+            state: {
+              nickName: state.nickName,
+            },
+          });
+        })
+        .catch((err) => {
+          // console.log(err.response.data.message);
+          toast.error(err.response.data.message, {
+            autoClose: 3000,
+            position: toast.POSITION.BOTTOM_CENTER,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+        });
     }
   }, [formState, data, isValidating]);
 
@@ -89,6 +111,7 @@ function SignupConfirmPage() {
         </div>
 
         <div className="text-body p-2">코드를 받지 못하였나요? 재전송하기</div>
+        <ToastContainer />
       </div>
     </div>
   );

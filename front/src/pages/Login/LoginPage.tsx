@@ -1,7 +1,7 @@
 import { inputs, buttons } from '@/components';
 import { URL as ServerURL } from '@/states/Server';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { LoginState } from '@/states/LoginState';
+import { useRecoilValue } from 'recoil';
+
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -33,11 +33,13 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
-        // const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState)
-        if (response.data.accessToken) {
-          localStorage.setItem('access-token', response.data.accessToken);
-          localStorage.setItem('refresh-token', response.data.refreshToken);
+        const access_token = response.headers.authorization;
+        const refresh_token = response.headers.refreshtoken;
+        if (access_token) {
+          localStorage.setItem('access-token', access_token);
+          localStorage.setItem('refresh-token', refresh_token);
         }
+
       })
       .catch((err) => {
         console.log(err);

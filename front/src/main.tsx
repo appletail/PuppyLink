@@ -16,6 +16,9 @@ import {
 
 const container = document.getElementById('root') as HTMLElement;
 
+// 로그인 여부를 알 수 있는 처리
+
+
 createRoot(container).render(
   <StrictMode>
     <RecoilRoot>
