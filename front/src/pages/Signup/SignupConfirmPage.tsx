@@ -1,13 +1,12 @@
-import  { useEffect } from 'react';
+import { useEffect } from 'react';
 import { MdMail } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { URL as ServerURL } from '@/states/Server';
 import axios from 'axios';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 type ConfirmProps = {
   // confirmNumber: string;

@@ -2,7 +2,7 @@ import { inputs, buttons } from '@/components';
 import { URL as ServerURL } from '@/states/Server';
 import { useRecoilValue } from 'recoil';
 
-
+import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import axios from 'axios';
@@ -16,6 +16,10 @@ interface LoginProps {
 function LoginPage() {
   // recoil에서 서버주소 가져오기
   const URL = useRecoilValue(ServerURL);
+  const navigate = useNavigate();
+  const goSignup = () => {
+    navigate('/signup/userTab');
+  };
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -39,7 +43,6 @@ function LoginPage() {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
         }
-
       })
       .catch((err) => {
         console.log(err);
@@ -100,7 +103,9 @@ function LoginPage() {
         </div>
         <div className="flex justify-between">
           <p>아직 회원이 아니신가요?</p>
-          <p className="text-main-100">회원가입</p>
+          <div className="text-main-100" onClick={goSignup}>
+            회원가입
+          </div>
         </div>
       </div>
     </div>

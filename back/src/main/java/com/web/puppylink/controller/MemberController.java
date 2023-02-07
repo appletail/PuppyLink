@@ -111,6 +111,8 @@ public class MemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
+        httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.AUTHORIZATION_HEADER);
+        httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.REFRESHTOKEN_HEADER);
         // FE응답
         return new ResponseEntity<>("SUCCESS", httpHeaders, HttpStatus.OK);
     }

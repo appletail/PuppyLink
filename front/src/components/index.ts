@@ -33,5 +33,5 @@ export const labels = { Label };
 export const inputs = { Input, InputBtn, InputForm, InputFormBtn };
 export const NavTop = { NavLogo, NavCreate, NavDetail, NavBack };
 
-export { default as NavBottom } from './navbar/buttom/NavBottom';
+export { default as NavBottom } from './navbar/bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
