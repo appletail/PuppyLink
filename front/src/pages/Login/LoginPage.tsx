@@ -1,12 +1,9 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { ErrorMessage } from '@hookform/error-message';
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
 
+import { axBase } from '@/apis/api/axiosInstance'
 import { inputs, buttons } from '@/components';
-import { LoginState } from '@/states/LoginState';
-import { URL as ServerURL } from '@/states/Server';
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
 interface LoginProps {
@@ -16,8 +13,6 @@ interface LoginProps {
 }
 
 function LoginPage() {
-  // recoil에서 서버주소 가져오기
-  const URL = useRecoilValue(ServerURL);
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -29,9 +24,9 @@ function LoginPage() {
   } = useForm<LoginProps>({});
 
   const onSubmit: SubmitHandler<LoginProps> = (data) => {
-    axios({
+    axBase({
       method: 'post',
-      url: `${URL}/members/login`,
+      url: 'members/login',
       data: data,
     })
       .then((response) => {

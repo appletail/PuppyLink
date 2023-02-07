@@ -3,16 +3,16 @@ server:
 
 spring:
 
-  driverClassName: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://puppy-db:3306/puppylink?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
-  username: puppy
-  password: ssafy
+#  driverClassName: com.mysql.cj.jdbc.Driver
+#  url: jdbc:mysql://puppy-db:3306/puppylink?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+#  username: puppy
+#  password: ssafy
 
-#  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
-#    username: puppy
-#    password: ssafy
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
+    username: puppy
+    password: ssafy
 
   jpa:
     open-in-view: true
@@ -49,12 +49,12 @@ spring:
             required: true
   session:
     store-type: redis
-#  redis:
-#    host: localhost
-#    port: 6379
   redis:
-     host: puppy-redis
-     port: 6379
+    host: localhost
+    port: 6379
+#  redis:
+#     host: puppy-redis
+#     port: 6379
   cache:
     type: redis
 
