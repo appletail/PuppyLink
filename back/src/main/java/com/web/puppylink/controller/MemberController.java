@@ -5,22 +5,24 @@ import com.web.puppylink.config.code.Code;
 import com.web.puppylink.config.jwt.JwtFilter;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.config.util.MailUtil;
-import com.web.puppylink.dto.*;
+import com.web.puppylink.dto.BasicResponseDto;
+import com.web.puppylink.dto.LoginDto;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
 import com.web.puppylink.model.redis.RefreshToken;
+import com.web.puppylink.service.FoundationServiceImpl;
 import com.web.puppylink.service.MemberServiceImpl;
 import com.web.puppylink.service.RedisServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
 import io.lettuce.core.RedisException;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -44,11 +46,7 @@ import com.web.puppylink.service.FoundationServiceImpl;
 import com.web.puppylink.service.MemberService;
 import com.web.puppylink.service.RedisServiceImpl;
 
-import io.lettuce.core.RedisException;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import com.web.puppylink.dto.BasicResponseDto;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponseDto.class),
