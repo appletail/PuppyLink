@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService{
     @Autowired
     private AccessRedisRepository accessRedisRepository;
 
-    public MemberServiceImpl(
+    public MemberServiceImpl (
             MemberRepository memberRepository,
             PasswordEncoder passwordEncoder,
             FoundationRepository foundationRepository,
@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
-    public Member signup(MemberDto member) {
+    public Member signup(MemberDto member) throws Exception{
         // 회원이 존재하는지 확인
         if( memberRepository.findAuthoritiesByEmail(member.getEmail()).orElse(null) != null ) {
             throw new RuntimeException("이미 가입되어 있는 유저가 존재합니다.");
@@ -75,6 +75,13 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         
         return memberRepository.save(memberInfo);
+    }
+
+    @Override
+    public TokenDto getTokenByAuthenticateion(Authentication authentication) {
+        String access = tokenProvider.createToken(authentication);
+        String refresh = tokenProvider.createRefreshToken(authentication);
+        return new TokenDto(access,refresh);
     }
 
     @Override
