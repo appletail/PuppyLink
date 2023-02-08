@@ -21,6 +21,7 @@ import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.Volunteer;
+import com.web.puppylink.model.File.FileRequest;
 import com.web.puppylink.ocr.GoogleVisionApi;
 import com.web.puppylink.repository.FlightTicketRepository;
 import com.web.puppylink.repository.FoundationRepository;
@@ -101,7 +102,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 		Volunteer volunteerInfo = Volunteer.builder()
 				.depTime(volunteer.getDepTime())
 				.dest(volunteer.getDest())
-				.fileURL(null)
+				.passportURL(null)
+				.flightURL(null)
 				.flightName(volunteer.getFlightName())				
 				.regDate(date)
 				.status("submit")
@@ -113,17 +115,22 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return volunteerRepository.save(volunteerInfo);
 	}
 
-	public Volunteer submitFile(String nickName, String imagePath, int volunteerNo) {
+	public Volunteer submitFile(FileRequest file) {
 
-		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+		Member member = memberRepository.findByNickName(file.getNickName()).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		
-		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(file.getVolunteerNo()).orElseThrow(()->{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		
-		volunteer.setFileURL(imagePath);
+		if(file.getTicketType().equals("flight")) {
+			volunteer.setFlightURL(file.getImagePath());
+		} else {
+			volunteer.setPassportURL(file.getImagePath());
+		}
+		
 		volunteerRepository.save(volunteer);
 		
 		return volunteer;
@@ -223,9 +230,15 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("confirm")) {
-			volunteer.setStatus("complete");
-			deleteFile(volunteerNo);			// s3 필수서류 삭제	
+		if(status.contentEquals("승인 완료")) {
+			volunteer.setStatus("봉사 완료");
+			
+			FileRequest fileRequest = FileRequest.builder()
+					.volunteerNo(volunteerNo)
+					.ticketType("all")
+					.build();
+			
+			deleteFile(fileRequest);			// s3 필수서류 삭제	
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -240,7 +253,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
-		String path = volunteer.getFileURL();
+		String path = volunteer.getFlightURL();
 		// [AWS S3] path = "https://puppylink-test.s3.ap-northeast-2.amazonaws.com/ocr-test/flight.PNG";
 		// [LOCAL] path = "src/image/001.PNG";
 		
@@ -259,14 +272,20 @@ public class VolunteerServiceImpl implements VolunteerService{
 
 	@Transactional
 	@Override
-	public void deleteFile(int volunteerNo) {
-		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+	public void deleteFile(FileRequest file) {
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(file.getVolunteerNo()).orElseThrow(()->{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		
 		try{
-			String fileUrl = volunteer.getFileURL();   		
-            String fileKey = fileUrl.split("com/")[1]; 		
+			String fileUrl = "";
+			if(file.getTicketType().equals("flight")) {
+				fileUrl = volunteer.getFlightURL();
+			} else {
+				fileUrl = volunteer.getPassportURL();
+			}
+			
+			String fileKey= fileUrl.split("com/")[1]; 		
 
             final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
 
@@ -279,10 +298,9 @@ public class VolunteerServiceImpl implements VolunteerService{
 	    } catch (Exception e) {
 	       e.printStackTrace();
 	       throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
-//	       throw new BaseException(S3_DELETE_ERROR);
 	    }
 		
-		volunteer.setFileURL(null);
+		volunteer.setFlightURL(null);
 	}
 	
 	@Transactional
@@ -300,10 +318,28 @@ public class VolunteerServiceImpl implements VolunteerService{
 		for (int i = 0; i < volList.size(); i++) {
 			Volunteer volunteer = volList.get(i);
 			int volunteerNo = volunteer.getVolunteerNo();
-			deleteFile(volunteerNo);						// s3 삭제
-			cancel(volunteerNo);							// db 삭제
+			
+			// s3 항공권 삭제
+			FileRequest fileRequest = FileRequest.builder()
+					.volunteerNo(volunteerNo)
+					.ticketType("flight")
+					.build();
+			
+			deleteFile(fileRequest);						
+			
+			// s3 여권 삭제
+			fileRequest = FileRequest.builder()
+					.volunteerNo(volunteerNo)
+					.ticketType("passport")
+					.build();
+			
+			deleteFile(fileRequest);
+			
+			// db 삭제
+			delete(volunteerNo);							
 		}
 		
 		
 	}
+
 }

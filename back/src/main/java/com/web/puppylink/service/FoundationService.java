@@ -5,9 +5,10 @@ import java.util.List;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
+import com.web.puppylink.model.File.FileRequest;
 
 public interface FoundationService {
 	List<Foundation> getFoundationAll();
 	Member signup(MemberDto member);
-	Foundation submitProfile(String nickName, String imagePath);
+	Foundation submitProfile(FileRequest file);
 }
