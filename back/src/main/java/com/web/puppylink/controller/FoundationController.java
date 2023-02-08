@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.web.puppylink.config.code.CommonCode;
+import com.web.puppylink.config.code.ExceptionCode;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.service.FoundationServiceImpl;
@@ -71,9 +72,11 @@ public class FoundationController {
     
     @PostMapping("/validate")
     @ApiOperation(value = "사업자등록번호 진위확인")
-    public String checkBusinessNo(@Valid @RequestBody Foundation request) {
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message="유효한 이메일입니다.", response = ResponseEntity.class)
+        })
+    public Object checkBusinessNo(@Valid @RequestBody Foundation request) {
     	JsonObject result = new JsonObject();
-    	String msg = "";
 
         String apiUrl = "https://api.odcloud.kr/api/nts-businessman/v1/validate?" +
         					"serviceKey=" + apiKey +
@@ -111,7 +114,8 @@ public class FoundationController {
     				os.close();
     			}
     			catch(Exception e) {
-    				e.printStackTrace();
+    				return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+    	                    ExceptionCode.EXCEPTION_APIPOST, null), HttpStatus.EXPECTATION_FAILED);
     			}
                 
                 // 요펑 후 응답받은 데이터 받기
@@ -119,26 +123,25 @@ public class FoundationController {
     			try {
     				br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
     				result = parseStringToJson(br.readLine());
-    				
     			} catch (UnsupportedEncodingException e) {
-    				e.printStackTrace();
-    			} catch (IOException e) {
-    				e.printStackTrace();
-    			} 
-            	
+    				return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+    	                    ExceptionCode.EXCEPTION_APIGET, null), HttpStatus.EXPECTATION_FAILED);
+    			}
+    			
 			} catch (Exception e) {
-				e.printStackTrace();
+				return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+	                    ExceptionCode.EXCEPTION_API, null), HttpStatus.EXPECTATION_FAILED);
 			}
         	
             JsonArray data = (JsonArray) result.get("data");
             
             if(data.toString().contains("valid_msg")) {
-            	msg = "사업자등록번호를 확인할 수 없습니다.";
+            	return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.FAILED_BUSINESSNO, false), HttpStatus.OK);
             }else {
-            	msg = "사업자인증이 완료되었습니다. 나머지 정보도 입력해주세요.";
+            	return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.SUCCESS_BUSINESSNO, true), HttpStatus.OK);
             }
-
-            return msg;
     }
     
     private JsonObject parseStringToJson(String stringJson) throws ParseException{
