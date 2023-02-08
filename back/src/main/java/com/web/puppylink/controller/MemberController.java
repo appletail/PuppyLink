@@ -229,15 +229,16 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(code=200, message = "인증번호가 정상적으로 발송되었습니다.", response = ResponseEntity.class)
     })
-    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() String email) {
-        logger.info("MemberController SignupToAuth : {} ", email);
+    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() Auth mail) {
+        logger.info("MemberController SignupToAuth : {} ", mail);
         try {
             // 인증번호 생성 및 redis 저장
             String auth = MailUtil.randomAuth();
-            Auth mail = Auth.builder()
-                            .email(email)
-                            .auth(auth)
-                            .build();
+//            Auth mail = Auth.builder()
+//                            .email(email)
+//                            .auth(auth)
+//                            .build();
+            mail.setAuth(auth);
             redisService.saveAuth(Auth.builder()
                     .email(mail.getEmail())
                     .auth(auth)
