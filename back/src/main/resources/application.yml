@@ -1,8 +1,8 @@
 server:
   port: 8085
-
+  servlet:
+    context-path: /puppy
 spring:
-#  driverClassName: com.mysql.cj.jdbc.Driver
 
 # 배포 테스트
 #  driverClassName: com.mysql.cj.jdbc.Driver
@@ -11,10 +11,10 @@ spring:
 #  password: ssafy
 
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
-    username: puppy
-    password: ssafy
+   driverClassName: com.mysql.cj.jdbc.Driver
+   url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
+   username: puppy
+   password: ssafy
 
   jpa:
     open-in-view: true
@@ -29,7 +29,6 @@ spring:
       hibernate:
         format_sql: true
         show-sql: true
-        dialect:
 
   jackson:
     serialization:
