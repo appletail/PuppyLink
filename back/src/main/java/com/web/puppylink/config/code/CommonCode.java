@@ -38,7 +38,18 @@ public enum CommonCode {
 	CREATE_BOARD(2117, "게시글 작성이 완료되었습니다."),
 	UPDATE_BOARD(2118, "게시글 수정이 완료되었습니다."),
 	DELETE_BOARD(2119, "게시글 삭제가 완료되었습니다."),
-	LIKE_BOARD(2120, "게시글에 대한 좋아요가 완료되었습니다.");
+	LIKE_BOARD(2120, "게시글에 대한 좋아요가 완료되었습니다."),
+
+	SUCCESS_EMAIL(2201, "사용가능한 이메일입니다."),
+    DUPLICATE_EMAIL(2202, "이미 사용중인 이메일입니다."),
+    SUCCESS_NICKNAME(2203, "사용가능한 닉네임입니다."),
+    DUPLICATE_NICKNAME(2204, "이미 사용중인 닉네임입니다."),
+    SUCCESS_BUSINESSNO(2205, "사업자번호 인증에 성공하였습니다."),
+	FAILED_BUSINESSNO(2206, "유효하지 않은 사업자번호입니다."),
+	SUCCESS_S3_UPLOAD(2207, "s3 업로드에 성공하였습니다."),
+	FAILED_S3_UPLOAD(2208, "s3 업로드에 실패했습니다."),
+	SUCCESS_S3_DELETE(2209, "필수서류 삭제에 성공하였습니다."),
+	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다");
 
     private int code;
     private String message;

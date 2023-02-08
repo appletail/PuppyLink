@@ -279,6 +279,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		
 		try{
 			String fileUrl = "";
+			
 			if(file.getTicketType().equals("flight")) {
 				fileUrl = volunteer.getFlightURL();
 			} else {
@@ -336,7 +337,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			deleteFile(fileRequest);
 			
 			// db 삭제
-			delete(volunteerNo);							
+			cancel(volunteerNo);							
 		}
 		
 		
