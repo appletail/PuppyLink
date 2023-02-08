@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.Volunteer;
+import com.web.puppylink.model.File.FileRequest;
 
 public interface VolunteerService {
 	// ※ 정규 봉사 신청 프로세스
@@ -57,8 +58,11 @@ public interface VolunteerService {
 	// ※ Google Vision Api를 통해, 업로드된 항공권 이미지에 대한 OCR 결과를 반환 및 저장
 	Volunteer ocr(int volunteerNo);
 
+	// 봉사자 필수서류(여권, 항공권) 등록
+	Volunteer submitFile(FileRequest file);
+	
 	// 봉사자 필수서류 삭제
-	void deleteFile(int volunteerNo);
+	void deleteFile(FileRequest file);
 
 	// 회원탈퇴 시 s3에 저장된 필수서류 삭제
 	void deleteALLFile(TokenDto token);
