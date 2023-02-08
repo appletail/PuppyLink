@@ -27,8 +27,8 @@ interface imgProps {
 
 interface CardProps {
   CardImg?: imgProps;
-  CardTitle: string | JSX.Element;
-  CardContents?: string[];
+  CardTitle?: string | JSX.Element;
+  CardContents?: string[] | JSX.Element[];
   CardFooter?: JSX.Element;
 }
 

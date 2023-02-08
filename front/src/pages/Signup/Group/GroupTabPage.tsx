@@ -18,7 +18,8 @@ function GroupTabPage() {
     </div>
 
     <div className="flex flex-col gap-4">
-      <div className="h-14 rounded-[0.625rem] w-[21.875rem]  flex bg-select items-center align-center justify-evenly">
+      <div className="h-14 rounded-[0.625rem] w-[21.875rem]  flex bg-select items-center align-center justify-evenly"
+      onClick={() => navigate('/signup/group')}>
         이메일로 계속하기
       </div>
     </div>
