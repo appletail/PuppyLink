@@ -8,9 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.annotations.ColumnDefault;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -20,33 +17,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "board")
+@Table(name = "Likes")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Board {
-
-
+public class Likes {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "boardNo")
-    private int     boardNo;
-    @Column(name = "subject", length = 500)
-    @NotNull
-    private String  subject;
-    @Column(name = "contents", length = 2000)
-    private String  contents;
-    @Column(name = "pictureURL")
-    private String  pictureURL;
-    @Column(name = "likes" , length = 100)
-    @ColumnDefault("'0'")
-    private String  likes;
-    @Column(name = "regDate", length = 50)
-    private String  regDate;
+    @Column(name = "likeNo")
+    private int likeNo;
+    
     @ManyToOne
     @JoinColumn(name = "members_email", referencedColumnName = "email")
     private Member  email;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "boardNo", referencedColumnName = "boardNo")
+    private Board  boardNo;
 }

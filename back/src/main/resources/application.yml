@@ -2,16 +2,17 @@ server:
   port: 8085
 
 spring:
-
 #  driverClassName: com.mysql.cj.jdbc.Driver
+
 #  url: jdbc:mysql://puppy-db:3306/puppylink?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
 #  username: puppy
 #  password: ssafy
 
+
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
-    username: puppy
+    username: root
     password: ssafy
 
   jpa:
