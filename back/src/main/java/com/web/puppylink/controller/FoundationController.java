@@ -14,6 +14,7 @@ import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.service.FoundationServiceImpl;
@@ -53,10 +55,18 @@ public class FoundationController {
 	}
 	
 	// STEP2-1.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @GetMapping("/list")
-    @ApiOperation(value = "[단체] 재단 전체 조회 [STEP1-1]", notes = "봉사 신청 페이지에서 봉사자가 단체에 대한 설명을 보고 고를 수 있도록, 전체 단체에 대한 정보를 반환한다. ")
-    public Object findAll() {
-        return ResponseEntity.ok(foundationService.getFoundationAll());
+    @ApiOperation(code = 200, value = "[단체] 재단 전체 조회 [STEP1-1]", notes = "봉사 신청 페이지에서 봉사자가 단체에 대한 설명을 보고 고를 수 있도록, 전체 단체에 대한 정보를 반환한다. ", response = ResponseEntity.class)
+    public Object selectAll() {
+        // return ResponseEntity.ok(foundationService.getFoundationAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_FOUNDATION,
+            			foundationService.getFoundationAll()
+            	), 
+            	HttpStatus.OK
+            );
     }
     
     @PostMapping("/validate")

@@ -13,16 +13,16 @@ import lombok.NoArgsConstructor;
 public class BoardDto {
 	@ApiModelProperty(dataType = "int", example = "1")
 	private int     boardNo;
-	@ApiModelProperty(dataType = "String", example = "게시글 제목입니다.")
+	@ApiModelProperty(dataType = "String", example = "게시글 제목")
 	private String  subject;
-	@ApiModelProperty(dataType = "String", example = "게시글 내용입니다.")
+	@ApiModelProperty(dataType = "String", example = "게시글 내용")
 	private String  contents;
-	@ApiModelProperty(dataType = "String", example = "게시글 링크입니다.")
+	@ApiModelProperty(dataType = "String", example = "게시글 링크")
 	private String  pictureURL;
 	@ApiModelProperty(dataType = "String", example = "0")
 	private String  likes;
 	@ApiModelProperty(dataType = "String", example = "2023-02-06")
 	private String  regDate;
-	@ApiModelProperty(dataType = "String", example = "admin")
+	@ApiModelProperty(dataType = "String", example = "admin@gmail.com")
 	private String  email;
 }
