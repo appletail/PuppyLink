@@ -31,9 +31,9 @@ public class FoundationController {
 		this.foundationService = foundationService;
 	}
 	
-	// STEP2.
-    @GetMapping("/all")
-    @ApiOperation(value = "[단체] 재단 전체 조회 [STEP2-1]", notes = "봉사 신청 페이지에서 봉사자가 단체에 대한 설명을 보고 고를 수 있도록, 전체 단체에 대한 정보를 반환한다. ")
+	// STEP2-1.
+    @GetMapping("/list")
+    @ApiOperation(value = "[단체] 재단 전체 조회 [STEP1-1]", notes = "봉사 신청 페이지에서 봉사자가 단체에 대한 설명을 보고 고를 수 있도록, 전체 단체에 대한 정보를 반환한다. ")
     public Object findAll() {
         return ResponseEntity.ok(foundationService.getFoundationAll());
     }

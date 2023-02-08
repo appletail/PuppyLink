@@ -14,7 +14,7 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, String>{
 	List<Volunteer> findVolunteerByBusinessNo(Foundation foundation);
 	List<Volunteer> findVolunteerByEmail(Member member);
 	Optional<Volunteer> findVolunteerByVolunteerNo(int volunteerNo);
-	Optional<Volunteer> deleteVolunteerByVolunteerNo(int volunteerNo);
+	void deleteVolunteerByVolunteerNo(int volunteerNo);
 	
 	List<Volunteer> findVolunteerByBusinessNoAndStatus(Foundation foundation, String status);
 	List<Volunteer> findVolunteerByEmailAndStatus(Member member, String status);

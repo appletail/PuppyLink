@@ -67,7 +67,7 @@ public class FoundationServiceImpl implements FoundationService{
         Foundation foundationInfo;
         Member memberInfo;
         
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         
         authority = Authority.builder()
                 .authorityName("ROLE_MANAGER")

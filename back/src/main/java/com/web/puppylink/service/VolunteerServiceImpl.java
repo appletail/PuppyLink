@@ -1,8 +1,8 @@
 package com.web.puppylink.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,8 +50,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 	
 	@Transactional
 	@Override
-	public List<Volunteer> getMemberVolunteer(String email) {
-		Member member = memberRepository.findUserByEmail(email).orElseThrow(()->{
+	public List<Volunteer> getMemberVolunteer(String nickName) {
+		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		return volunteerRepository.findVolunteerByEmail(member);
@@ -59,8 +59,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 	
 	@Transactional
 	@Override
-	public List<Volunteer> getMembmerStatusVolunteer(String email, String status) {
-		Member member = memberRepository.findUserByEmail(email).orElseThrow(()->{
+	public List<Volunteer> getMembmerStatusVolunteer(String nickName, String status) {
+		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		return volunteerRepository.findVolunteerByEmailAndStatus(member, status);
@@ -95,13 +95,16 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
 		});
 		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
+		String date = simpleDateFormat.format(new Date()); 
+		
 		Volunteer volunteerInfo = Volunteer.builder()
 				.depTime(volunteer.getDepTime())
 				.dest(volunteer.getDest())
 				.fileURL(null)
 				.flightName(volunteer.getFlightName())				
-				.regDate(new Date().toString())
-				.status("신청 완료")
+				.regDate(date)
+				.status("submit")
 				.businessNo(foundation)
 				.email(member)
 				.ticketNo(null)
@@ -128,7 +131,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 
 	@Transactional
 	@Override
-	public void delete(int volunteerNo) {
+	public void cancel(int volunteerNo) {
+		// 봉사 상태(submit, refuse)에 따른 삭제 가능 조건 추가 예정
 		volunteerRepository.deleteVolunteerByVolunteerNo(volunteerNo);
 	}
 	
@@ -139,8 +143,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("신청 완료")) {
-			volunteer.setStatus("접수 완료");			
+		if(status.contentEquals("submit")) {
+			volunteer.setStatus("regist");			
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -150,13 +154,13 @@ public class VolunteerServiceImpl implements VolunteerService{
 	
 	@Transactional
 	@Override
-	public Volunteer cancel(int volunteerNo) {
+	public Volunteer refuse(int volunteerNo) {
 		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("신청 완료")) {
-			volunteer.setStatus("접수 거절");			
+		if(status.contentEquals("submit")) {
+			volunteer.setStatus("refuse");			
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -171,8 +175,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("접수 완료") || status.contentEquals("서류 미흡") ) {
-			volunteer.setStatus("제출 완료");			
+		if(status.contentEquals("regist") || status.contentEquals("lack") ) {
+			volunteer.setStatus("docs");			
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -187,8 +191,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("제출 완료")) {
-			volunteer.setStatus("승인 완료");
+		if(status.contentEquals("docs")) {
+			volunteer.setStatus("confirm");
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -203,8 +207,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("제출 완료")) {
-			volunteer.setStatus("서류 미흡");
+		if(status.contentEquals("docs")) {
+			volunteer.setStatus("lack");
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
@@ -219,8 +223,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("승인 완료")) {
-			volunteer.setStatus("봉사 완료");
+		if(status.contentEquals("confirm")) {
+			volunteer.setStatus("complete");
 			deleteFile(volunteerNo);			// s3 필수서류 삭제	
 		}
 		else {
@@ -297,7 +301,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			Volunteer volunteer = volList.get(i);
 			int volunteerNo = volunteer.getVolunteerNo();
 			deleteFile(volunteerNo);						// s3 삭제
-			delete(volunteerNo);							// db 삭제
+			cancel(volunteerNo);							// db 삭제
 		}
 		
 		

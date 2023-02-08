@@ -17,6 +17,6 @@ public class VolunteerDto {
     private String flightName;
     @ApiModelProperty(dataType = "String", example = "1148209801")
     private String businessNo;
-    @ApiModelProperty(dataType = "String", example = "admin")
+    @ApiModelProperty(dataType = "String", example = "admin@gmail.com")
     private String email;
 }
