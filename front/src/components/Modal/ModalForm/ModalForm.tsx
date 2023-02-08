@@ -14,6 +14,7 @@ function ModalForm({ModalContent, closeModal}:ModalProps): JSX.Element {
       <div
         aria-hidden="true"
         className={style.Body}
+        onClick={(e) => e.stopPropagation()}
       >
         {ModalContent}
       </div>

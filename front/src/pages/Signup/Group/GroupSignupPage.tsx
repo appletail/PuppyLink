@@ -9,9 +9,6 @@ import BusinessValidate from './Components/BusinessValidate';
 import { axBase } from '@/apis/api/axiosInstance'
 import { inputs, buttons, ModalForm } from '@/components';
 
-
-
-
 interface SignupProps {
   email: string;
   password: string;
@@ -118,14 +115,22 @@ function GroupSignupPage() {
   // 사업자 번호 인증
   const [NotbusinessNoValidateCheck, setNotbusinessNoValidateCheck] = useState(true)
   const [openModal, setOpenModal] = useState(false)
-  const handleModal = () => {
-    setOpenModal(!openModal)
-  }
+
 
   // 회원가입 버튼 누르면 다음페이지로 이동
 
   const onSubmit: SubmitHandler<SignupProps> = (data) => {
-   console.log(data)
+    navigate('/signup/confirm', {
+      replace: true,
+      state: {
+        email: data.email,
+        password: data.password,
+        name: data.name,
+        phone: data.phone,
+        nickName: data.nickName,
+        businessNo : data.businessNo,
+      },
+    });
   };
   // form 디자인
   return (
@@ -136,6 +141,7 @@ function GroupSignupPage() {
           className="flex flex-col gap-4 "
           onSubmit={handleSubmit(onSubmit)}
         >
+          {/* 이메일 */}
           <inputs.InputFormBtn
             control={control}
             name="email"
@@ -160,7 +166,7 @@ function GroupSignupPage() {
             }}
           />
           <ErrorMessage errors={errors} name="email" />
-
+{/* 비밀번호 */}
           <inputs.InputForm
             control={control}
             name="password"
@@ -176,6 +182,7 @@ function GroupSignupPage() {
           />
           <ErrorMessage errors={errors} name="password" />
 
+{/* 비밀번호 확인 */}
           <inputs.InputForm
             control={control}
             name="passwordConfirm"
@@ -253,7 +260,7 @@ function GroupSignupPage() {
             rules={{
               required: { value: true, message: '사업자 번호를 입력해주세요' },
               validate: {
-                nickNamevalidate: () =>
+                businessNovalidate: () =>
                   !NotbusinessNoValidateCheck || '사업자 번호 인증을 해주세요',
               },
               onChange: () => {
@@ -263,12 +270,15 @@ function GroupSignupPage() {
           />
           <ErrorMessage errors={errors} name="businessNo" />
 
-          <buttons.BtnLg BtnValue="회원가입" />
           {openModal &&
           <ModalForm 
-          ModalContent={<BusinessValidate businessNo={getValues('businessNo')} />}
           closeModal={() => setOpenModal(!openModal)}
+          ModalContent={<BusinessValidate businessNo={getValues('businessNo')} 
+          setNotbusinessNoValidateCheck={setNotbusinessNoValidateCheck} 
+          setOpenModal={setOpenModal}
           />}
+          />}
+          <buttons.BtnLg BtnValue="회원가입" />
         </form>
       </div>
     </div>

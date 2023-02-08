@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import  { useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { MdMail } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -52,6 +52,7 @@ function SignupConfirmPage() {
           name: state.name,
           phone: state.phone,
           nickName: state.nickName,
+          businessNo: state.businessNo? state.businessNo : "",
           auth: data.confirmNumber,
         },
       })
