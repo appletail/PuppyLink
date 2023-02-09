@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useController } from 'react-hook-form'
 
-import { Modal } from '@/components'
+import { ModalCard } from '@/components'
 
 
 interface foundation {
@@ -53,7 +53,7 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
         </label>
         {modalOn[idx]
           &&
-          <Modal
+          <ModalCard
             CardContents={[item?.description]}
             CardTitle={title}
             closeModal={() =>

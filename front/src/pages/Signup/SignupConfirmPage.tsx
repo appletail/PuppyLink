@@ -6,6 +6,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { axBase } from '@/apis/api/axiosInstance'
+import { NavTop } from '@/components';
+
+
+
+
 
 type ConfirmProps = {
   // confirmNumber: string;
@@ -48,6 +53,7 @@ function SignupConfirmPage() {
           name: state.name,
           phone: state.phone,
           nickName: state.nickName,
+          businessNo: state.businessNo ? state.businessNo : "",
           auth: data.confirmNumber,
         },
       })
@@ -76,6 +82,7 @@ function SignupConfirmPage() {
 
   return (
     <div>
+      <NavTop.NavBack NavContent='회원가입' />
       <div className="mt-16 text-center  ">
         {/* 상단 부분 */}
         <div className="flex flex-col items-center">

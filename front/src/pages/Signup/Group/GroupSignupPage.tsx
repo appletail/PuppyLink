@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '@hookform/error-message';
 
+import BusinessValidate from './Components/BusinessValidate';
+
 import { axBase } from '@/apis/api/axiosInstance'
-
-import { inputs, buttons , NavTop } from '@/components';
-
-
-
+import { inputs, buttons, ModalForm, NavTop } from '@/components';
 
 interface SignupProps {
   email: string;
@@ -19,9 +16,10 @@ interface SignupProps {
   nickName: string;
   name: string;
   phone: number;
+  businessNo : number;
 }
 
-function UserSignupPage() {
+function GroupSignupPage() {
   const navigate = useNavigate();
   const {
     control,
@@ -29,8 +27,7 @@ function UserSignupPage() {
     formState: { errors },
     getValues,
     setError,
-    watch,
-    clearErrors,
+    watch
   } = useForm<SignupProps>({});
 
   // 이메일 & 비밀번호 유효성 검사 형식
@@ -115,10 +112,14 @@ function UserSignupPage() {
     }
   };
 
+  // 사업자 번호 인증
+  const [NotbusinessNoValidateCheck, setNotbusinessNoValidateCheck] = useState(true)
+  const [openModal, setOpenModal] = useState(false)
+
+
   // 회원가입 버튼 누르면 다음페이지로 이동
 
   const onSubmit: SubmitHandler<SignupProps> = (data) => {
-    console.log(data.email)
     navigate('/signup/confirm', {
       replace: true,
       state: {
@@ -127,37 +128,22 @@ function UserSignupPage() {
         name: data.name,
         phone: data.phone,
         nickName: data.nickName,
+        businessNo : data.businessNo,
       },
     });
-    axBase({
-      method: 'post',
-      url: '/members/mail',
-      data: {
-        email: data.email,
-      },
-    })
-      .then((res) => {
-        console.log(res.data)
-      })
-      .catch(() => {
-        setError('email', {
-          type: 'email',
-          message: '사용할 수 없는 이메일입니다.',
-        });
-      });
   };
   // form 디자인
   return (
     <div>
-
-    <div className="mt-14">
       <NavTop.NavBack NavContent='회원가입' />
+      <div  className="mt-12">
       <p className="text-title1 mb-5">만나서 반가워요!</p>
       <div>
         <form
           className="flex flex-col gap-4 "
           onSubmit={handleSubmit(onSubmit)}
           >
+          {/* 이메일 */}
           <inputs.InputFormBtn
             control={control}
             name="email"
@@ -180,9 +166,9 @@ function UserSignupPage() {
                 setNotEmailDuplicateCheck(true);
               },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="email" />
-
+{/* 비밀번호 */}
           <inputs.InputForm
             control={control}
             name="password"
@@ -198,6 +184,7 @@ function UserSignupPage() {
             />
           <ErrorMessage errors={errors} name="password" />
 
+{/* 비밀번호 확인 */}
           <inputs.InputForm
             control={control}
             name="passwordConfirm"
@@ -214,9 +201,10 @@ function UserSignupPage() {
                 }
               },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="passwordConfirm" />
 
+          {/* 닉네임 */}
           <inputs.InputFormBtn
             control={control}
             name="nickName"
@@ -235,9 +223,10 @@ function UserSignupPage() {
                 setNotnickNameDuplicateCheck(true);
               },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="nickName" />
 
+            {/* 이름 */}
           <inputs.InputForm
             control={control}
             name="name"
@@ -246,9 +235,10 @@ function UserSignupPage() {
             rules={{
               required: { value: true, message: '이름을 입력해주세요' },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="name" />
-
+          
+          {/* 전화번호 */}
           <inputs.InputForm
             control={control}
             name="phone"
@@ -257,15 +247,45 @@ function UserSignupPage() {
             rules={{
               required: { value: true, message: '전화번호을 입력해주세요' },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="phone" />
 
+            {/* 사업자번호 */}
+          <inputs.InputFormBtn
+            control={control}
+            name="businessNo"
+            placeholder="사업자번호 "
+            type="number"
+            button={
+              <buttons.BtnSm BtnValue="인증하기" onClick={() => {setOpenModal(!openModal)}} />
+            }
+            rules={{
+              required: { value: true, message: '사업자 번호를 입력해주세요' },
+              validate: {
+                businessNovalidate: () =>
+                  !NotbusinessNoValidateCheck || '사업자 번호 인증을 해주세요',
+              },
+              onChange: () => {
+                setNotbusinessNoValidateCheck(true);
+              },
+            }}
+          />
+          <ErrorMessage errors={errors} name="businessNo" />
+
+          {openModal &&
+          <ModalForm 
+          closeModal={() => setOpenModal(!openModal)}
+          ModalContent={<BusinessValidate businessNo={getValues('businessNo')} 
+          setNotbusinessNoValidateCheck={setNotbusinessNoValidateCheck} 
+          setOpenModal={setOpenModal}
+          />}
+          />}
           <buttons.BtnLg BtnValue="회원가입" />
         </form>
       </div>
     </div>
-            </div>
+  </div>
   );
 }
 
-export default UserSignupPage;
+export default GroupSignupPage;

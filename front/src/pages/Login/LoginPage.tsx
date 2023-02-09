@@ -1,11 +1,11 @@
-
-import { useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '@hookform/error-message';
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { inputs, buttons } from '@/components';
+import { NavTop , inputs, buttons } from '@/components';
+
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
 interface LoginProps {
@@ -52,6 +52,7 @@ function LoginPage() {
 
   return (
     <div>
+      <NavTop.NavBack NavContent='로그인'/>
       <p className="text-title1 mt-14 mb-3 ">다시 보니 반갑네요!</p>
 
       {/* 로그인 form */}

@@ -5,10 +5,14 @@ import RootLayout from './RootLayout';
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import LoginPage from '@/pages/Login/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
+
 import ReviewMainPage from '@/pages/Review/ReviewMainPage';
+import GroupSignupPage from '@/pages/Signup/Group/GroupSignupPage';
+import GroupTabPage from '@/pages/Signup/Group/GroupTabPage';
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
 import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
-import UserSignup from '@/pages/Signup/User/UserSignupPage';
+
+import UserSignupPage from '@/pages/Signup/User/UserSignupPage';
 import UserTabPage from '@/pages/Signup/User/UserTabPage';
 import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
 import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
@@ -43,9 +47,18 @@ const routers = createBrowserRouter([
         path: '/signup/usertab',
         element: <UserTabPage />,
       },
+      
+      {
+        path: '/signup/grouptab',
+        element: <GroupTabPage />,
+      },
       {
         path: '/signup/user',
-        element: <UserSignup />,
+        element: <UserSignupPage />,
+      },
+      {
+        path: '/signup/group',
+        element: <GroupSignupPage />,
       },
       {
         path: '/signup/confirm',
@@ -57,6 +70,7 @@ const routers = createBrowserRouter([
       },
     ],
   },
+
 ]);
 
 export default routers;
