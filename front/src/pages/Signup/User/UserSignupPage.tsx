@@ -5,10 +5,21 @@ import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '@hookform/error-message';
 
+<<<<<<< HEAD
+
 import { axBase } from '@/apis/api/axiosInstance'
 
 import { inputs, buttons , NavTop } from '@/components';
 
+
+=======
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
+
+import { inputs, buttons } from '@/components';
+
+import { URL as ServerURL } from '@/states/Server';
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
 
 
 
@@ -137,7 +148,12 @@ function UserSignupPage() {
       },
     })
       .then((res) => {
+<<<<<<< HEAD
         console.log(res.data)
+
+=======
+        console.log(res)
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
       })
       .catch(() => {
         setError('email', {
@@ -180,7 +196,7 @@ function UserSignupPage() {
                 setNotEmailDuplicateCheck(true);
               },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="email" />
 
           <inputs.InputForm
@@ -195,7 +211,11 @@ function UserSignupPage() {
                 message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
               },
             }}
+<<<<<<< HEAD
             />
+=======
+          />
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
           <ErrorMessage errors={errors} name="password" />
 
           <inputs.InputForm
@@ -214,7 +234,11 @@ function UserSignupPage() {
                 }
               },
             }}
+<<<<<<< HEAD
             />
+=======
+          />
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
           <ErrorMessage errors={errors} name="passwordConfirm" />
 
           <inputs.InputFormBtn
@@ -235,7 +259,11 @@ function UserSignupPage() {
                 setNotnickNameDuplicateCheck(true);
               },
             }}
+<<<<<<< HEAD
             />
+=======
+          />
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
           <ErrorMessage errors={errors} name="nickName" />
 
           <inputs.InputForm
@@ -246,7 +274,7 @@ function UserSignupPage() {
             rules={{
               required: { value: true, message: '이름을 입력해주세요' },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="name" />
 
           <inputs.InputForm
@@ -257,7 +285,7 @@ function UserSignupPage() {
             rules={{
               required: { value: true, message: '전화번호을 입력해주세요' },
             }}
-            />
+          />
           <ErrorMessage errors={errors} name="phone" />
 
           <buttons.BtnLg BtnValue="회원가입" />

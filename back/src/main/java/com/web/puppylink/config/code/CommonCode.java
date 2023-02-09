@@ -54,7 +54,9 @@ public enum CommonCode {
 	SUCCESS_S3_UPLOAD(2207, "s3 업로드에 성공하였습니다."),
 	FAILED_S3_UPLOAD(2208, "s3 업로드에 실패했습니다."),
 	SUCCESS_S3_DELETE(2209, "필수서류 삭제에 성공하였습니다."),
-	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다");
+	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다"),
+	
+	SELECT_GPS(2315, "해당하는 편명의 실시간 항공기 정보를 성공적으로 조회했습니다.");
 
     private int code;
     private String message;

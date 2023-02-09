@@ -16,6 +16,7 @@ import UserSignupPage from '@/pages/Signup/User/UserSignupPage';
 import UserTabPage from '@/pages/Signup/User/UserTabPage';
 import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
 import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
+import VolGps from '@/pages/Volunteer/User/VolGps';
 
 const routers = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ const routers = createBrowserRouter([
       {
         path: '/signup/success',
         element: <SignupSuccessPage />,
+      },
+      {
+        path: '/gps',
+        element: <VolGps />,
       },
     ],
   },

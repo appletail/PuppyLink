@@ -32,6 +32,7 @@ function UserTabPage() {
           네이버로 계속하기
         </div>
         <div
+          aria-hidden='true'
           className="h-14 rounded-[0.625rem] w-[21.875rem] flex bg-select items-center align-center justify-evenly"
           onClick={() => navigate('/signup/user')}
         >
