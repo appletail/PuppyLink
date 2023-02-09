@@ -16,7 +16,7 @@ type UCProps<TFieldValues extends FieldValues = FieldValues> = {
 
 interface BtnProps extends ButtonTypes {
   // onClick: () => void;
-  BtnValue: string;
+  BtnValue: string | JSX.Element;
 }
 interface imgProps {
   src: string;
@@ -50,4 +50,36 @@ interface InputProps {
   button?: JSX.Element;
   helper?: string;
   InputType: string;
+}
+
+type status = '신청 완료' | '접수 완료' | '제출 완료' | '서류 미흡' | '승인 완료' | '봉사 완료'
+
+interface member {
+  email: string
+  name: string
+  phone: number
+  nickName: string
+  activated: boolean
+  authorities: Array
+  joinDate: Date
+}
+
+interface businessNo {
+  businessNo: number,
+  businessName: string,
+  presidentName: string,
+  startDate: Date,
+  email: member
+}
+
+interface volunteer {
+  volunteerNo: number
+  depTime: Date
+  dest: string
+  status: string
+  flightName: string
+  regDate: Date
+  email: member
+  businessNo: businessNo
+  description: string
 }

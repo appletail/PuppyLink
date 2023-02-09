@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 import  { useEffect } from 'react';
+=======
+import React, { useEffect } from 'react';
+>>>>>>> dev
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { MdMail } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';

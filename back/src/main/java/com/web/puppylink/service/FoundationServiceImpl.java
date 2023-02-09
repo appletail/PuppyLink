@@ -14,6 +14,7 @@ import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.Volunteer;
+import com.web.puppylink.model.File.FileRequest;
 import com.web.puppylink.repository.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
@@ -67,7 +68,7 @@ public class FoundationServiceImpl implements FoundationService{
         Foundation foundationInfo;
         Member memberInfo;
         
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         
         authority = Authority.builder()
                 .authorityName("ROLE_MANAGER")
@@ -96,14 +97,15 @@ public class FoundationServiceImpl implements FoundationService{
         
         foundationRepository.save(foundationInfo);
 
-        return memberRepository.save(memberInfo);
+        return memberInfo;
     }
 
 	@Transactional
 	@Override
-	public Foundation submitProfile(String nickName, String imagePath) {
+	public Foundation submitProfile(FileRequest file) {
 
-		Member member = memberRepository.findByNickName(nickName).orElseThrow(()->{
+		System.out.print(file.getNickName());
+		Member member = memberRepository.findByNickName(file.getNickName()).orElseThrow(()->{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		
@@ -111,7 +113,7 @@ public class FoundationServiceImpl implements FoundationService{
 			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
 		});
 		
-		foundation.setProfileURL(imagePath);
+		foundation.setProfileURL(file.getImagePath());
 		
 		return foundationRepository.save(foundation);
 	}

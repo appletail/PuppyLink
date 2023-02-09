@@ -40,8 +40,10 @@ public class Volunteer {
     private String          dest;
     @Column(name = "status" ,length = 100)
     private String          status;
-    @Column(name = "fileURL" , length = 100)
-    private String          fileURL;
+    @Column(name = "passportURL" , length = 300)
+    private String          passportURL;
+    @Column(name = "flightURL" , length = 300)
+    private String          flightURL;
     @Column(name = "flightName" , length = 100)
     @NotNull
     private String          flightName;

@@ -112,7 +112,7 @@ public class MemberController {
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
         return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
-                CommonCode.SUCCESS_LOGIN,null), httpHeaders, HttpStatus.OK);
+                CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/reissuance")
@@ -194,7 +194,7 @@ public class MemberController {
     public Object signup(@RequestBody MemberDto member) {
         try {
             if (member.getBusinessName() == null) {
-                // 봉사자를 회원가입합니다.
+                // 봉사자를 회원가입합니다. 
                 memberService.signup(member);
                 return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
                         CommonCode.JOIN_MEMBER, null), HttpStatus.OK);
@@ -229,15 +229,16 @@ public class MemberController {
     @ApiResponses(value = {
             @ApiResponse(code=200, message = "인증번호가 정상적으로 발송되었습니다.", response = ResponseEntity.class)
     })
-    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() String email) {
-        logger.info("MemberController SignupToAuth : {} ", email);
+    public ResponseEntity<?> getSignupToAuthentication(@RequestBody() Auth mail) {
+        logger.info("MemberController SignupToAuth : {} ", mail);
         try {
             // 인증번호 생성 및 redis 저장
             String auth = MailUtil.randomAuth();
-            Auth mail = Auth.builder()
-                            .email(email)
-                            .auth(auth)
-                            .build();
+//            Auth mail = Auth.builder()
+//                            .email(email)
+//                            .auth(auth)
+//                            .build();
+            mail.setAuth(auth);
             redisService.saveAuth(Auth.builder()
                     .email(mail.getEmail())
                     .auth(auth)
@@ -267,22 +268,46 @@ public class MemberController {
 
     @GetMapping("/checkEmail/{email}")
     @ApiOperation(value = "이메일 중복조회")
-    public boolean emailCheck(@PathVariable  String email) {
+    @ApiImplicitParam(name = "email", value = "이메일", required = true, dataType = "String", defaultValue = "user@gmail.com")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message="사용가능한 이메일입니다.", response = ResponseEntity.class)
+        })
+    public Object emailCheck(@PathVariable  String email) {
     	logger.debug("UserController duplicate email check : {}", email);
-    	if(memberService.duplicateCheckEmail(email)) {
-    		return false;
-    	}
-    	return true;
+    	try {
+    		if(memberService.duplicateCheckEmail(email)) {
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.DUPLICATE_EMAIL, false), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                        CommonCode.SUCCESS_EMAIL, true), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+                    ExceptionCode.EXCEPTION_DATA, null), HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @GetMapping("/checkNickname/{nickName}")
     @ApiOperation(value = "닉네임 중복조회")
-    public boolean nickNameCheck(@PathVariable String nickName) {
+    @ApiImplicitParam(name = "nickName", value = "닉네임", required = true, dataType = "String", defaultValue = "selly")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message="사용가능한 닉네임입니다.", response = ResponseEntity.class)
+        })
+    public Object nickNameCheck(@PathVariable String nickName) {
     	logger.debug("UserController duplicate nickName check : {}", nickName);
-    	if(memberService.duplicateCheckNickName(nickName)){
-    		return false;
-    	}
-    	return true;
+    	try {
+    		if(memberService.duplicateCheckNickName(nickName)) {
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                		CommonCode.DUPLICATE_NICKNAME, false), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+                		CommonCode.SUCCESS_NICKNAME, true), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+                    ExceptionCode.EXCEPTION_DATA, null), HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     @DeleteMapping

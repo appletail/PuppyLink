@@ -1,6 +1,0 @@
-FROM mysql:8.0.31-oracle
-LABEL author Gonjelly
-ENV MYSQL_ROOT_PASSWORD=ssafy
-ENV MYSQL_DATABASE=puppylink
-ENV MYSQL_USER=puppy
-ENV MYSQL_PASSWORD=ssafy

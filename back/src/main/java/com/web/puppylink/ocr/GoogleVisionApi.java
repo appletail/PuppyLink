@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -114,13 +116,16 @@ public class GoogleVisionApi {
 							}
 						}
 					}
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"); 
+					String date = simpleDateFormat.format(new Date()); 
+					
 					ticket.setPassengerName(array[passengerNameIndex]);
 					ticket.setTicketNo(array[ticketNoIndex]);
 					ticket.setBookingReference(array[bookingReferenceIndex]);
 					ticket.setDepCity(array[depCityIndex]);
-					ticket.setDepDate(array[depDateIndex]);
+					ticket.setDepDate(dateFormat(array[depDateIndex]));
 					ticket.setArriveCity(array[arriveCityIndex]);
-					ticket.setArriveDate(array[arriveDateIndex]);
+					ticket.setArriveDate(dateFormat(array[arriveDateIndex]));
 					ticket.setFlight(array[flightIndex]);
 
 //					System.out.println("Passenger Name : "+array[passengerNameIndex]);
@@ -164,5 +169,48 @@ public class GoogleVisionApi {
 	        	e.printStackTrace();
 	        }
 			return null;
+	}
+	
+	// 항공권에 표기된 출발 시각 및 도착 시각을 표준 시간 형태로 변환하여 반환한다.
+	// 19NOV18(MON) 05:30 (Local Time) -> 2018-11-19 05:30:00
+	public String dateFormat(String date) {
+		// [월 영문 표기] 1월:JAN 2월:FEB 3월:MAR 4월:APR 5월:MAY 6월:JUN 7월:JUL 8월:AUG 9월:SEP 10월:OCT 11월:NOV 12월:DEC
+		
+		// STEP1. 공백 및 특수문자 제거
+		String trim = date.replaceAll(" ", "");
+		trim = trim.replaceAll("[():]", "");
+		trim = trim.replaceAll("(LocalTime)", "");
+		
+		// STEP2. 영문 요일 및 한글 요일 제거
+		String[] weeks = {"월", "화", "수", "목", "금", "토", "일", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+		for(int i=0; i<weeks.length; i++) {
+			trim = trim.replaceAll(weeks[i], "");
+		}
+		
+		// STEP3. Date 정보 추출
+		String year = Integer.toString(2000 + Integer.parseInt(trim.substring(5, 7))); 
+		String month = trim.substring(2, 5);
+		String day = trim.substring(0, 2);
+		String hour = trim.substring(7, 9);
+		String minute = trim.substring(9, 11);
+		String second = "00";
+		
+		// STEP4. 영문 월 숫자 변환
+		String[] trans = {"", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+		for(int i=0; i<trans.length; i++) {
+			if(trans[i].equals(month)) {
+				if(i<10) {
+					month = "0";
+					month += Integer.toString(i);
+				}
+				else {
+					month = Integer.toString(i);					
+				}
+			}
+		}
+		
+		// STEP5. 최종 문자열 형태 구성
+		String time = year + "-" + month + "-" + day +" "+ hour +":" + minute+":" + second;
+		return time;
 	}
 }

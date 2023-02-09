@@ -55,7 +55,7 @@ function VolUserResi() {
     data = { ...data, email: 'admin' }
     axBase({
       method: 'post',
-      url: `${URL}/volunteer/submit`,
+      url: '/volunteer/submit',
       data: data
     })
       .then((res) => console.log(res.data))

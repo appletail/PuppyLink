@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService{
         Authority authority;
         Member memberInfo;
         
-        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         authority = Authority.builder()
                 .authorityName("ROLE_USER")

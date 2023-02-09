@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.Volunteer;
+import com.web.puppylink.model.File.FileRequest;
 
 public interface VolunteerService {
 	// ※ 정규 봉사 신청 프로세스
@@ -19,7 +20,7 @@ public interface VolunteerService {
 	//	8. [단체] 봉사 완료 : 봉사가 완료되어 입양 희망자에게 반려견이 인계된 상태
 	
 	// ※ <봉사자> 신청한 봉사 조회 : 봉사자가 신청한 본인의 봉사 신청 목록을 조회한다.
-	List<Volunteer> getMemberVolunteer(String email);
+	List<Volunteer> getMemberVolunteer(String nickName);
 	
 	// ※ <재단> 신청된 봉사 조회 : 재단에 신청된 봉사 목록을 조회한다.
 	List<Volunteer> getFoundationVolunteer(String businessNo);
@@ -28,13 +29,13 @@ public interface VolunteerService {
 	Volunteer submit(VolunteerDto volunteer);
 	
 	// 2. <봉사자> [신청 취소] : 봉사자가 신청한 봉사를 취소한 상태 -> 봉사 튜플이 완전히 삭제된다.
-	void delete(int volunteerNo);
+	void cancel(int volunteerNo);
 	
 	// 3. <재단> [접수 완료] : 재단이 봉사자의 신청을 1차 승인한 경우 -> 봉사자의 '서류 제출' 버튼 활성화
 	Volunteer regist(int volunteerNo);
 	
 	// 4. <재단> [접수 거절] : 재단이 봉사자의 신청을 거절한 경우
-	Volunteer cancel(int volunteerNo); // 봉사 승인 취소
+	Volunteer refuse(int volunteerNo); // 봉사 승인 취소
 	
 	// 5. <봉사자> [제출 완료] : 봉사자가 필수 서류를 제출한 상태
 	Volunteer docs(int volunteerNo);
@@ -52,13 +53,16 @@ public interface VolunteerService {
 	List<Volunteer> getFoundationStatusVolunteer(String businessNo, String status);
 	
 	// ※ 봉사자의 마이 페이지에서, 드롭다운 버튼에 따른 봉사 상태(Status)에 따른 목록 조회
-	List<Volunteer> getMembmerStatusVolunteer(String email, String status);		
+	List<Volunteer> getMembmerStatusVolunteer(String nickName, String status);		
 	
 	// ※ Google Vision Api를 통해, 업로드된 항공권 이미지에 대한 OCR 결과를 반환 및 저장
 	Volunteer ocr(int volunteerNo);
 
+	// 봉사자 필수서류(여권, 항공권) 등록
+	Volunteer submitFile(FileRequest file);
+	
 	// 봉사자 필수서류 삭제
-	void deleteFile(int volunteerNo);
+	void deleteFile(FileRequest file);
 
 	// 회원탈퇴 시 s3에 저장된 필수서류 삭제
 	void deleteALLFile(TokenDto token);

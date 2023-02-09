@@ -29,9 +29,10 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
   useEffect(() => {
     setModal(Array(foundations.length).fill(false))
   }, [foundations])
+
   const foundationsBtn = foundations.map((item, idx) => {
     const title = (
-      <div className="flex justify-between items-center text-title3-bold">
+      <div className="flex justify-between items-center text-title2-bold">
         <p>{item?.businessName}</p>
         <img alt="foundation" src={`https://puppylink-test.s3.ap-northeast-2.amazonaws.com/foundation-profile/${item?.businessName}`} />
       </div>
