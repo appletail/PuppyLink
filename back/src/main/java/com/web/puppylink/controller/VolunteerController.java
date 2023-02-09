@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.puppylink.config.code.CommonCode;
@@ -247,5 +248,25 @@ public class VolunteerController {
             	), 
             	HttpStatus.OK
             );
+    }
+    
+    //항공 GPS 정보 요청
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/gps/{volunteerNo}")
+    @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
+//    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
+    public @ResponseBody String GPS(@PathVariable final int volunteerNo) {
+    	System.out.println("gps 호출");
+        // return ResponseEntity.ok(volunteerService.ocr(volunteerNo));
+    	ResponseEntity<String> ans = volunteerService.flightInfo(volunteerNo);    
+    	System.out.println(" ans  : "  +  ans.getBody());
+    	return ans.getBody();
+//        return new ResponseEntity(
+//            	new BasicResponseDto(
+//            			CommonCode.SELECT_GPS,
+//            			ans
+//            	), 
+//            	HttpStatus.OK
+//            );
     }
 }

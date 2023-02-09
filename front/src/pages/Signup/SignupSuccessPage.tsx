@@ -1,7 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '@/assets/logo.svg';
+<<<<<<< HEAD
 import { buttons, NavTop } from '@/components';
+=======
+import { buttons } from '@/components';
+>>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
 
 function SignupSuccessPage() {
   const location = useLocation();
