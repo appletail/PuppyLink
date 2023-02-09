@@ -5,13 +5,13 @@ import RootLayout from './RootLayout';
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import LoginPage from '@/pages/Login/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
-
+import ReviewMainPage from '@/pages/Review/ReviewMainPage';
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
 import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
 import UserSignup from '@/pages/Signup/User/UserSignupPage';
 import UserTabPage from '@/pages/Signup/User/UserTabPage';
-
-import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
+import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
+import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
 
 const routers = createBrowserRouter([
   {
@@ -20,8 +20,16 @@ const routers = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: '/volunteer',
+        path: '/volunteer-user',
         element: <VolUserResiPage />,
+      },
+      {
+        path: '/volunteer-admin',
+        element: <VolAdminPage />,
+      },
+      {
+        path: '/review',
+        element: <ReviewMainPage />,
       },
       {
         path: '/components',
@@ -43,7 +51,6 @@ const routers = createBrowserRouter([
         path: '/signup/confirm',
         element: <SignupConfirmPage />,
       },
-
       {
         path: '/signup/success',
         element: <SignupSuccessPage />,

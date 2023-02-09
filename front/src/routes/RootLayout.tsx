@@ -1,7 +1,9 @@
 import { Outlet } from 'react-router-dom';
-import { Detail, NavBottom, NavTop } from '@/components';
 
 import { useRecoilState } from 'recoil';
+
+import { Detail, NavBottom, NavTop } from '@/components';
+
 import { LoginState } from '@/states/LoginState';
 
 export default function RootLayout() {
