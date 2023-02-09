@@ -47,7 +47,7 @@ function SignupConfirmPage() {
       // console.log(state.businessNo)
       // console.log(state)
       // state.nickName != undefined ? console.log(state.nickName) : console.log("hello")
-      const datas = {
+      const user_data = {
         auth: data.confirmNumber,
         businessName: state.businessName != undefined ? state.businessName : "",
         businessNo: state.businessNo != undefined ? state.businessNo : "",
@@ -59,15 +59,15 @@ function SignupConfirmPage() {
         presidentName: "",
         startDate: "",
       }
-      // console.log(datas)
+      console.log(user_data)
       axBase({
         method: 'post',
         url: '/members',
-        data: datas
+        data: user_data
 
       })
         .then((res) => {
-          // console.log(res)
+          console.log(res)
           navigate('/signup/success', {
             replace: true,
             state: {

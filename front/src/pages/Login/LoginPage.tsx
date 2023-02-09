@@ -40,8 +40,9 @@ function LoginPage() {
       .then((response) => {
         // console.log(response)
         navigate('/')
-        const access_token = response.headers.authorization;
-        const refresh_token = response.headers.refreshtoken;
+        // Bearer를 제외하고 token을 저장합니다
+        const access_token = response.headers.authorization.split(" ")[1];
+        const refresh_token = response.headers.refreshtoken.split(" ")[1];
         if (access_token) {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
