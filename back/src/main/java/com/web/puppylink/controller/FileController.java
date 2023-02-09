@@ -168,7 +168,7 @@ public class FileController {
 			String fileName = nickName; 
 			
 			// 한글 디코딩 
-			fileName = URLDecoder.decode(fileName, Charsets.UTF_8); 			
+			fileName = URLDecoder.decode(fileName, "UTF-8"); 			
 			
 			long size = multipartFile.getSize(); 
 			
