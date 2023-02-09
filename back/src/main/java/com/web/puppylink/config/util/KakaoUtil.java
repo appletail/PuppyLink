@@ -88,7 +88,7 @@ public class KakaoUtil {
 
         MemberDto member = new MemberDto();
         member.setEmail(kakao_account.get("email").getAsString());
-        member.setPassword("social_" + Math.random());
+        member.setPassword("social_puppy");
         member.setPhone("00000000000");
         member.setName(properties.get("nickname").getAsString());
         member.setNickName(properties.get("nickname").getAsString());

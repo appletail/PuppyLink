@@ -356,14 +356,37 @@ public class MemberController {
             if ( !memberService.getMemberWithAuthorities(member.getEmail()).isPresent() ) {
                 memberService.signup(member);
             }
+            // 카카오 회원정보를 가지고 토큰 발급하기
+            // 이메일과 패스워드로 Authentication인증 객체를 만들기
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+            // 인증이 완료된 Authentication 객체를 저장 ( UserDetailsService를 구현한 클래스 이동 )
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            // SecurityContextHolder에 인증이 완료된 Authentication객체를 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Authentication 객체를 이용해서 토큰을 생성
+            TokenDto token = memberService.getTokenByAuthenticateion(authentication);
+            // redis에 DB저장하기
+            redisService.saveRefreshToken(new RefreshToken().builder()
+                    .email(member.getEmail())
+                    .refreshToken(token.getRefreshToken())
+                    .build());
+            // Header에 토큰을 저장
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.AUTHORIZATION_HEADER);
+            httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.REFRESHTOKEN_HEADER);
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+            httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
+            // 회원정보 및 토큰 리턴
             return new ResponseEntity<>(new BasicResponseDto<>(
-                    CommonCode.SUCCESS_LOGIN,null),HttpStatus.OK);
+                    CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()),httpHeaders,HttpStatus.OK);
         } catch ( JsonProcessingException e) {
             e.printStackTrace();
         } catch ( Exception e ) {
             e.printStackTrace();
         }
-        return new ResponseEntity<>(ExceptionCode.EXCEPTION_API,HttpStatus.EXPECTATION_FAILED);
+        return new ResponseEntity<>(new BasicResponseDto<>(
+                ExceptionCode.EXCEPTION_API,null),HttpStatus.EXPECTATION_FAILED);
     }
 
 }
