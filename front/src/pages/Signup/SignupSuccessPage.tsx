@@ -1,11 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ReactComponent as Logo } from '@/assets/logo.svg';
-<<<<<<< HEAD
 import { buttons, NavTop } from '@/components';
-=======
-import { buttons } from '@/components';
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
 
 function SignupSuccessPage() {
   const location = useLocation();
@@ -25,7 +21,7 @@ function SignupSuccessPage() {
           <p>회원가입을 축하드립니다.</p>
         </div>
         <div className='flex justify-center'>
-          <buttons.BtnMd BtnValue="로그인하러 가기" onClick={goToLogin } />
+          <buttons.BtnMd BtnValue="로그인하러 가기" onClick={goToLogin} />
         </div>
       </div>
     </div>

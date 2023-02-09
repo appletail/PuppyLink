@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 
+import SortedFooter from './FooterController'
 import Modal from './ModalVolunteer'
-import SortedFooter from './SortedFooter'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
-
 
 function SortedVol({ status }: { status: status }) {
 
@@ -14,13 +13,9 @@ function SortedVol({ status }: { status: status }) {
 
   useEffect(() => {
     axBase({
-      url: '/volunteer/select/foundation/status',
-      params: {
-        businessNo: '1148209801',
-        status: status
-      }
+      url: `/volunteer/foundation/${'2308201019'}/${status}`,
     })
-      .then((res) => setVolunteers(res.data))
+      .then((res) => setVolunteers(res.data.data))
   }, [status])
 
   useEffect(() => {
@@ -28,7 +23,7 @@ function SortedVol({ status }: { status: status }) {
   }, [volunteers])
 
 
-  const volunteerCards = volunteers.map((volunteer: volunteer, idx: number) => {
+  const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
     const cardBody = [
       `신청일: ${volunteer.regDate}`,

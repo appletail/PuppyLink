@@ -4,7 +4,7 @@ import style from '@/components/Modal/Modal.module.css'
 
 
 interface ModalProps {
-  volunteer: volunteer
+  volunteer: Volunteer
   closeModal: () => void
 }
 

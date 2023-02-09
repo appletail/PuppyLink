@@ -52,27 +52,27 @@ interface InputProps {
   InputType: string;
 }
 
-type status = '신청 완료' | '접수 완료' | '제출 완료' | '서류 미흡' | '승인 완료' | '봉사 완료'
+type status = 'submit' | 'regist' | 'refuse' | 'docs' | 'lack' | 'confirm' | 'complete'
 
-interface member {
+interface Member {
   email: string
   name: string
   phone: number
   nickName: string
   activated: boolean
-  authorities: Array
+  authorities: Array<{ authorityName: string }>
   joinDate: Date
 }
 
-interface businessNo {
+interface Business {
   businessNo: number,
   businessName: string,
   presidentName: string,
   startDate: Date,
-  email: member
+  email: Member
 }
 
-interface volunteer {
+interface Volunteer {
   volunteerNo: number
   depTime: Date
   dest: string
@@ -80,6 +80,6 @@ interface volunteer {
   flightName: string
   regDate: Date
   email: member
-  businessNo: businessNo
+  businessNo: Business
   description: string
 }

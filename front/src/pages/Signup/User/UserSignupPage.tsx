@@ -1,25 +1,11 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '@hookform/error-message';
 
-<<<<<<< HEAD
-
 import { axBase } from '@/apis/api/axiosInstance'
-
-import { inputs, buttons , NavTop } from '@/components';
-
-
-=======
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
-
-import { inputs, buttons } from '@/components';
-
-import { URL as ServerURL } from '@/states/Server';
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
+import { inputs, buttons, NavTop } from '@/components';
 
 
 
@@ -148,12 +134,7 @@ function UserSignupPage() {
       },
     })
       .then((res) => {
-<<<<<<< HEAD
         console.log(res.data)
-
-=======
-        console.log(res)
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
       })
       .catch(() => {
         setError('email', {
@@ -166,133 +147,126 @@ function UserSignupPage() {
   return (
     <div>
 
-    <div className="mt-14">
-      <NavTop.NavBack NavContent='회원가입' />
-      <p className="text-title1 mb-5">만나서 반가워요!</p>
-      <div>
-        <form
-          className="flex flex-col gap-4 "
-          onSubmit={handleSubmit(onSubmit)}
+      <div className="mt-14">
+        <NavTop.NavBack NavContent='회원가입' />
+        <p className="text-title1 mb-5">만나서 반가워요!</p>
+        <div>
+          <form
+            className="flex flex-col gap-4 "
+            onSubmit={handleSubmit(onSubmit)}
           >
-          <inputs.InputFormBtn
-            control={control}
-            name="email"
-            placeholder="이메일"
-            type="email"
-            button={
-              <buttons.BtnSm BtnValue="중복확인" onClick={emailValidate} />
-            }
-            rules={{
-              required: { value: true, message: '이메일을 입력해주세요' },
-              pattern: {
-                value: Regex.email,
-                message: '이메일 형식을 입력해주세요',
-              },
-              validate: {
-                emailvalidate: () =>
-                !NotEmailDuplicateCheck || '이메일 중복확인을 해주세요',
-              },
-              onChange: () => {
-                setNotEmailDuplicateCheck(true);
-              },
-            }}
-          />
-          <ErrorMessage errors={errors} name="email" />
-
-          <inputs.InputForm
-            control={control}
-            name="password"
-            placeholder="비밀번호 (대문자, 특수문자를 포함해 8자 이상)"
-            type="password"
-            rules={{
-              required: { value: true, message: '비밀번호를 입력해주세요' },
-              pattern: {
-                value: Regex.password,
-                message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
-              },
-            }}
-<<<<<<< HEAD
+            <inputs.InputFormBtn
+              control={control}
+              name="email"
+              placeholder="이메일"
+              type="email"
+              button={
+                <buttons.BtnSm BtnValue="중복확인" onClick={emailValidate} />
+              }
+              rules={{
+                required: { value: true, message: '이메일을 입력해주세요' },
+                pattern: {
+                  value: Regex.email,
+                  message: '이메일 형식을 입력해주세요',
+                },
+                validate: {
+                  emailvalidate: () =>
+                    !NotEmailDuplicateCheck || '이메일 중복확인을 해주세요',
+                },
+                onChange: () => {
+                  setNotEmailDuplicateCheck(true);
+                },
+              }}
             />
-=======
-          />
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
-          <ErrorMessage errors={errors} name="password" />
+            <ErrorMessage errors={errors} name="email" />
 
-          <inputs.InputForm
-            control={control}
-            name="passwordConfirm"
-            placeholder="비밀번호 확인"
-            type="password"
-            rules={{
-              required: {
-                value: true,
-                message: '비밀번호 확인을 입력해주세요',
-              },
-              validate: (val: string) => {
-                if (watch('password') != val) {
-                  return '비밀번호가 일치하지 않습니다';
-                }
-              },
-            }}
-<<<<<<< HEAD
+            <inputs.InputForm
+              control={control}
+              name="password"
+              placeholder="비밀번호 (대문자, 특수문자를 포함해 8자 이상)"
+              type="password"
+              rules={{
+                required: { value: true, message: '비밀번호를 입력해주세요' },
+                pattern: {
+                  value: Regex.password,
+                  message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
+                },
+              }}
+
             />
-=======
-          />
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
-          <ErrorMessage errors={errors} name="passwordConfirm" />
 
-          <inputs.InputFormBtn
-            control={control}
-            name="nickName"
-            placeholder="닉네임"
-            type="text"
-            button={
-              <buttons.BtnSm BtnValue="중복확인" onClick={nickNameValidate} />
-            }
-            rules={{
-              required: { value: true, message: '닉네임을 입력해주세요' },
-              validate: {
-                nickNamevalidate: () =>
-                  !NotnickNameDuplicateCheck || '닉네임 중복확인을 해주세요',
-              },
-              onChange: () => {
-                setNotnickNameDuplicateCheck(true);
-              },
-            }}
-<<<<<<< HEAD
+            <ErrorMessage errors={errors} name="password" />
+
+            <inputs.InputForm
+              control={control}
+              name="passwordConfirm"
+              placeholder="비밀번호 확인"
+              type="password"
+              rules={{
+                required: {
+                  value: true,
+                  message: '비밀번호 확인을 입력해주세요',
+                },
+                validate: (val: string) => {
+                  if (watch('password') != val) {
+                    return '비밀번호가 일치하지 않습니다';
+                  }
+                },
+              }}
+
             />
-=======
-          />
->>>>>>> ff2144b5eb3d98ba365d55d7608dc0190c34fc46
-          <ErrorMessage errors={errors} name="nickName" />
 
-          <inputs.InputForm
-            control={control}
-            name="name"
-            placeholder="이름"
-            type="name"
-            rules={{
-              required: { value: true, message: '이름을 입력해주세요' },
-            }}
-          />
-          <ErrorMessage errors={errors} name="name" />
+            <ErrorMessage errors={errors} name="passwordConfirm" />
 
-          <inputs.InputForm
-            control={control}
-            name="phone"
-            placeholder="전화번호 ('-'를 빼고 입력하세요)"
-            type="number"
-            rules={{
-              required: { value: true, message: '전화번호을 입력해주세요' },
-            }}
-          />
-          <ErrorMessage errors={errors} name="phone" />
+            <inputs.InputFormBtn
+              control={control}
+              name="nickName"
+              placeholder="닉네임"
+              type="text"
+              button={
+                <buttons.BtnSm BtnValue="중복확인" onClick={nickNameValidate} />
+              }
+              rules={{
+                required: { value: true, message: '닉네임을 입력해주세요' },
+                validate: {
+                  nickNamevalidate: () =>
+                    !NotnickNameDuplicateCheck || '닉네임 중복확인을 해주세요',
+                },
+                onChange: () => {
+                  setNotnickNameDuplicateCheck(true);
+                },
+              }}
+            />
 
-          <buttons.BtnLg BtnValue="회원가입" />
-        </form>
+            <ErrorMessage errors={errors} name="nickName" />
+
+            <inputs.InputForm
+              control={control}
+              name="name"
+              placeholder="이름"
+              type="name"
+              rules={{
+                required: { value: true, message: '이름을 입력해주세요' },
+              }}
+            />
+            <ErrorMessage errors={errors} name="name" />
+
+            <inputs.InputForm
+              control={control}
+              name="phone"
+              placeholder="전화번호 ('-'를 빼고 입력하세요)"
+              type="number"
+              rules={{
+                required: { value: true, message: '전화번호을 입력해주세요' },
+              }}
+            />
+            <ErrorMessage errors={errors} name="phone" />
+
+            <buttons.BtnLg BtnValue="회원가입" />
+          </form>
+        </div>
       </div>
     </div>
-            </div>
   );
 }
 
