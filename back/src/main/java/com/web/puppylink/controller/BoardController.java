@@ -18,6 +18,7 @@ import com.web.puppylink.dto.BoardDto;
 import com.web.puppylink.service.BoardServiceImpl;
 
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -106,10 +107,15 @@ private final BoardServiceImpl boardService;
     }
     
     //------------------------------------------------- 윗부분까지 구현 완료 ------------------------------------------------- 
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    @PutMapping("/like")
+    @PutMapping("/like/{boardNo}/{nickName}")
     @ApiOperation(code = 200, value = "게시글 좋아요", notes = "게시글에 좋아요를 반영 혹은 취소한다.", response = ResponseEntity.class)
-    public Object like(@RequestBody BoardDto board) {
-        return ResponseEntity.ok(boardService.getBoardAll());
+	@ApiImplicitParams({
+    	@ApiImplicitParam(name = "boardNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1"),    	
+    	@ApiImplicitParam(name = "nickName", value = "봉사자 닉네임(Unique)", required = true, dataType = "string", defaultValue = "tom")
+    })
+    public void like(@PathVariable final int boardNo, @PathVariable final String nickName) {
+    	boardService.like(boardNo, nickName);
     }
 }
