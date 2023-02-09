@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios'
 
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
@@ -54,9 +53,9 @@ function VolUserResi() {
 
   const volunteerSubmit = (data: object) => {
     data = { ...data, email: 'admin' }
-    axios({
+    axBase({
       method: 'post',
-      url: `${URL}/volunteer/submit`,
+      url: '/volunteer/submit',
       data: data
     })
       .then((res) => console.log(res.data))

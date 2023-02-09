@@ -1,0 +1,27 @@
+.Carousel  {
+  @apply
+    w-[21.875rem]
+    mt-6 mb-8
+}
+
+.NewTitle {
+  @apply 
+    text-title2-bold
+    mb-4;
+}
+
+.SortTitle {
+  @apply
+    text-title2-bold mb-4
+}
+
+.Scroll {
+  @apply
+    w-[21.875rem]
+}
+
+.Selector {
+  @apply
+    flex justify-between
+    px-2 mb-8
+}
