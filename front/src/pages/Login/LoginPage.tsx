@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorMessage } from '@hookform/error-message';
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { NavTop , inputs, buttons } from '@/components';
+import { NavTop, inputs, buttons } from '@/components';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -38,6 +38,8 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
+        // console.log(response)
+        navigate('/')
         const access_token = response.headers.authorization;
         const refresh_token = response.headers.refreshtoken;
         if (access_token) {
@@ -52,7 +54,7 @@ function LoginPage() {
 
   return (
     <div>
-      <NavTop.NavBack NavContent='로그인'/>
+      <NavTop.NavBack NavContent='로그인' />
       <p className="text-title1 mt-14 mb-3 ">다시 보니 반갑네요!</p>
 
       {/* 로그인 form */}

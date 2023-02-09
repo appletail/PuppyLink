@@ -8,7 +8,7 @@ import { cards } from '@/components'
 
 function NewVolCarousel() {
 
-  const [volunteers, setVolunteers] = useState<volunteer[]>([])
+  const [volunteers, setVolunteers] = useState<Volunteer[]>([])
   const [modal, setModal] = useState<boolean[]>([])
 
   useEffect(() => {
@@ -26,7 +26,7 @@ function NewVolCarousel() {
     setModal(Array(volunteers.length).fill(false))
   }, [volunteers])
 
-  const volunteerCards = volunteers.map((volunteer: volunteer, idx: number) => {
+  const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
     const cardBody = [
       `신청일: ${volunteer.regDate}`,
@@ -42,7 +42,7 @@ function NewVolCarousel() {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={SortedFooter('신청 완료')}
+            CardFooter={SortedFooter('submit')}
             CardTitle={volunteer.email.name}
           />
         </div>

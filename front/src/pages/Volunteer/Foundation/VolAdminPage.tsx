@@ -3,14 +3,16 @@ import { useState } from 'react'
 import NewVolCarousel from './Components/NewVolCarousel'
 import SortedVol from './Components/SortedVol'
 
+import { NavTop } from '@/components'
 import style from '@/styles/pages/Volunteer/VolAdminPage.module.css'
 
 function VolAdminPage() {
 
-  const [status, setStatus] = useState<status>("신청 완료")
+  const [status, setStatus] = useState<status>("submit")
 
   return (
     <div>
+      <NavTop.NavLogo />
       <div className={style.Carousel}>
         <p className={style.NewTitle}>새로 요청이 들어온 봉사자</p>
         {/* 새로운 요청이 들어온 봉사자 */}

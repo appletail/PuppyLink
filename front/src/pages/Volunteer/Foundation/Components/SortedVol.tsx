@@ -28,7 +28,7 @@ function SortedVol({ status }: { status: status }) {
   }, [volunteers])
 
 
-  const volunteerCards = volunteers.map((volunteer: volunteer, idx: number) => {
+  const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
     const cardBody = [
       `신청일: ${volunteer.regDate}`,

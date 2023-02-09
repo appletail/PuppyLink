@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useRecoilValue , useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 
 import NavStyle from './NavTop.module.css';
 
@@ -14,13 +15,19 @@ function NavTop(): JSX.Element {
 
   const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState);
   const hasToken = localStorage.getItem('access-token');
-  if (hasToken) {
-    setisLoggedIn(true);
-  }
+  useEffect(() => {
+    if (hasToken) {
+      setisLoggedIn(true);
+    }
+  }, [])
 
   const navigate = useNavigate();
   const goLogin = () => {
-     navigate('/login')
+    navigate('/login')
+  }
+
+  const goLogout = () => {
+
   }
 
 
@@ -34,7 +41,7 @@ function NavTop(): JSX.Element {
       <div className={NavStyle.Right}>
         {auth
           ? //   로그인한 사람은 => 로그아웃이 보인다
-            '로그아웃'
+          <div onClick={goLogout}>로그아웃</div>
           : //   로그아웃 된 사람에게는 로그인이 보인다
           <div onClick={goLogin}>로그인</div>}
       </div>
