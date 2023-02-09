@@ -9,6 +9,7 @@ public enum CommonCode {
 
     JOIN_MEMBER(2001, "봉사자로 회원가입이 되었습니다."),
     JOIN_FOUNDATION(2002, "재단으로 회원가입이 되었습니다."),
+	EXIST_MEMBER(2010,"이미 가입되어 있는 유저가 존재합니다."),
     SUCCESS_LOGIN(2003, "로그인이 성공하였습니다."),
     FAILED_LOGIN(2004, "로그인이 실패하였습니다."),
     SUCCESS_SECESSION(2005, "회원탈퇴가 정상적으로 되었습니다."),

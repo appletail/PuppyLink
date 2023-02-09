@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -44,14 +45,10 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     @Override
     public Member signup(MemberDto member) throws Exception{
+
         // 회원이 존재하는지 확인
         if( memberRepository.findAuthoritiesByEmail(member.getEmail()).orElse(null) != null ) {
-            throw new RuntimeException("이미 가입되어 있는 유저가 존재합니다.");
-        }
-
-        // 인증번호가 맞는지 확인한다.
-        if( !authRedisRepository.findById(member.getEmail()).get().getAuth().equals(member.getAuth()) ) {
-            throw new RuntimeException("인증번호가 맞지않습니다.");
+            throw new Exception();
         }
 
         Authority authority;

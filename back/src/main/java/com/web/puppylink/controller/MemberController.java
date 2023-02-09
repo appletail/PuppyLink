@@ -1,10 +1,12 @@
 package com.web.puppylink.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.config.code.ExceptionCode;
 import com.web.puppylink.config.jwt.JwtFilter;
 import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.config.util.KakaoUtil;
 import com.web.puppylink.config.util.MailUtil;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.LoginDto;
@@ -24,6 +26,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -39,12 +42,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Unauthorized", response = ResponseEntity.class),
@@ -191,7 +196,15 @@ public class MemberController {
     @ApiResponses(value = {
         @ApiResponse(code=200,message="정상적으로 회원가입이 되었습니다.", response = ResponseEntity.class)
     })
-    public Object signup(@RequestBody MemberDto member) {
+    public ResponseEntity<?> signup(@RequestBody MemberDto member) {
+        
+        logger.debug("회원가입에 필요한 정보 : {}", member);
+        // 인증번호가 맞는지 확인한다.
+        if( !redisService.findAuth(member.getEmail()).isPresent() ) {
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    ExceptionCode.EXCEPTION_DATA,null),HttpStatus.BAD_REQUEST);
+        }
+        // 회원등록 ( 봉사자 / 단체 )
         try {
             if (member.getBusinessName() == null) {
                 // 봉사자를 회원가입합니다. 
@@ -317,6 +330,7 @@ public class MemberController {
     })
     public Object secession(TokenDto tokenDto) {
         try {
+            logger.debug("회원탈퇴에 필요한 토큰 : {}", tokenDto);
             // s3 필수서류 삭제 
             volunteerService.deleteALLFile(tokenDto);
             memberService.deleteMemberByToken(tokenDto);
@@ -328,4 +342,28 @@ public class MemberController {
                     CommonCode.FAILED_SECESSION,null),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/kakao")
+    @ApiOperation(value = "카카오 로그인")
+    public ResponseEntity<?> loginByKakao(@RequestParam String code) {
+
+        logger.info("카카오 전달 코드 확인 : {}",code);
+        try {
+            // 인가코드에서 카카오토큰 받아오기
+            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code);
+            // 카카오 토큰에서 회원 정보가져오기 [ 없음) 회원가입 ]
+            MemberDto member = KakaoUtil.getUserByAccessToken(kakaoToken.getAccessToken());
+            if ( !memberService.getMemberWithAuthorities(member.getEmail()).isPresent() ) {
+                memberService.signup(member);
+            }
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    CommonCode.SUCCESS_LOGIN,null),HttpStatus.OK);
+        } catch ( JsonProcessingException e) {
+            e.printStackTrace();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(ExceptionCode.EXCEPTION_API,HttpStatus.EXPECTATION_FAILED);
+    }
+
 }

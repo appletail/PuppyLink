@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface RedisService {
 
     void saveAuth(Auth auth);
+    Optional<Auth> findAuth(String email);
     void saveRefreshToken(RefreshToken refresh);
     boolean confirmRefreshToken(RefreshToken refresh);
     public void delRefreshToken(RefreshToken token);
