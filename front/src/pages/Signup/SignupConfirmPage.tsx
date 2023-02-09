@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import  { useEffect } from 'react';
-=======
 import React, { useEffect } from 'react';
->>>>>>> dev
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { MdMail } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -57,7 +53,7 @@ function SignupConfirmPage() {
           name: state.name,
           phone: state.phone,
           nickName: state.nickName,
-          businessNo: state.businessNo? state.businessNo : "",
+          businessNo: state.businessNo ? state.businessNo : "",
           auth: data.confirmNumber,
         },
       })

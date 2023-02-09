@@ -5,13 +5,10 @@ import RootLayout from './RootLayout';
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import LoginPage from '@/pages/Login/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage';
-<<<<<<< HEAD
 
+import ReviewMainPage from '@/pages/Review/ReviewMainPage';
 import GroupSignupPage from '@/pages/Signup/Group/GroupSignupPage';
 import GroupTabPage from '@/pages/Signup/Group/GroupTabPage';
-=======
-import ReviewMainPage from '@/pages/Review/ReviewMainPage';
->>>>>>> dev
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
 import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
 

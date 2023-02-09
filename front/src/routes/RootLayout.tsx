@@ -1,18 +1,13 @@
 import { Outlet } from 'react-router-dom';
 
-<<<<<<< HEAD
 
 
 import { Detail, NavBottom } from '@/components';
 
 
-=======
-import { useRecoilState } from 'recoil';
 
-import { Detail, NavBottom, NavTop } from '@/components';
 
-import { LoginState } from '@/states/LoginState';
->>>>>>> dev
+
 
 export default function RootLayout() {
 
