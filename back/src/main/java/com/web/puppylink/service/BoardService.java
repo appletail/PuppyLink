@@ -11,4 +11,5 @@ public interface BoardService {
 	Board create(BoardDto board);
 	Board update(BoardDto board);
 	void delete(int boardNo);
+	void like(int boardNo, String nickName);
 }

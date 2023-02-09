@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.web.puppylink.model.Board;
 
 public interface BoardRepository extends JpaRepository<Board,String>{
-	Board findBoardByBoardNo(int boardNo);
-	List<Board> findBoardAllByOrderByBoardNo();
+	Optional<Board> findBoardByBoardNo(int boardNo);
+	Optional<List<Board>> findBoardAllByOrderByBoardNo();
 	void deleteBoardByBoardNo(int boardNo);
 }
