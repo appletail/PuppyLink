@@ -1,14 +1,22 @@
+import { useNavigate } from 'react-router-dom';
+
+import { useRecoilValue , useRecoilState } from 'recoil';
+
 import NavStyle from './NavTop.module.css';
 
 import LogoWhite from '@/assets/logo-white.svg';
-import { useRecoilValue } from 'recoil';
 import { LoginState } from '@/states/LoginState';
-import { useNavigate } from 'react-router-dom';
 
 
 function NavTop(): JSX.Element {
   // 로그인 되어있는지 확인
   const auth = useRecoilValue(LoginState);
+
+  const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState);
+  const hasToken = localStorage.getItem('access-token');
+  if (hasToken) {
+    setisLoggedIn(true);
+  }
 
   const navigate = useNavigate();
   const goLogin = () => {
@@ -20,7 +28,7 @@ function NavTop(): JSX.Element {
     <div className={NavStyle.NavBg}>
       <div className={NavStyle.Left}>
         <div className={NavStyle.Logo}>
-          <img src={LogoWhite} className={NavStyle.Logo} />
+          <img className={NavStyle.Logo} src={LogoWhite} />
         </div>
       </div>
       <div className={NavStyle.Right}>

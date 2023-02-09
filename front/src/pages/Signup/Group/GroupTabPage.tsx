@@ -1,9 +1,12 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+
+import { NavTop } from '@/components';
 function GroupTabPage() {
   const navigate = useNavigate();
   return (
     <div >
+      <NavTop.NavBack NavContent='회원가입' />
     <div className="mt-14 mb-11 flex justify-center ">
       <div className="w-1/2 h-10 text-center border-b-[1px] border-main-50">
         <div className="text-title3" onClick={() => navigate('/signup/usertab')}>개인회원</div>

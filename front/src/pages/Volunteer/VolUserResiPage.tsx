@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { cards, buttons, ModalCard } from '@/components';
+import { cards, buttons, ModalCard, NavTop } from '@/components';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
 
 function VolUserResi() {
@@ -64,6 +64,7 @@ function VolUserResi() {
 
   return (
     <div>
+      <NavTop.NavLogo />
       <button className={`${VolUserStyle.GoToMyRegi} bg-main-30`} type="button">
         <p className="text-body-bold text-white">내 봉사 확인하기</p>
         <p className="text-caption1 text-black">현황 확인 및 서류 제출하기</p>

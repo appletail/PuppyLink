@@ -7,7 +7,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import BusinessValidate from './Components/BusinessValidate';
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { inputs, buttons, ModalForm } from '@/components';
+import { inputs, buttons, ModalForm, NavTop } from '@/components';
 
 interface SignupProps {
   email: string;
@@ -134,13 +134,15 @@ function GroupSignupPage() {
   };
   // form 디자인
   return (
-    <div className="mt-12">
+    <div>
+      <NavTop.NavBack NavContent='회원가입' />
+      <div  className="mt-12">
       <p className="text-title1 mb-5">만나서 반가워요!</p>
       <div>
         <form
           className="flex flex-col gap-4 "
           onSubmit={handleSubmit(onSubmit)}
-        >
+          >
           {/* 이메일 */}
           <inputs.InputFormBtn
             control={control}
@@ -158,7 +160,7 @@ function GroupSignupPage() {
               },
               validate: {
                 emailvalidate: () =>
-                  !NotEmailDuplicateCheck || '이메일 중복확인을 해주세요',
+                !NotEmailDuplicateCheck || '이메일 중복확인을 해주세요',
               },
               onChange: () => {
                 setNotEmailDuplicateCheck(true);
@@ -179,7 +181,7 @@ function GroupSignupPage() {
                 message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
               },
             }}
-          />
+            />
           <ErrorMessage errors={errors} name="password" />
 
 {/* 비밀번호 확인 */}
@@ -282,6 +284,7 @@ function GroupSignupPage() {
         </form>
       </div>
     </div>
+  </div>
   );
 }
 
