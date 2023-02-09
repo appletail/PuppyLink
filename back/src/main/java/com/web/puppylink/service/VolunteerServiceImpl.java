@@ -4,17 +4,29 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.dto.GpsDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
@@ -341,6 +353,49 @@ public class VolunteerServiceImpl implements VolunteerService{
 		}
 		
 		
+	}
+	
+
+	@Transactional
+	@Override
+	public ResponseEntity<String> flightInfo(int volunteerNo) {
+		//1. 봉사자의 정보를 가져온다.
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		//2. 봉자자의 해외 이동 봉사에 이용되는 항공기 편명을 가져온다. 
+		String flightNum = volunteer.getTicketNo().getFlight();
+		System.out.println(flightNum);
+		
+		//3. AirLabs로 API 요청을 보내고 편명에 해당하는 각종 정보를 받는다.
+		RestTemplate rt = new RestTemplate();
+		
+		//HttpHeader 오브젝트 생성
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+			    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
+		
+		//HttpBody 오브젝트 생성									
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("_view", "array");
+		params.add("_fields", "lat,lng,dir");
+		params.add("api_key", "b6ebcdfa-abce-4e8d-a218-71360b0ac0fa");
+		params.add("flight_iata", flightNum);
+
+		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
+				new HttpEntity<>(params, headers);
+		
+		ResponseEntity<String> response= rt.exchange(
+				"https://airlabs.co/api/v9/flights",
+				HttpMethod.POST,
+				airLabsRequest,
+				String.class
+		);
+		
+		System.out.println("response.getBody() : " + response.getBody());
+
+		return response;
 	}
 
 }

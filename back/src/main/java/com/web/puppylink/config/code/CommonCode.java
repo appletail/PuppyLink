@@ -39,6 +39,11 @@ public enum CommonCode {
 	UPDATE_BOARD(2118, "게시글 수정이 완료되었습니다."),
 	DELETE_BOARD(2119, "게시글 삭제가 완료되었습니다."),
 	LIKE_BOARD(2120, "게시글에 대한 좋아요가 완료되었습니다."),
+	SELECT_COMMENT_ONE(2121, "게시글에 작성된 단일 댓글 조회가 완료되었습니다."),
+	SELECT_COMMENT_ALL(2122, "게시글에 작성된 댓글 목록 조회가 완료되었습니다."),
+	CREATE_COMMENT(2123, "댓글 작성이 완료되었습니다."),
+	UPDATE_COMMENT(2124, "댓글 수정이 완료되었습니다."),
+	DELETE_COMMENT(2125, "댓글 삭제가 완료되었습니다."),
 
 	SUCCESS_EMAIL(2201, "사용가능한 이메일입니다."),
     DUPLICATE_EMAIL(2202, "이미 사용중인 이메일입니다."),
@@ -49,7 +54,9 @@ public enum CommonCode {
 	SUCCESS_S3_UPLOAD(2207, "s3 업로드에 성공하였습니다."),
 	FAILED_S3_UPLOAD(2208, "s3 업로드에 실패했습니다."),
 	SUCCESS_S3_DELETE(2209, "필수서류 삭제에 성공하였습니다."),
-	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다");
+	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다"),
+	
+	SELECT_GPS(2315, "해당하는 편명의 실시간 항공기 정보를 성공적으로 조회했습니다.");
 
     private int code;
     private String message;

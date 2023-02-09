@@ -171,7 +171,7 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
       {/* 자식 컴포넌트에서 인증을 해야 닫힌다. */}
       <buttons.BtnMd BtnValue="인증하기" onClick={BusinessNoValidate} />
 
-    </div>
+    </div >
   )
 }
 

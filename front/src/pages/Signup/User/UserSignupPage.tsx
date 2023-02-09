@@ -1,14 +1,11 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { useNavigate } from 'react-router-dom';
 
 import { ErrorMessage } from '@hookform/error-message';
 
 import { axBase } from '@/apis/api/axiosInstance'
-
 import { inputs, buttons, NavTop } from '@/components';
-
 
 
 
@@ -195,7 +192,9 @@ function UserSignupPage() {
                   message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
                 },
               }}
+
             />
+
             <ErrorMessage errors={errors} name="password" />
 
             <inputs.InputForm
@@ -214,7 +213,9 @@ function UserSignupPage() {
                   }
                 },
               }}
+
             />
+
             <ErrorMessage errors={errors} name="passwordConfirm" />
 
             <inputs.InputFormBtn
@@ -236,6 +237,7 @@ function UserSignupPage() {
                 },
               }}
             />
+
             <ErrorMessage errors={errors} name="nickName" />
 
             <inputs.InputForm

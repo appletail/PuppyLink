@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.service.BoardServiceImpl;
 
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -43,9 +45,9 @@ private final BoardServiceImpl boardService;
 	
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/{boardNo}")
-    @ApiOperation(code = 200, value = "게시글 조회", notes = "특정 게시글 하나를 조회하여 반환한다.", response = ResponseEntity.class)
+    @ApiOperation(code = 200, value = "게시글 단일 조회", notes = "특정 게시글 하나를 조회하여 반환한다.", response = ResponseEntity.class)
 	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1")
-    public Object select(@PathVariable final int boardNo) {
+    public Object selectBoard(@PathVariable final int boardNo) {
         // return ResponseEntity.ok(boardService.getBoard(boardNo));
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
@@ -59,7 +61,7 @@ private final BoardServiceImpl boardService;
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/list")
     @ApiOperation(code = 200, value = "게시글 전체 조회", notes = "전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
-    public Object selectAll() {
+    public Object selectBoardAll() {
         // return ResponseEntity.ok(boardService.getBoardAll());
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
@@ -105,11 +107,77 @@ private final BoardServiceImpl boardService;
     	boardService.delete(boardNo);
     }
     
-    //------------------------------------------------- 윗부분까지 구현 완료 ------------------------------------------------- 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @PutMapping("/like")
+    @PutMapping("/like/{boardNo}/{nickName}")
     @ApiOperation(code = 200, value = "게시글 좋아요", notes = "게시글에 좋아요를 반영 혹은 취소한다.", response = ResponseEntity.class)
-    public Object like(@RequestBody BoardDto board) {
-        return ResponseEntity.ok(boardService.getBoardAll());
+	@ApiImplicitParams({
+    	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1"),    	
+    	@ApiImplicitParam(name = "nickName", value = "회원 닉네임(Unique)", required = true, dataType = "string", defaultValue = "tom")
+    })
+    public void like(@PathVariable final int boardNo, @PathVariable final String nickName) {
+    	boardService.like(boardNo, nickName);
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @PostMapping("/comment")
+    @ApiOperation(code = 200, value = "댓글 작성", notes = "게시글에 댓글을 작성한다.", response = ResponseEntity.class)
+    public Object comment(@RequestBody CommentDto comment) {
+    	// return boardService.comment(comment);
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.CREATE_COMMENT,
+            			boardService.comment(comment)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @PutMapping("/comment/{commentNo}}")
+    @ApiOperation(code = 200, value = "댓글 수정", notes = "게시글에 작성된 댓글을 수정한다.", response = ResponseEntity.class)
+    public Object updateComment(@RequestBody CommentDto comment) {
+    	// return boardService.updateComment(comment);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.UPDATE_COMMENT,
+            			boardService.updateComment(comment)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @DeleteMapping("/comment/{commentNo}")
+    @ApiOperation(code = 200, value = "댓글 삭제", notes = "게시글에 작성된 댓글을 삭제한다.", response = ResponseEntity.class)
+    public void deleteComment(@PathVariable final int commentNo) {
+    	boardService.deleteComment(commentNo);
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/comment/{commentNo}")
+    @ApiOperation(code = 200, value = "게시글 단일 댓글 조회", notes = "게시글에 작성된 단일 댓글을 조회한다.", response = ResponseEntity.class)
+    public Object selectComment(@PathVariable final int commentNo) {
+    	// return boardService.getComment(commentNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_COMMENT_ONE,
+            			boardService.getComment(commentNo)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/comment/list/{boardNo}")
+    @ApiOperation(code = 200, value = "게시글 전체 댓글 조회", notes = "게시글에 작성된 전체 댓글을 조회한다.", response = ResponseEntity.class)
+    public Object selectCommentAll(@PathVariable final int boardNo) {
+    	// return boardService.getCommentAll(boardNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_COMMENT_ALL,
+            			boardService.getCommentAll(boardNo)
+            	), 
+            	HttpStatus.OK
+            );
     }
 }

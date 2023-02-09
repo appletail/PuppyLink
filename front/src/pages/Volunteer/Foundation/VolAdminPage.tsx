@@ -23,12 +23,12 @@ function VolAdminPage() {
         <div className={style.Selector}>
           <p>진행 상태</p>
           <select className="text-caption1" onChange={(e) => { setStatus(e.target.value as status) }}>
-            <option value="신청 완료">접수 대기</option>
-            <option value="접수 완료">접수 완료</option>
-            <option value="제출 완료">서류 승인 대기</option>
-            <option value="서류 미흡">서류 미흡</option>
-            <option value="승인 완료">봉사 진행 중</option>
-            <option value="봉사 완료">봉사 완료</option>
+            <option value="submit">접수 대기</option>
+            <option value="regist">접수 완료</option>
+            <option value="docs">서류 승인 대기</option>
+            <option value="lack">서류 미흡</option>
+            <option value="confirm">봉사 진행 중</option>
+            <option value="complete">봉사 완료</option>
           </select>
         </div>
         <SortedVol status={status} />

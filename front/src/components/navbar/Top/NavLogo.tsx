@@ -27,7 +27,7 @@ function NavTop(): JSX.Element {
   }
 
   const goLogout = () => {
-
+    console.log("로그아웃할 부분입니다.")
   }
 
 

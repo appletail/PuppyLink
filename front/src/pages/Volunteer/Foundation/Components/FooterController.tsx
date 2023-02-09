@@ -3,9 +3,9 @@ import React from 'react'
 import { footers, buttons, labels } from '@/components'
 
 
-function SortedFooter(status: status) {
+function FooterController(status: status) {
 
-  const footerController = {
+  const Controller = {
     'submit': <footers.FooterBtn
       BtnLeft={<buttons.BtnSm BtnValue='수락' />}
       BtnRight={<buttons.BtnSm BtnValue='거절' />}
@@ -35,9 +35,9 @@ function SortedFooter(status: status) {
       BtnRight={<buttons.BtnSm BtnValue='리뷰 쓰기' />}
       onClick={(e) => e.stopPropagation()} />,
   }
-  const footer = footerController[status]
+  const footer = Controller[status]
 
   return footer
 }
 
-export default SortedFooter
+export default FooterController

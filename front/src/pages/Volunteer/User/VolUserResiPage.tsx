@@ -20,19 +20,19 @@ function VolUserResi() {
     presidentName: string
     startDate: Date
     description: string
-    image?: string
+    profileURL?: string
   }
 
 
   const [foundations, setFoundations] = useState<foundation[]>([])
   useEffect(() => {
     axBase({
-      url: '/foundation/all'
+      url: '/foundation/list'
     })
       .then((res) => {
-        setFoundations([...res.data])
+        setFoundations([...res.data.data])
       })
-      .catch((err) => console.log(err.response.data))
+      .catch((err) => console.log(err))
   }, [])
 
   const notify = () => {
@@ -52,7 +52,7 @@ function VolUserResi() {
   const [term, setTerm] = useState(false)
 
   const volunteerSubmit = (data: object) => {
-    data = { ...data, email: 'admin' }
+    data = { ...data, email: 'litan36@naver.com' }
     axBase({
       method: 'post',
       url: '/volunteer/submit',

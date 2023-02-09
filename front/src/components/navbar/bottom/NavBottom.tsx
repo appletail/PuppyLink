@@ -9,19 +9,19 @@ import NavStyle from './NavBottom.module.css'
 
 function NavBottom(): JSX.Element {
 
-  const role = { 'user': 'user', 'manager': 'manager', 'undefined': undefined }
+  const role = { 'member': 'member', 'foundation': 'foundation', 'undefined': undefined }
 
-  const roles = 'manager'
+  const roles = 'member'
 
   const icons = [
     { id: 'Home', link: '/', fill: AiFillHome, empty: AiOutlineHome },
     {
       id: 'Volunteer',
-      link: roles == undefined ? '/login' : roles == role.manager ? '/volunteer-admin' : '/volunteer-user',
+      link: roles == undefined ? '/login' : roles == role.foundation ? '/volunteer/admin' : 'volunteer',
       fill: RiHandHeartFill, empty: RiHandHeartLine
     },
     { id: 'Review', link: '/review', fill: IoNewspaperSharp, empty: IoNewspaperOutline },
-    { id: 'MyPage', link: '/', fill: IoPerson, empty: IoPersonOutline },
+    { id: 'MyPage', link: '/mypage', fill: IoPerson, empty: IoPersonOutline },
     { id: 'ComponentCollect', link: '/components', fill: FaGrinWink, empty: FaRegGrin },
   ]
 
