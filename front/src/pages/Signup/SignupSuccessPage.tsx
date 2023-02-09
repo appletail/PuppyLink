@@ -1,16 +1,18 @@
-import { ReactComponent as Logo } from '@/assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { buttons } from '@/components';
+
+import { ReactComponent as Logo } from '@/assets/logo.svg';
+import { buttons, NavTop } from '@/components';
 
 function SignupSuccessPage() {
   const location = useLocation();
   const state = location.state;
-  let navigate = useNavigate()
+  const navigate = useNavigate()
   const goToLogin = () => {
     navigate('/login')
   }
   return (
     <div>
+      <NavTop.NavBack NavContent='회원가입' />
       <div className="mt-24">
         {/* 로고 */}
         <Logo />

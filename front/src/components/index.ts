@@ -35,4 +35,5 @@ export const NavTop = { NavLogo, NavCreate, NavDetail, NavBack };
 
 export { default as NavBottom } from './navbar/bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
-export { default as Modal } from './Modal/Modal';
+export { default as ModalCard } from './Modal/ModalCard';
+export { default as ModalForm } from './Modal/ModalForm/ModalForm';
