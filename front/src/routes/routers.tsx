@@ -4,6 +4,8 @@ import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
 import LoginPage from '@/pages/Login/LoginPage';
+import UserMyPage from '@/pages/Mypage/User/UserMyPage';
+import UserVolLst from '@/pages/Mypage/User/UserVolLst';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ReviewMainPage from '@/pages/Review/ReviewMainPage';
 import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
@@ -13,6 +15,8 @@ import UserTabPage from '@/pages/Signup/User/UserTabPage';
 import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
 import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
 
+
+
 const routers = createBrowserRouter([
   {
     path: '/',
@@ -20,12 +24,22 @@ const routers = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: '/volunteer-user',
+        id: 'volunteerUser',
+        path: '/volunteer',
         element: <VolUserResiPage />,
       },
       {
-        path: '/volunteer-admin',
+        path: '/volunteer/admin',
         element: <VolAdminPage />,
+      },
+      {
+        path: '/mypage',
+        element: <UserMyPage />,
+
+      },
+      {
+        path: '/mypage/vollist',
+        element: <UserVolLst />,
       },
       {
         path: '/review',

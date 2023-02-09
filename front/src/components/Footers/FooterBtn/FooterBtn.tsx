@@ -1,8 +1,6 @@
 import FtStyle from './FooterBtn.module.css';
 
 interface FooterBtn extends FooterProps {
-  BtnLeft: JSX.Element;
-  BtnRight: JSX.Element;
   onClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
 

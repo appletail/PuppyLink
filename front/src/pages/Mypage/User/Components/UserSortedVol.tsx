@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import FooterController from './FooterController'
-import Modal from './ModalVolunteer'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
 
-function NewVolCarousel() {
+function UserSortedVol({ status }: { status: status }) {
 
   const [volunteers, setVolunteers] = useState([])
   const [modal, setModal] = useState<boolean[]>([])
 
   useEffect(() => {
     axBase({
-      url: `/volunteer/foundation/${'2308201019'}/submit`,
+      url: `/volunteer/member/${'bread'}/${status}`,
     })
       .then((res) => setVolunteers(res.data.data))
-  }, [])
+  }, [status])
 
   useEffect(() => {
     setModal(Array(volunteers.length).fill(false))
   }, [volunteers])
+
 
   const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
     const cardBody = [
       `신청일: ${volunteer.regDate}`,
       `출국일: ${volunteer.depTime}`,
-      `도착지: ${volunteer.dest} | ${volunteer.flightName}`,
+      `봉사단체: ${volunteer.businessNo.businessName}`,
     ]
+
     return (
       <div key={volunteer.volunteerNo} className='mb-3' >
         <div aria-hidden="true"
@@ -38,28 +39,20 @@ function NewVolCarousel() {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController('submit')}
+            CardFooter={FooterController(status)}
             CardTitle={volunteer.email.name}
           />
         </div>
-        {
-          modal[idx] &&
-          <Modal volunteer={volunteer}
-            closeModal={() => setModal(modal.reduce((acc: boolean[]) => {
-              acc.push(false)
-              return acc
-            }, []))} />
-        }
       </div >
     )
+
   })
 
-
   return (
-    <div className='flex gap-4 overflow-y-scroll'>
+    <div className='overflow-y-scroll flex flex-col items-center'>
       {volunteerCards}
     </div>
   )
 }
 
-export default NewVolCarousel
+export default UserSortedVol
