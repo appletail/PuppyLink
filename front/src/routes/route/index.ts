@@ -4,3 +4,4 @@ export { default as Login } from "./Login";
 export { default as Others } from "./Others";
 export { default as Review } from "./Review";
 export { default as SignUp } from "./SignUp";
+export { default as Social } from "./Social";

@@ -1,10 +1,12 @@
 package com.web.puppylink.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.config.code.ExceptionCode;
 import com.web.puppylink.config.jwt.JwtFilter;
 import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.config.util.KakaoUtil;
 import com.web.puppylink.config.util.MailUtil;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.LoginDto;
@@ -20,10 +22,12 @@ import com.web.puppylink.service.RedisServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
 import io.lettuce.core.RedisException;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -39,12 +43,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Optional;
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Unauthorized", response = ResponseEntity.class),
@@ -180,6 +187,13 @@ public class MemberController {
                         .email(principal.getUsername())
                         .refreshToken(tokenDto.getRefreshToken())
                         .build();
+        // 카카오 이메일이면 카카오도 로그아웃되도록 처리
+        Authentication authoriztion = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
+        String memberEmail = ((PrincipalDetails) authentication.getPrincipal()).getUsername();
+        if( memberEmail.contains("@kakao.com") ) {
+            Optional<Member> member = memberService.getMemberWithAuthorities(memberEmail);
+            String result = KakaoUtil.logoutToKakao(member.get());
+        }
         // 2. redis에 refresh Token 삭제
         redisService.delRefreshToken(refreshToken);
         // 3. redis에 Access Token 블랙리스트 등록
@@ -191,9 +205,16 @@ public class MemberController {
     @ApiResponses(value = {
         @ApiResponse(code=200,message="정상적으로 회원가입이 되었습니다.", response = ResponseEntity.class)
     })
-    public Object signup(@RequestBody MemberDto member) {
-        logger.info("회원가입에 필요한 회원 정보 : {}", member);
-    	try {
+    public ResponseEntity<?> signup(@RequestBody MemberDto member) {
+        
+        logger.debug("회원가입에 필요한 정보 : {}", member);
+        // 인증번호가 맞는지 확인한다.
+        if( !redisService.findAuth(member.getEmail()).isPresent() ) {
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    ExceptionCode.EXCEPTION_DATA,null),HttpStatus.BAD_REQUEST);
+        }
+        // 회원등록 ( 봉사자 / 단체 )
+        try {
             if (member.getBusinessName() == null || member.getBusinessName().equals("")) {
                 // 봉사자를 회원가입합니다. 
                 memberService.signup(member);
@@ -318,6 +339,7 @@ public class MemberController {
     })
     public Object secession(TokenDto tokenDto) {
         try {
+            logger.debug("회원탈퇴에 필요한 토큰 : {}", tokenDto);
             // s3 필수서류 삭제 
             volunteerService.deleteALLFile(tokenDto);
             memberService.deleteMemberByToken(tokenDto);
@@ -329,4 +351,57 @@ public class MemberController {
                     CommonCode.FAILED_SECESSION,null),HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/kakao")
+    @ApiOperation(value = "카카오 로그인")
+    public ResponseEntity<?> loginByKakao(@RequestParam String code) {
+
+        logger.info("카카오 전달 코드 확인 : {}",code);
+        try {
+            // 인가코드에서 카카오토큰 받아오기
+            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code);
+            // 카카오 토큰에서 회원 정보가져오기 [ 없음) 회원가입 ]
+            MemberDto member = KakaoUtil.getUserByAccessToken(kakaoToken.getAccessToken());
+            if ( !memberService.getMemberWithAuthorities(member.getEmail()).isPresent() ) {
+                memberService.signup(member);
+            }
+            // 카카오 회원정보를 가지고 토큰 발급하기
+            // 이메일과 패스워드로 Authentication인증 객체를 만들기
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(member.getEmail(), member.getPassword());
+            // 인증이 완료된 Authentication 객체를 저장 ( UserDetailsService를 구현한 클래스 이동 )
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            // SecurityContextHolder에 인증이 완료된 Authentication객체를 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // Authentication 객체를 이용해서 토큰을 생성
+            TokenDto token = memberService.getTokenByAuthenticateion(authentication);
+            // redis에 DB저장하기
+            redisService.saveRefreshToken(new RefreshToken().builder()
+                    .email(member.getEmail())
+                    .refreshToken(token.getRefreshToken())
+                    .build());
+            // Header에 토큰을 저장
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.AUTHORIZATION_HEADER);
+            httpHeaders.add("Access-Control-Expose-Headers", JwtFilter.REFRESHTOKEN_HEADER);
+            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
+            httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
+            // 회원정보 및 토큰 리턴
+            return new ResponseEntity<>(new BasicResponseDto<>(
+                    CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()),httpHeaders,HttpStatus.OK);
+        } catch ( JsonProcessingException e) {
+            e.printStackTrace();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(new BasicResponseDto<>(
+                ExceptionCode.EXCEPTION_API,null),HttpStatus.EXPECTATION_FAILED);
+    }
+//
+//    @GetMapping("/kakao")
+//    @ApiOperation(value = "카카오 로그인")
+//    public void getAccessByCode(@RequestParam String code) {
+//
+//    }
+
 }
