@@ -9,6 +9,7 @@ import com.web.puppylink.model.Board;
 
 public interface BoardRepository extends JpaRepository<Board,String>{
 	Optional<Board> findBoardByBoardNo(int boardNo);
-	Optional<List<Board>> findBoardAllByOrderByBoardNo();
+	Optional<List<Board>> findBoardAllByOrderByBoardNoDesc();
+	Optional<List<Board>> findBoardAllByOrderByLikesDesc();
 	void deleteBoardByBoardNo(int boardNo);
 }
