@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
+import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.VolunteerDto;
+import com.web.puppylink.service.FlightTicketServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -37,9 +39,12 @@ import io.swagger.annotations.ApiResponses;
 public class VolunteerController {
 	
 	private final VolunteerServiceImpl volunteerService;
+	private final FlightTicketServiceImpl flightTicketService;
 	
-	public VolunteerController(VolunteerServiceImpl volunteerService) {
+	public VolunteerController(VolunteerServiceImpl volunteerService,
+			FlightTicketServiceImpl flightTicketService) {
 		this.volunteerService = volunteerService;
+		this.flightTicketService = flightTicketService;
 	}
 	
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -180,7 +185,7 @@ public class VolunteerController {
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.OCR_VALOUNTEER,
-            			volunteerService.ocr(volunteerNo)
+            			flightTicketService.ocr(volunteerNo)
             	), 
             	HttpStatus.OK
             );
@@ -188,15 +193,14 @@ public class VolunteerController {
     
     //	6. 제출 완료 : 봉사자가 필수 서류를 제출한 상태
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    @PutMapping("/docs/{volunteerNo}")
+    @PostMapping("/docs")
     @ApiOperation(code = 200, value = "[봉사자] 제출 완료 [STEP5-1]", notes = "[접수 완료 → 제출 완료] 봉사자가 여권 사진에 대한 업로드 및 항공권 이미지에 대한 OCR 처리 후, 필수 서류를 제출한다.", response = ResponseEntity.class)
-    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
-    public Object docs(@PathVariable final int volunteerNo) {
+    public Object docs(@RequestBody FlightTicketDto flightTicket) {
         // return ResponseEntity.ok(volunteerService.docs(volunteerNo));
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.DOCS_VALOUNTEER,
-            			volunteerService.docs(volunteerNo)
+            			volunteerService.docs(flightTicket)
             	), 
             	HttpStatus.OK
             );
