@@ -62,6 +62,7 @@ interface Member {
   activated: boolean
   authorities: Array<{ authorityName: string }>
   joinDate: Date
+  role: string
 }
 
 interface Business {
