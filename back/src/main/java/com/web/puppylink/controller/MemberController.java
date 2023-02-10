@@ -192,8 +192,9 @@ public class MemberController {
         @ApiResponse(code=200,message="정상적으로 회원가입이 되었습니다.", response = ResponseEntity.class)
     })
     public Object signup(@RequestBody MemberDto member) {
-        try {
-            if (member.getBusinessName() == null) {
+        logger.info("회원가입에 필요한 회원 정보 : {}", member);
+    	try {
+            if (member.getBusinessName() == null || member.getBusinessName().equals("")) {
                 // 봉사자를 회원가입합니다. 
                 memberService.signup(member);
                 return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
@@ -206,7 +207,7 @@ public class MemberController {
             }
         } catch (Exception e) {
             return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
-                    ExceptionCode.EXCEPTION_SIGNUP, null), HttpStatus.EXPECTATION_FAILED);
+                    ExceptionCode.EXCEPTION_SIGNUP, false), HttpStatus.EXPECTATION_FAILED);
         }
     }
 

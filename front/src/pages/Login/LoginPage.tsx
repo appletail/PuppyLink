@@ -1,10 +1,16 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { ErrorMessage } from '@hookform/error-message';
+
+import { useRecoilState } from 'recoil';
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { NavTop, inputs, buttons } from '@/components';
+import { UserState } from '@/states/UserState';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -15,12 +21,14 @@ interface LoginProps {
 }
 
 function LoginPage() {
-  // recoil에서 서버주소 가져오기
 
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
   };
+
+  // recoil 변화를 위한 hook
+  const [UserData, setUserData] = useRecoilState(UserState)
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -39,6 +47,8 @@ function LoginPage() {
     })
       .then((response) => {
         // console.log(response)
+        const resData = response.data
+        console.log(resData)
         navigate('/')
         // Bearer를 제외하고 token을 저장합니다
         const access_token = response.headers.authorization.split(" ")[1];
@@ -46,10 +56,29 @@ function LoginPage() {
         if (access_token) {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
+          const LoginData = [
+            {
+              email: resData.email
+            }
+          ]
+          // setUserData(LoginData)
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+
+        toast.error(err.response.data.message, {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+
+
+
       });
   };
 
@@ -113,6 +142,7 @@ function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
