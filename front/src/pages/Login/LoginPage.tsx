@@ -6,11 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { ErrorMessage } from '@hookform/error-message';
 
-import { useRecoilState } from 'recoil';
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { NavTop, inputs, buttons } from '@/components';
-import { UserState } from '@/states/UserState';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -27,8 +25,6 @@ function LoginPage() {
     navigate('/signup/userTab');
   };
 
-  // recoil 변화를 위한 hook
-  const [UserData, setUserData] = useRecoilState(UserState)
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -46,22 +42,30 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
-        // console.log(response)
-        const resData = response.data
-        console.log(resData)
+        const resData = response.data.data
         navigate('/')
         // Bearer를 제외하고 token을 저장합니다
         const access_token = response.headers.authorization.split(" ")[1];
         const refresh_token = response.headers.refreshtoken.split(" ")[1];
+
+        // local storage에 access token과 refresh token을 저장합니다
         if (access_token) {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
-          const LoginData = [
-            {
-              email: resData.email
-            }
-          ]
-          // setUserData(LoginData)
+
+          // recoil에 Login한 user의 정보를 LoginData로 저장합니다
+          const LoginData: Member =
+          {
+            email: resData.email,
+            name: resData.name,
+            phone: resData.phone,
+            nickName: resData.nickName,
+            activated: true,
+            authorities: [{ "authorityName": resData.authorities[0].authorityName }],
+            joinDate: resData.joinDate,
+          }
+          localStorage.setItem('userData', JSON.stringify(LoginData))
+
         }
       })
       .catch((err) => {

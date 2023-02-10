@@ -1,4 +1,4 @@
-import UserChangePassword from '@/pages/Mypage/User/Components/UserChangePassword';
+import UserChangePassword from '@/pages/Mypage/User/UserChangePassword';
 import UserFileDocs from '@/pages/Mypage/User/UserFileDocs';
 import UserMyPage from '@/pages/Mypage/User/UserMyPage';
 import UserVolLst from '@/pages/Mypage/User/UserVolLst';
