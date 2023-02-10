@@ -13,8 +13,10 @@ export const interceptors = (instance: AxiosInstance) => {
   return instance;
 };
 
-// const BASE_URL = 'http://i8c107.p.ssafy.io:8085/puppy';
+// const BASE_URL = 'http://i8c107.p.ssafy.io:8085/puppy'; // ec2에 올릴 경우 체인지
 const BASE_URL = 'http://localhost:8085/puppy';
+// 카카오 로그인 요청을 보내는 URL
+const KAKAO_URL = 'https://kauth.kakao.com';
 
 // 단순 get요청으로 인증값이 필요없는 경우
 const axiosApi = (url: string, options?: object) => {
@@ -29,5 +31,11 @@ const axiosAuthApi = (url: string, options?: object) => {
   return instance;
 };
 
+const axioskakao = (url: string, options?: object) => {
+  const instance = axios.create({ baseURL: url, ...options});
+  return instance;
+}
+
 export const axBase = axiosApi(BASE_URL);
 export const axAuth = axiosAuthApi(BASE_URL);
+export const kakaoAuth  = axioskakao(KAKAO_URL);

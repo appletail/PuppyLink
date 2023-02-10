@@ -1,9 +1,23 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, redirect } from 'react-router-dom';
+import { kakaoAuth } from '@/apis/api/axiosInstance';
 
 import { NavTop } from '@/components';
 
 function UserTabPage() {
   const navigate = useNavigate();
+
+  // Kakao restapi key
+  const KAKAO_KEY = 'abc501edb920accef066a054e7659254';
+  // 인가코드가 리턴되는 서버주소
+  const REDIRECT_URL = "http://localhost:3000/Social/kakao";
+
+  const KakaoLogin = () => {
+    let url = "https://kauth.kakao.com/oauth/authorize"
+              + `?client_id=${KAKAO_KEY}`
+              + `&redirect_uri=${REDIRECT_URL}`
+              + `&response_type=code`;
+    location.href = url;
+  };
 
   return (
     <div >
@@ -22,7 +36,10 @@ function UserTabPage() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="h-14 rounded-[0.625rem] w-[21.875rem]  flex bg-select items-center align-center justify-evenly">
+        <div 
+          className="h-14 rounded-[0.625rem] w-[21.875rem]  flex bg-select items-center align-center justify-evenly" 
+          onClick={KakaoLogin}
+        >
           카카오로 계속하기
         </div>
         <div className="h-14 rounded-[0.625rem] w-[21.875rem] flex bg-select items-center align-center justify-evenly">
