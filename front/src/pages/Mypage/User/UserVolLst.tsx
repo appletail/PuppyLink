@@ -2,12 +2,15 @@ import { useState } from 'react'
 
 import UserSortedVol from './Components/UserSortedVol'
 
+import { NavTop } from '@/components'
+
 function UserVolLst() {
 
   const [status, setStatus] = useState<status>("submit")
 
   return (
     <div>
+      <NavTop.NavBack NavContent='봉사 정보' />
       <div>
         <p className='my-12 px-5 text-title1-bold'>봉사 신청 내역</p>
         <div className='w-screen'>

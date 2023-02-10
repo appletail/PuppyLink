@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { ToastContainer, toast } from 'react-toastify';
 
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
+
+import { ToastContainer, toast } from 'react-toastify';
 
 import { DepDateFooter, DestFooter, FlightName, Foundation, DestTitle, DepDateTitle } from './Components'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards, buttons, ModalCard, NavTop } from '@/components';
 import VolUserStyle from '@/styles/pages/Volunteer/VolUserResiPage.module.css';
+
+
 
 function VolUserResi() {
 
@@ -62,10 +66,12 @@ function VolUserResi() {
       .catch((err) => console.log(err.response.data))
   }
 
+  const navigate = useNavigate()
+
   return (
     <div>
       <NavTop.NavLogo />
-      <button className={`${VolUserStyle.GoToMyRegi} bg-main-30`} type="button">
+      <button className={`${VolUserStyle.GoToMyRegi} bg-main-30`} type="button" onClick={() => navigate('/mypage/vollist')}>
         <p className="text-body-bold text-white">내 봉사 확인하기</p>
         <p className="text-caption1 text-black">현황 확인 및 서류 제출하기</p>
       </button>

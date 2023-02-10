@@ -2,11 +2,12 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 
-import { buttons } from '@/components'
+import { buttons, NavTop } from '@/components'
 
 function UserMyPage() {
   return (
     <div>
+      <NavTop.NavLogo />
       <div className='px-5 mt-12'>
         <p className='text-largetitle-bold'>
           {/* 봉사자 이름이나 닉네임 넣을 것 */}
