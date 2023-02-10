@@ -58,6 +58,7 @@ private final BoardServiceImpl boardService;
             );
     }
 	
+    // 게시글을 최신 작성순대로 반환한다. (게시글 번호 내림차순)
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/list")
     @ApiOperation(code = 200, value = "게시글 전체 조회", notes = "전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
@@ -67,6 +68,21 @@ private final BoardServiceImpl boardService;
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_ALL,
             			boardService.getBoardAll()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/best")
+    @ApiOperation(code = 200, value = "베스트 게시글 조회", notes = "베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBestBoard() {
+        // return ResponseEntity.ok(boardService.getBestBoard());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_BEST,
+            			boardService.getBestBoard()
             	), 
             	HttpStatus.OK
             );
