@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from './RootLayout';
 
 import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import HomePage from '@/pages/Home/HomePage';
 import LoginPage from '@/pages/Login/LoginPage';
 import UserMyPage from '@/pages/Mypage/User/UserMyPage';
 import UserVolLst from '@/pages/Mypage/User/UserVolLst';
@@ -24,10 +25,14 @@ import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
 
 const routers = createBrowserRouter([
   {
-    path: '/',
+
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
+      {
+        path: '/',
+        element: <HomePage />
+      },
       {
         id: 'volunteerUser',
         path: '/volunteer',

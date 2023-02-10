@@ -5,8 +5,10 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 
 import NavStyle from './NavTop.module.css';
 
+import { axBase } from '@/apis/api/axiosInstance';
 import LogoWhite from '@/assets/logo-white.svg';
 import { LoginState } from '@/states/LoginState';
+
 
 
 function NavTop(): JSX.Element {
@@ -14,16 +16,34 @@ function NavTop(): JSX.Element {
   const auth = useRecoilValue(LoginState);
 
   const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState);
-  const hasToken = localStorage.getItem('access-token');
+  const accessToken = localStorage.getItem('access-token');
+  const refreshToken = localStorage.getItem('refresh-token')
   useEffect(() => {
-    if (hasToken) {
+    if (accessToken) {
       setisLoggedIn(true);
     }
-  }, [])
+  }, [isLoggedIn])
 
   const navigate = useNavigate();
   const goLogin = () => {
     navigate('/login')
+  }
+
+  const goLogout = () => {
+    console.log("로그아웃할 부분입니다.")
+    axBase({
+      method: 'post',
+      url: 'members/logout',
+      data: {
+        accessToken: accessToken,
+        refreshToken: refreshToken
+      }
+    }).then(() => {
+      localStorage.clear()
+      setisLoggedIn(false)
+    }
+    ).catch((err) => { console.log(err) })
+
   }
 
 
@@ -37,7 +57,7 @@ function NavTop(): JSX.Element {
       <div className={NavStyle.Right}>
         {auth
           ? //   로그인한 사람은 => 로그아웃이 보인다
-          '로그아웃'
+          <div onClick={goLogout}>로그아웃</div>
           : //   로그아웃 된 사람에게는 로그인이 보인다
           <div onClick={goLogin}>로그인</div>}
       </div>
