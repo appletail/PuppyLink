@@ -30,7 +30,6 @@ function NavTop(): JSX.Element {
   }
 
   const goLogout = () => {
-    console.log("로그아웃할 부분입니다.")
     axBase({
       method: 'post',
       url: 'members/logout',
@@ -43,7 +42,6 @@ function NavTop(): JSX.Element {
       setisLoggedIn(false)
     }
     ).catch((err) => { console.log(err) })
-
   }
 
 

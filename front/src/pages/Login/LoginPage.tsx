@@ -54,7 +54,7 @@ function LoginPage() {
   };
 
   return (
-    <div>
+    <div className='w-[21.875rem]'>
       <NavTop.NavBack NavContent='로그인' />
       <p className="text-title1 mt-14 mb-3 ">다시 보니 반갑네요!</p>
 

@@ -2,10 +2,13 @@ import React from 'react'
 
 import ReviewLst from './Components/ReviewLst'
 
+import { NavTop } from '@/components'
+
 
 function ReviewMainPage() {
   return (
     <div className='w-[21.875rem]'>
+      <NavTop.NavLogo />
       <div className='mt-6 mb-9'>
         <p className='text-title2-bold mb-4'>이번 주의 BEST 후기</p>
         <div>
