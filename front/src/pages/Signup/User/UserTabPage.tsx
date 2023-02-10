@@ -9,7 +9,7 @@ function UserTabPage() {
   // Kakao restapi key
   const KAKAO_KEY = 'abc501edb920accef066a054e7659254';
   // 인가코드가 리턴되는 서버주소
-  const REDIRECT_URL = "http://localhost:8085/puppy/members/kakao";
+  const REDIRECT_URL = "http://localhost:3000/Social/kakao";
 
   const KakaoLogin = () => {
     let url = "https://kauth.kakao.com/oauth/authorize"

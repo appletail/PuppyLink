@@ -27,7 +27,7 @@ public class KakaoUtil {
     private static final String LOGOUT = "https://kapi.kakao.com/v1/user/logout";
     private static final String KEY = "c1a6f5a36cc3ee5bb64b3fb804e37407";
     private static final String ADMIN_KEY = "f25ba205fb42653c1d8c426f6bf6ad5e";
-    private static final String REQUEST = "http://localhost:8085/puppy/members/kakao";
+    private static final String REQUEST = "http://localhost:3000/Social/kakao";
 
     // 카카오 로그인해서 얻은 인가코드롤 AccessToken 및 refresh 토큰 얻는 함수
     public static TokenDto getAccessTokenByKakao(String code) {

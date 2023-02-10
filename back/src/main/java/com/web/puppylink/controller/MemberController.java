@@ -397,5 +397,11 @@ public class MemberController {
         return new ResponseEntity<>(new BasicResponseDto<>(
                 ExceptionCode.EXCEPTION_API,null),HttpStatus.EXPECTATION_FAILED);
     }
+//
+//    @GetMapping("/kakao")
+//    @ApiOperation(value = "카카오 로그인")
+//    public void getAccessByCode(@RequestParam String code) {
+//
+//    }
 
 }
