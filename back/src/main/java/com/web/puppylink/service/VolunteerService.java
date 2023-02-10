@@ -1,12 +1,13 @@
 package com.web.puppylink.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
+import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
+import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
 
@@ -40,7 +41,7 @@ public interface VolunteerService {
 	Volunteer refuse(int volunteerNo); // 봉사 승인 취소
 	
 	// 5. <봉사자> [제출 완료] : 봉사자가 필수 서류를 제출한 상태
-	Volunteer docs(int volunteerNo);
+	Volunteer docs(FlightTicketDto flightTicket);
 	
 	// 6. <재단> [승인 완료] : 재단이 봉사자의 서류 제출을 확인한 경우
 	Volunteer confirm(int volunteerNo);
@@ -56,9 +57,6 @@ public interface VolunteerService {
 	
 	// ※ 봉사자의 마이 페이지에서, 드롭다운 버튼에 따른 봉사 상태(Status)에 따른 목록 조회
 	List<Volunteer> getMembmerStatusVolunteer(String nickName, String status);		
-	
-	// ※ Google Vision Api를 통해, 업로드된 항공권 이미지에 대한 OCR 결과를 반환 및 저장
-	Volunteer ocr(int volunteerNo);
 
 	// 봉사자 필수서류(여권, 항공권) 등록
 	Volunteer submitFile(FileRequest file);

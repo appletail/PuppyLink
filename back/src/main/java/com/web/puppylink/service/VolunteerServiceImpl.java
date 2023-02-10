@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -21,12 +20,9 @@ import org.springframework.web.client.RestTemplate;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
-import com.web.puppylink.dto.GpsDto;
+import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
@@ -34,7 +30,6 @@ import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
-import com.web.puppylink.ocr.GoogleVisionApi;
 import com.web.puppylink.repository.FlightTicketRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
@@ -189,17 +184,33 @@ public class VolunteerServiceImpl implements VolunteerService{
 
 	@Transactional
 	@Override
-	public Volunteer docs(int volunteerNo) {
-		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+	public Volunteer docs(FlightTicketDto flightTicket) {
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(flightTicket.getVolunteerNo()).orElseThrow(()->{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
 		if(status.contentEquals("regist") || status.contentEquals("lack") ) {
-			volunteer.setStatus("docs");			
+			volunteer.setStatus("docs");	
 		}
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
 		}
+		
+		// OCR 처리 결과를 반환할 항공권 객체를 생성한다.
+		FlightTicket flightTicketInfo = FlightTicket.builder()
+				.ticketNo(flightTicket.getTicketNo())
+				.passengerName(flightTicket.getPassengerName())
+				.bookingReference(flightTicket.getBookingReference())
+				.depCity(flightTicket.getDepCity())
+				.depDate(flightTicket.getDepDate())
+				.arriveCity(flightTicket.getArriveCity())
+				.arriveDate(flightTicket.getArriveDate())
+				.flight(flightTicket.getFlight())
+				.build();
+		
+		// 봉사자의 항공권 정보(ticketNo)를 업데이트한다.
+		volunteer.setTicketNo(flightTicketRepository.save(flightTicketInfo));
+		
 		return volunteer;
 	}
 	
@@ -255,30 +266,6 @@ public class VolunteerServiceImpl implements VolunteerService{
 		else {
 			throw new IllegalArgumentException("올바른 프로세스가 아닙니다.");
 		}
-		return volunteer;
-	}
-
-	@Transactional
-	@Override
-	public Volunteer ocr(int volunteerNo) {
-		// 1. 봉사자가 업로드한 항공권 이미지 경로를 탐색한다.
-		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
-			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
-		});
-		String path = volunteer.getFlightURL();
-		// [AWS S3] path = "https://puppylink-test.s3.ap-northeast-2.amazonaws.com/ocr-test/flight.PNG";
-		// [LOCAL] path = "src/image/001.PNG";
-		
-		// 2. 항공권 정보에 OCR을 적용하여 주요 정보를 데이터화한다.
-		GoogleVisionApi api = new GoogleVisionApi(path);
-		
-		// 3. 항공권 정보를 객체에 담은 뒤, 데이터베이스에 저장한다.
-		FlightTicket flightTicket = api.getFlightTicket();
-		// flightTicketRepository.save(flightTicket);
-		
-		// 4. 봉사자의 항공권 정보(ticketNo)를 업데이트한다.
-		volunteer.setTicketNo(flightTicket);
-		
 		return volunteer;
 	}
 
