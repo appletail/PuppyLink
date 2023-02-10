@@ -3,7 +3,9 @@ package com.web.puppylink.service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -65,15 +67,23 @@ public class FoundationServiceImpl implements FoundationService{
             throw new RuntimeException("해당 사업자번호로 이미 가입되어 있는 단체가 존재합니다.");
         }
         
-        Authority authority;
+        Authority authority1, authority2;
         Foundation foundationInfo;
         Member memberInfo;
         
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         
-        authority = Authority.builder()
+        authority1 = Authority.builder()
                 .authorityName("ROLE_MANAGER")
                 .build();
+        
+        authority2 = Authority.builder()
+                .authorityName("ROLE_USER")
+                .build();
+        
+        Set<Authority> authSet = new HashSet<Authority>();
+        authSet.add(authority1);
+        authSet.add(authority2);
 
         memberInfo  = Member.builder()
                 .email(member.getEmail())
@@ -83,7 +93,7 @@ public class FoundationServiceImpl implements FoundationService{
                 .nickName(member.getBusinessName())
                 .activated(true)
                 .joinDate(now)
-                .authorities(Collections.singleton(authority))
+                .authorities(authSet)
                 .build();
         
         memberRepository.save(memberInfo);

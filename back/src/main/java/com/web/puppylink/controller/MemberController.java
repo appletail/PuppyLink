@@ -205,7 +205,9 @@ public class MemberController {
                         CommonCode.JOIN_MEMBER, null), HttpStatus.OK);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+        	e.printStackTrace();
+        	
+        	return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
                     ExceptionCode.EXCEPTION_SIGNUP, null), HttpStatus.EXPECTATION_FAILED);
         }
     }
