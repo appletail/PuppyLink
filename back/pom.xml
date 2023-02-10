@@ -195,6 +195,12 @@
 		    <artifactId>google-cloud-vision</artifactId>
 		    <version>3.7.0</version>
 		</dependency>
+		<!-- Jsoup : java crawling library -->
+		<dependency>
+		    <groupId>org.jsoup</groupId>
+		    <artifactId>jsoup</artifactId>
+		    <version>1.15.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>

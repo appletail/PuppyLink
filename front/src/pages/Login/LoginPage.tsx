@@ -1,10 +1,14 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { ErrorMessage } from '@hookform/error-message';
 
+
 import { axBase } from '@/apis/api/axiosInstance'
-import { NavTop , inputs, buttons } from '@/components';
+import { NavTop, inputs, buttons } from '@/components';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -15,12 +19,12 @@ interface LoginProps {
 }
 
 function LoginPage() {
-  // recoil에서 서버주소 가져오기
 
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
   };
+
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -38,21 +42,53 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
-        const access_token = response.headers.authorization;
-        const refresh_token = response.headers.refreshtoken;
+        const resData = response.data.data
+        navigate('/')
+        // Bearer를 제외하고 token을 저장합니다
+        const access_token = response.headers.authorization.split(" ")[1];
+        const refresh_token = response.headers.refreshtoken.split(" ")[1];
+
+        // local storage에 access token과 refresh token을 저장합니다
         if (access_token) {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
+
+          // recoil에 Login한 user의 정보를 LoginData로 저장합니다
+          const LoginData: Member =
+          {
+            email: resData.email,
+            name: resData.name,
+            phone: resData.phone,
+            nickName: resData.nickName,
+            activated: true,
+            authorities: [{ "authorityName": resData.authorities[0].authorityName }],
+            joinDate: resData.joinDate,
+          }
+          localStorage.setItem('userData', JSON.stringify(LoginData))
+
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+
+        toast.error(err.response.data.message, {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+
+
+
       });
   };
 
   return (
-    <div>
-      <NavTop.NavBack NavContent='로그인'/>
+    <div className='w-[21.875rem]'>
+      <NavTop.NavBack NavContent='로그인' />
       <p className="text-title1 mt-14 mb-3 ">다시 보니 반갑네요!</p>
 
       {/* 로그인 form */}
@@ -110,6 +146,7 @@ function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -56,8 +56,17 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	@Override
 	public List<Board> getBoardAll() {
-		List<Board> boardInfoList = boardRepository.findBoardAllByOrderByBoardNo().orElseThrow(()->{
+		List<Board> boardInfoList = boardRepository.findBoardAllByOrderByBoardNoDesc().orElseThrow(()->{
 			return new IllegalArgumentException("게시글 목록 정보를 찾을 수 없습니다.");
+		});
+		return boardInfoList;
+	}
+	
+	@Transactional
+	@Override
+	public List<Board> getBestBoard() {
+		List<Board> boardInfoList = boardRepository.findBoardAllByOrderByLikesDesc().orElseThrow(()->{
+			return new IllegalArgumentException("베스트 게시글 목록 정보를 찾을 수 없습니다.");
 		});
 		return boardInfoList;
 	}

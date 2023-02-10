@@ -61,54 +61,70 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: 'light',
+        theme: 'colored',
       })
       return
     }
+    else {
 
-    // axios 통신
-    axBase({
-      method: 'post',
-      url: '/foundation/validate',
-      data: {
-        "businessName": "",
-        "businessNo": businessNo,
-        "description": "",
-        "email": {
-          "activated": true,
-          "authorities": [
-            {
-              "authorityName": ""
-            }
-          ],
-          "email": "",
-          "joinDate": "",
-          "name": "",
-          "nickName": "",
-          "phone": "",
-          "refreshToken": ""
+      // axios 통신
+      axBase({
+        method: 'post',
+        url: '/foundation/validate',
+        data: {
+          "businessName": "",
+          "businessNo": businessNo,
+          "description": "",
+          "email": {
+            "activated": true,
+            "authorities": [
+              {
+                "authorityName": ""
+              }
+            ],
+            "email": "",
+            "joinDate": "",
+            "name": "",
+            "nickName": "",
+            "phone": "",
+            "refreshToken": ""
+          },
+          "presidentName": presidentName,
+          "profileURL": "",
+          "startDate": format_date
         },
-        "presidentName": presidentName,
-        "profileURL": "",
-        "startDate": format_date
-      },
-    })
-      .then((res) => {
-        // console.log(res)
-        toast.error(res.data, {
-          autoClose: 3000,
-          position: toast.POSITION.BOTTOM_CENTER,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        })
-
-        setNotbusinessNoValidateCheck(false)
-        setOpenModal(false)
       })
-      .catch((err) => console.log(err))
+        .then((res) => {
+          // console.log(res)
+          const isBusinessValid = res.data.data
+          if (!isBusinessValid) {
+            toast.error("사업자 인증에 실패했습니다. 다시 확인해주세요", {
+              autoClose: 3000,
+              position: toast.POSITION.BOTTOM_CENTER,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            })
+          }
+          else {
+            toast.success("사업자 인증에 성공했습니다.", {
+              autoClose: 3000,
+              position: toast.POSITION.BOTTOM_CENTER,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            })
+            setNotbusinessNoValidateCheck(false)
+            setOpenModal(false)
+          }
+
+        })
+        .catch((err) => console.log(err))
+    }
 
   }
   // 사업자 인증 form
@@ -155,8 +171,7 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
       {/* 자식 컴포넌트에서 인증을 해야 닫힌다. */}
       <buttons.BtnMd BtnValue="인증하기" onClick={BusinessNoValidate} />
 
-      <ToastContainer />
-    </div>
+    </div >
   )
 }
 

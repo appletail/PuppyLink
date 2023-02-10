@@ -43,39 +43,50 @@ function SignupConfirmPage() {
 
   useEffect(() => {
     if (formState.isValid && !isValidating) {
-      // console.log(data.confirmNumber)
+
+      const user_data = {
+        auth: data.confirmNumber,
+        businessName: state.businessName != undefined ? state.businessName : "",
+        businessNo: state.businessNo != undefined ? state.businessNo : "",
+        email: state.email,
+        name: state.name,
+        nickName: state.nickName != undefined ? state.nickName : "",
+        password: state.password,
+        phone: state.phone,
+        presidentName: "",
+        startDate: "",
+      }
+      // console.log(user_data)
+
       axBase({
         method: 'post',
         url: '/members',
-        data: {
-          email: state.email,
-          password: state.password,
-          name: state.name,
-          phone: state.phone,
-          nickName: state.nickName,
-          businessNo: state.businessNo ? state.businessNo : "",
-          auth: data.confirmNumber,
-        },
+        data: user_data
+
       })
-        .then(() => {
+        .then((res) => {
+          // console.log(res)
           navigate('/signup/success', {
             replace: true,
             state: {
-              nickName: state.nickName,
+              nickName: state.nickName ? state.nickName : "",
+              businessName: state.businessName ? state.businessName : ""
             },
           });
         })
         .catch((err) => {
-          // console.log(err.response.data.message);
-          toast.error(err.response.data.message, {
-            autoClose: 3000,
-            position: toast.POSITION.BOTTOM_CENTER,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
+          console.log(err);
+          if (!err.response.data.data) {
+            toast.error("인증번호가 틀렸습니다.", {
+              autoClose: 3000,
+              position: toast.POSITION.BOTTOM_CENTER,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          }
         });
     }
   }, [formState, data, isValidating]);

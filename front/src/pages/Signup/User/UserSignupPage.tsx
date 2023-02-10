@@ -54,7 +54,7 @@ function UserSignupPage() {
         data: email,
       })
         .then((res) => {
-          const canUseEmail = res.data;
+          const canUseEmail = res.data.data;
           if (canUseEmail) {
             // 중복확인 결과 이용가능한 이메일인 경우
             setError('email', {
@@ -92,7 +92,7 @@ function UserSignupPage() {
         data: nickName,
       })
         .then((res) => {
-          const canUsenickName = res.data;
+          const canUsenickName = res.data.data;
           if (canUsenickName) {
             // 중복확인 결과 이용가능한 닉네임인 경우
             setError('nickName', {
@@ -115,7 +115,7 @@ function UserSignupPage() {
   // 회원가입 버튼 누르면 다음페이지로 이동
 
   const onSubmit: SubmitHandler<SignupProps> = (data) => {
-    console.log(data.email)
+    // console.log(data.email)
     navigate('/signup/confirm', {
       replace: true,
       state: {

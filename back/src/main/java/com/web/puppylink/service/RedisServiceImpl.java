@@ -39,6 +39,11 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public Optional<Auth> findAuth(String email) {
+        return authRedisRepository.findById(email);
+    }
+
+    @Override
     public void saveRefreshToken(RefreshToken token) {
         refreshRedisRepository.save(token);
     }
