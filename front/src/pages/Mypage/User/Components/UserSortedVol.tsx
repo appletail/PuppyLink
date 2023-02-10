@@ -1,0 +1,58 @@
+import { useEffect, useState } from 'react'
+
+import FooterController from './FooterController'
+
+import { axBase } from '@/apis/api/axiosInstance'
+import { cards } from '@/components'
+
+function UserSortedVol({ status }: { status: status }) {
+
+  const [volunteers, setVolunteers] = useState([])
+  const [modal, setModal] = useState<boolean[]>([])
+
+  useEffect(() => {
+    axBase({
+      url: `/volunteer/member/${'bread'}/${status}`,
+    })
+      .then((res) => setVolunteers(res.data.data))
+  }, [status])
+
+  useEffect(() => {
+    setModal(Array(volunteers.length).fill(false))
+  }, [volunteers])
+
+
+  const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
+
+    const cardBody = [
+      `신청일: ${volunteer.regDate}`,
+      `출국일: ${volunteer.depTime}`,
+      `봉사단체: ${volunteer.businessNo.businessName}`,
+    ]
+
+    return (
+      <div key={volunteer.volunteerNo} className='mb-3' >
+        <div aria-hidden="true"
+          onClick={() => setModal(modal.reduce((acc: boolean[], cur, modalIdx) => {
+            modalIdx === idx ? acc.push(true) : acc.push(false)
+            return acc
+          }, []))}>
+          <cards.CardLg
+            CardContents={cardBody}
+            CardFooter={FooterController(status)}
+            CardTitle={volunteer.email.name}
+          />
+        </div>
+      </div >
+    )
+
+  })
+
+  return (
+    <div className='overflow-y-scroll flex flex-col items-center'>
+      {volunteerCards}
+    </div>
+  )
+}
+
+export default UserSortedVol

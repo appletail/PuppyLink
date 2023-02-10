@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-
 import { MdMail } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
-
-
-
 import { axBase } from '@/apis/api/axiosInstance'
+import { NavTop } from '@/components';
+
+
+
+
 
 type ConfirmProps = {
   // confirmNumber: string;
@@ -42,44 +43,59 @@ function SignupConfirmPage() {
 
   useEffect(() => {
     if (formState.isValid && !isValidating) {
-      // console.log(data.confirmNumber)
+      // console.log(data)
+      // console.log(state.businessNo)
+      // console.log(state)
+      // state.nickName != undefined ? console.log(state.nickName) : console.log("hello")
+      const user_data = {
+        auth: data.confirmNumber,
+        businessName: state.businessName != undefined ? state.businessName : "",
+        businessNo: state.businessNo != undefined ? state.businessNo : "",
+        email: state.email,
+        name: state.name,
+        nickName: state.nickName != undefined ? state.nickName : "",
+        password: state.password,
+        phone: state.phone,
+        presidentName: "",
+        startDate: "",
+      }
+      console.log(user_data)
       axBase({
         method: 'post',
         url: '/members',
-        data: {
-          email: state.email,
-          password: state.password,
-          name: state.name,
-          phone: state.phone,
-          nickName: state.nickName,
-          auth: data.confirmNumber,
-        },
+        data: user_data
+
       })
-        .then(() => {
+        .then((res) => {
+          console.log(res)
           navigate('/signup/success', {
             replace: true,
             state: {
-              nickName: state.nickName,
+              nickName: state.nickName ? state.nickName : "",
+              businessName: state.businessName ? state.businessName : ""
             },
           });
         })
         .catch((err) => {
-          // console.log(err.response.data.message);
-          toast.error(err.response.data.message, {
-            autoClose: 3000,
-            position: toast.POSITION.BOTTOM_CENTER,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'light',
-          });
+          console.log(err);
+          if (!err.response.data.data) {
+            toast.error("인증번호가 틀렸습니다.", {
+              autoClose: 3000,
+              position: toast.POSITION.BOTTOM_CENTER,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          }
         });
     }
   }, [formState, data, isValidating]);
 
   return (
     <div>
+      <NavTop.NavBack NavContent='회원가입' />
       <div className="mt-16 text-center  ">
         {/* 상단 부분 */}
         <div className="flex flex-col items-center">

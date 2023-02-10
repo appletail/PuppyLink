@@ -28,7 +28,7 @@ function InputFormBtn({
         type={type}
         placeholder={placeholder}
       />
-      <div>{button}</div>
+      <div className="min-w-[70px]">{button}</div>
       {/* <p>{fieldState.isTouched && 'Touched'}</p>
       <p>{fieldState.isDirty && 'Dirty'}</p>
       <p>{fieldState.invalid ? 'invalid' : 'valid'}</p> */}

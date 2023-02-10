@@ -1,11 +1,10 @@
 import { useNavigate, redirect } from 'react-router-dom';
 import { kakaoAuth } from '@/apis/api/axiosInstance';
 
+import { NavTop } from '@/components';
+
 function UserTabPage() {
   const navigate = useNavigate();
-  const EmailSignup = () => {
-    navigate('/signup/user');
-  };
 
   // Kakao restapi key
   const KAKAO_KEY = 'abc501edb920accef066a054e7659254';
@@ -21,13 +20,14 @@ function UserTabPage() {
   };
 
   return (
-    <div className="">
+    <div >
+      <NavTop.NavBack NavContent='회원가입'/>
       <div className="mt-14 mb-11 flex justify-center ">
         <div className="w-1/2 h-10 text-center border-b-2 border-main-100">
-          <p className="text-title3-bold">개인회원</p>
+          <div className="text-title3-bold">개인회원</div>
         </div>
         <div className="w-1/2 h-10 text-center border-b-[1px] border-main-50">
-          <p className="text-title3">단체회원</p>
+          <div className="text-title3" onClick={() => navigate('/signup/grouptab')}>단체회원</div>
         </div>
       </div>
 
@@ -49,8 +49,9 @@ function UserTabPage() {
           네이버로 계속하기
         </div>
         <div
+          aria-hidden='true'
           className="h-14 rounded-[0.625rem] w-[21.875rem] flex bg-select items-center align-center justify-evenly"
-          onClick={EmailSignup}
+          onClick={() => navigate('/signup/user')}
         >
           이메일로 계속하기
         </div>

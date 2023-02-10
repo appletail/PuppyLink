@@ -16,7 +16,7 @@ type UCProps<TFieldValues extends FieldValues = FieldValues> = {
 
 interface BtnProps extends ButtonTypes {
   // onClick: () => void;
-  BtnValue: string;
+  BtnValue: string | JSX.Element;
 }
 interface imgProps {
   src: string;
@@ -27,8 +27,8 @@ interface imgProps {
 
 interface CardProps {
   CardImg?: imgProps;
-  CardTitle: string | JSX.Element;
-  CardContents?: string[];
+  CardTitle?: string | JSX.Element;
+  CardContents?: string[] | JSX.Element[];
   CardFooter?: JSX.Element;
 }
 
@@ -50,4 +50,36 @@ interface InputProps {
   button?: JSX.Element;
   helper?: string;
   InputType: string;
+}
+
+type status = 'submit' | 'regist' | 'refuse' | 'docs' | 'lack' | 'confirm' | 'complete'
+
+interface Member {
+  email: string
+  name: string
+  phone: number
+  nickName: string
+  activated: boolean
+  authorities: Array<{ authorityName: string }>
+  joinDate: Date
+}
+
+interface Business {
+  businessNo: number,
+  businessName: string,
+  presidentName: string,
+  startDate: Date,
+  email: Member
+}
+
+interface Volunteer {
+  volunteerNo: number
+  depTime: Date
+  dest: string
+  status: string
+  flightName: string
+  regDate: Date
+  email: member
+  businessNo: Business
+  description: string
 }

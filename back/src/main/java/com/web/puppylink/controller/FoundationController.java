@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -28,6 +29,8 @@ import com.google.gson.JsonObject;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.config.code.ExceptionCode;
 import com.web.puppylink.dto.BasicResponseDto;
+import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.FoundationDto;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.service.FoundationServiceImpl;
 
@@ -142,6 +145,19 @@ public class FoundationController {
             	return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
                         CommonCode.SUCCESS_BUSINESSNO, true), HttpStatus.OK);
             }
+    }
+    
+    @SuppressWarnings("unchecked")
+	@PostMapping
+    @ApiOperation(code = 200, value = "단체 소개글 작성", response = ResponseEntity.class)
+    public Object create(@RequestBody FoundationDto foundationDto) {
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SUCCESS_DESCRIPTION,
+            			foundationService.createDescription(foundationDto)
+            	), 
+            	HttpStatus.OK
+            );
     }
     
     private JsonObject parseStringToJson(String stringJson) throws ParseException{

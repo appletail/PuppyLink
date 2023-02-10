@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.puppylink.dto.FoundationDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
@@ -115,6 +116,19 @@ public class FoundationServiceImpl implements FoundationService{
 		
 		foundation.setProfileURL(file.getImagePath());
 		
+		return foundationRepository.save(foundation);
+	}
+
+	@Transactional
+	@Override
+	public Foundation createDescription(FoundationDto foundationDto) {
+
+		Foundation foundation = foundationRepository.findFoundationByBusinessNo(foundationDto.getBusinessNo()).orElseThrow(()->{
+			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
+		});
+		
+		foundation.setDescription(foundationDto.getDescription());
+        
 		return foundationRepository.save(foundation);
 	}
 }

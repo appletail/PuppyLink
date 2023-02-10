@@ -1,52 +1,31 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import RootLayout from './RootLayout';
+import { Login, Mypage, Others, Review, SignUp, Volunteer } from './route';
 
-import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
-import LoginPage from '@/pages/Login/LoginPage';
+import HomePage from '@/pages/Home/HomePage';
 import NotFoundPage from '@/pages/NotFoundPage';
+import VolGps from '@/pages/Volunteer/User/VolGps';
 
-import SignupConfirmPage from '@/pages/Signup/SignupConfirmPage';
-import SignupSuccessPage from '@/pages/Signup/SignupSuccessPage';
-import UserSignup from '@/pages/Signup/User/UserSignupPage';
-import UserTabPage from '@/pages/Signup/User/UserTabPage';
-
-import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
 
 const routers = createBrowserRouter([
   {
-    path: '/',
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: '/volunteer',
-        element: <VolUserResiPage />,
+        path: '/',
+        element: <HomePage />
       },
+      ...Login,
+      ...Mypage,
+      ...Others,
+      ...Review,
+      ...SignUp,
+      ...Volunteer,
       {
-        path: '/components',
-        element: <ComponentCollectsPage />,
-      },
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/signup/usertab',
-        element: <UserTabPage />,
-      },
-      {
-        path: '/signup/user',
-        element: <UserSignup />,
-      },
-      {
-        path: '/signup/confirm',
-        element: <SignupConfirmPage />,
-      },
-
-      {
-        path: '/signup/success',
-        element: <SignupSuccessPage />,
+        path: '/gps',
+        element: <VolGps />,
       },
     ],
   },

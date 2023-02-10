@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useController } from 'react-hook-form'
 
-import { Modal } from '@/components'
+import { ModalCard } from '@/components'
 
 
 interface foundation {
@@ -10,7 +10,7 @@ interface foundation {
   presidentName: string
   startDate: Date
   description: string
-  image?: string
+  profileURL?: string
 }
 interface FoundationProps extends UCProps {
   foundations: foundation[]
@@ -29,11 +29,12 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
   useEffect(() => {
     setModal(Array(foundations.length).fill(false))
   }, [foundations])
+
   const foundationsBtn = foundations.map((item, idx) => {
     const title = (
-      <div className="flex justify-between items-center text-title3-bold">
+      <div className="flex justify-between items-center text-title2-bold">
         <p>{item?.businessName}</p>
-        <img alt="foundation" src={`https://puppylink-test.s3.ap-northeast-2.amazonaws.com/foundation-profile/${item?.businessName}`} />
+        <img alt="foundation" className='w-14 h-14 rounded-full' src={item.profileURL} />
       </div>
     )
 
@@ -47,12 +48,12 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
             }, []))
           } />
         <label htmlFor={item?.businessNo}>
-          <img alt="foundation" className={isChecked(item?.businessNo) ? 'bg-white rounded-full brightness-[.60]' : ''} src={`https://puppylink-test.s3.ap-northeast-2.amazonaws.com/foundation-profile/${item?.businessName}`} />
+          <img alt="foundation" className={`w-14 h-14 rounded-full ${isChecked(item?.businessNo) ? 'bg-white rounded-full brightness-[.60]' : ''}`} src={item.profileURL} />
 
         </label>
         {modalOn[idx]
           &&
-          <Modal
+          <ModalCard
             CardContents={[item?.description]}
             CardTitle={title}
             closeModal={() =>
