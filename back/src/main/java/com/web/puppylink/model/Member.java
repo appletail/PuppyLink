@@ -6,7 +6,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -40,7 +39,10 @@ public class Member {
     @NotNull
     private boolean             activated;
 
-    @ManyToMany
+    @ManyToMany( cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "members_authority",
             joinColumns = {@JoinColumn(name = "members_email", referencedColumnName = "email")},
@@ -50,5 +52,11 @@ public class Member {
     @Column(name = "joinDate", length = 50)
     @NotNull
     private String              joinDate;
-
+    
+    @Lob
+    private String refreshToken;
+    
+    public void updateRefreshToken(String newToken) {
+        this.refreshToken = newToken;
+    }
 }

@@ -38,5 +38,7 @@ public class Foundation {
     @JoinColumn(name = "members_email", referencedColumnName = "email")
 //    @JoinColumn(name = "email")
     private Member          email;
+    @Column(name = "description", length = 500)
+    private String  description;
 
 }
