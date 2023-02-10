@@ -227,4 +227,10 @@ public class BoardServiceImpl implements BoardService{
 		
 		return commentRepository.findCommentByBoardNo(boardInfo);
 	}
+
+	@Override
+	public List<Board> getBoardInfinite(int boardNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -380,7 +380,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("_view", "array");
 		params.add("_fields", "lat,lng,dir");
-		params.add("api_key", "b6ebcdfa-abce-4e8d-a218-71360b0ac0fa");
+		params.add("api_key", "fdf4a6cd-42f2-48d4-87f1-1a375d234b94");
 		params.add("flight_iata", flightNum);
 
 		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 

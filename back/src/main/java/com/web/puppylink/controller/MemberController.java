@@ -9,6 +9,7 @@ import com.web.puppylink.config.util.MailUtil;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.PasswordDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
@@ -261,8 +262,8 @@ public class MemberController {
 
     @PutMapping("/{nickName}/change")
     @ApiOperation(value = "비밀번호 변경")
-    public ResponseEntity<Integer> update(@RequestBody String newPassword, @PathVariable String nickName) {
-    	memberService.update(newPassword, nickName);
+    public ResponseEntity<Integer> update(@RequestBody PasswordDto passwordDto, @PathVariable String nickName) {
+    	memberService.update(passwordDto, nickName);
     	return new ResponseEntity<Integer>(1, HttpStatus.OK);
     }
 
