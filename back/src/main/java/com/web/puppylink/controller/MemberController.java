@@ -22,11 +22,12 @@ import com.web.puppylink.service.RedisServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
 import io.lettuce.core.RedisException;
+
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.json.JSONException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -50,6 +51,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.Optional;
 
 @ApiResponses(value = {
         @ApiResponse(code = 401, message = "Unauthorized", response = ResponseEntity.class),
@@ -185,6 +187,13 @@ public class MemberController {
                         .email(principal.getUsername())
                         .refreshToken(tokenDto.getRefreshToken())
                         .build();
+        // 카카오 이메일이면 카카오도 로그아웃되도록 처리
+        Authentication authoriztion = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
+        String memberEmail = ((PrincipalDetails) authentication.getPrincipal()).getUsername();
+        if( memberEmail.contains("@kakao.com") ) {
+            Optional<Member> member = memberService.getMemberWithAuthorities(memberEmail);
+            String result = KakaoUtil.logoutToKakao(member.get());
+        }
         // 2. redis에 refresh Token 삭제
         redisService.delRefreshToken(refreshToken);
         // 3. redis에 Access Token 블랙리스트 등록

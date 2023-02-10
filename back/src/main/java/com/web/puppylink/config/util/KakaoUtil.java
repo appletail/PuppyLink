@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -23,7 +24,9 @@ public class KakaoUtil {
 
     private static final String TOKENAUTH = "https://kauth.kakao.com/oauth/token";
     private static final String PROFILEAPI = "https://kapi.kakao.com/v2/user/me";
+    private static final String LOGOUT = "https://kapi.kakao.com/v1/user/logout";
     private static final String KEY = "c1a6f5a36cc3ee5bb64b3fb804e37407";
+    private static final String ADMIN_KEY = "f25ba205fb42653c1d8c426f6bf6ad5e";
     private static final String REQUEST = "http://localhost:8085/puppy/members/kakao";
 
     // 카카오 로그인해서 얻은 인가코드롤 AccessToken 및 refresh 토큰 얻는 함수
@@ -83,17 +86,31 @@ public class KakaoUtil {
 
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        KakaoDto kakaoDto = objectMapper.readValue(userInfo, KakaoDto.class);
-        logger.info("카카오 토큰에서 가져온 정보 properties : {}", kakaoUser.get("properties"));
-        logger.info("카카오 토큰에서 가져온 정보 account : {}", kakaoUser.get("kakao_account"));
+        logger.debug("카카오 토큰에서 가져온 정보 properties : {}", kakaoUser.get("properties"));
+        logger.debug("카카오 토큰에서 가져온 정보 account : {}", kakaoUser.get("kakao_account"));
 
         MemberDto member = new MemberDto();
         member.setEmail(kakao_account.get("email").getAsString());
-        member.setPassword("social_puppy");
+        member.setPassword("social_" + kakaoUser.get("id").getAsString());
         member.setPhone("00000000000");
         member.setName(properties.get("nickname").getAsString());
         member.setNickName(properties.get("nickname").getAsString());
 
         return member;
+    }
+
+    public static String logoutToKakao(Member member) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK  " + ADMIN_KEY);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
+
+        params.add("target_id_type",member.getEmail());
+        params.add("target_id", member.getPassword().replace("social_",""));
+
+        return "SUCCESS";
     }
 
 }
