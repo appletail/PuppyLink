@@ -215,7 +215,7 @@ public class MemberController {
         }
         // 회원등록 ( 봉사자 / 단체 )
         try {
-            if (member.getBusinessName() == null) {
+            if (member.getBusinessName() == null || member.getBusinessName().equals("")) {
                 // 봉사자를 회원가입합니다. 
                 memberService.signup(member);
                 return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
@@ -227,10 +227,8 @@ public class MemberController {
                         CommonCode.JOIN_MEMBER, null), HttpStatus.OK);
             }
         } catch (Exception e) {
-        	e.printStackTrace();
-        	
-        	return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
-                    ExceptionCode.EXCEPTION_SIGNUP, null), HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(new BasicResponseDto<ExceptionCode>(
+                    ExceptionCode.EXCEPTION_SIGNUP, false), HttpStatus.EXPECTATION_FAILED);
         }
     }
 

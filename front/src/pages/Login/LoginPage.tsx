@@ -1,7 +1,11 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { ErrorMessage } from '@hookform/error-message';
+
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { NavTop, inputs, buttons } from '@/components';
@@ -15,12 +19,12 @@ interface LoginProps {
 }
 
 function LoginPage() {
-  // recoil에서 서버주소 가져오기
 
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
   };
+
 
   // 이메일 유효성 검사 패턴
   const Regex = { email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g };
@@ -38,18 +42,47 @@ function LoginPage() {
       data: data,
     })
       .then((response) => {
-        // console.log(response)
+        const resData = response.data.data
         navigate('/')
         // Bearer를 제외하고 token을 저장합니다
         const access_token = response.headers.authorization.split(" ")[1];
         const refresh_token = response.headers.refreshtoken.split(" ")[1];
+
+        // local storage에 access token과 refresh token을 저장합니다
         if (access_token) {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
+
+          // recoil에 Login한 user의 정보를 LoginData로 저장합니다
+          const LoginData: Member =
+          {
+            email: resData.email,
+            name: resData.name,
+            phone: resData.phone,
+            nickName: resData.nickName,
+            activated: true,
+            authorities: [{ "authorityName": resData.authorities[0].authorityName }],
+            joinDate: resData.joinDate,
+          }
+          localStorage.setItem('userData', JSON.stringify(LoginData))
+
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+
+        toast.error(err.response.data.message, {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+
+
+
       });
   };
 
@@ -113,6 +146,7 @@ function LoginPage() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -43,10 +43,7 @@ function SignupConfirmPage() {
 
   useEffect(() => {
     if (formState.isValid && !isValidating) {
-      // console.log(data)
-      // console.log(state.businessNo)
-      // console.log(state)
-      // state.nickName != undefined ? console.log(state.nickName) : console.log("hello")
+
       const user_data = {
         auth: data.confirmNumber,
         businessName: state.businessName != undefined ? state.businessName : "",
@@ -59,7 +56,8 @@ function SignupConfirmPage() {
         presidentName: "",
         startDate: "",
       }
-      console.log(user_data)
+      // console.log(user_data)
+
       axBase({
         method: 'post',
         url: '/members',
@@ -67,7 +65,7 @@ function SignupConfirmPage() {
 
       })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           navigate('/signup/success', {
             replace: true,
             state: {
