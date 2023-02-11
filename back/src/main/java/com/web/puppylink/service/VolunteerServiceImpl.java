@@ -1,8 +1,12 @@
 package com.web.puppylink.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -381,6 +385,43 @@ public class VolunteerServiceImpl implements VolunteerService{
 		);
 		
 		System.out.println("response.getBody() : " + response.getBody());
+		
+		
+		//HttpHeader 오브젝트 생성
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers2.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+			    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
+		
+		//HttpBody 오브젝트 생성									
+		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
+		params2.add("iata_code", "CDG");
+		params2.add("api_key", "fdf4a6cd-42f2-48d4-87f1-1a375d234b94");
+
+		HttpEntity<MultiValueMap<String, String>> airLabsRequest2 = 
+				new HttpEntity<>(params2, headers2);
+		
+		ResponseEntity<Map> response2 = rt.exchange(
+				"https://airlabs.co/api/v9/airports",
+				HttpMethod.POST,
+				airLabsRequest2,
+				Map.class
+		);
+		System.out.println("response2 : " + response2);
+		System.out.println("response2.body : " + response2.getBody());
+		System.out.println("response2.header : " + response2.getHeaders());
+		System.out.println("response2.getStatusCodeValue : " + response2.getStatusCodeValue());
+		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
+
+		ArrayList m =  (ArrayList) response2.getBody().get("response");
+//		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
+		System.out.println("ArrayList m  : "  + m);
+		System.out.println("m.get(0) : " +  m.get(0));
+		LinkedHashMap a = (LinkedHashMap) m.get(0);
+		System.out.println("LinkedHashMap a : " + a);
+		System.out.println("a.keyset" + a.keySet());
+		System.out.println("a.get(\"lat\") :"  + a.get("lat"));
+//		System.out.println(	m.get(4));
 
 		return response;
 	}

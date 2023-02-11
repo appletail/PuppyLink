@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-<<<<<<< HEAD
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.config.jwt.TokenProvider;
@@ -31,12 +30,8 @@ import com.web.puppylink.repository.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
 import com.web.puppylink.repository.RefreshRedisRepository;
-=======
-import javax.management.openmbean.KeyAlreadyExistsException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
->>>>>>> 1099ecfcd2cc28fe2dfc014a5bd9078e420c5d06
+
+
 
 @Component("memberService")
 public class MemberServiceImpl implements MemberService{
@@ -227,13 +222,13 @@ public class MemberServiceImpl implements MemberService{
 		 Member member = memberRepository.findByNickName(nickName).orElseThrow(()
 				 -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 		 
-		 if(!member.getPassword().equals(passwordDto.getRawPassword())) {
+		 if ( !passwordEncoder.matches(passwordDto.getRawPassword(), member.getPassword())) {
 		        return new ResponseEntity<BasicResponseDto>(
 		            	new BasicResponseDto(
-		            			CommonCode.FAILED_UPDATE_PWD,
+		            			CommonCode.FAILED_UPDATE_PWD.getCode(),
 		            			null
 		            	), 
-		            	HttpStatus.NOT_FOUND
+		            	HttpStatus.OK
 		            );
 		 }
 
@@ -241,7 +236,7 @@ public class MemberServiceImpl implements MemberService{
 		member.setPassword(encPassword);
 		 return new ResponseEntity<BasicResponseDto>(
 	            	new BasicResponseDto(
-	            			CommonCode.SUCCESS_UPDATE_PWD,
+	            			CommonCode.SUCCESS_UPDATE_PWD.getCode(),
 	            			null
 	            	), 
 	            	HttpStatus.OK
