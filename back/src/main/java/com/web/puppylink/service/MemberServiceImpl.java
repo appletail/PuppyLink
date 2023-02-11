@@ -1,23 +1,37 @@
 package com.web.puppylink.service;
 
-import com.web.puppylink.config.util.SecurityUtil;
-import com.web.puppylink.config.auth.PrincipalDetails;
-import com.web.puppylink.config.jwt.TokenProvider;
-import com.web.puppylink.dto.MemberDto;
-import com.web.puppylink.dto.TokenDto;
-import com.web.puppylink.model.*;
-import com.web.puppylink.model.redis.AccessToken;
-import com.web.puppylink.repository.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.openmbean.KeyAlreadyExistsException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import com.web.puppylink.config.auth.PrincipalDetails;
+import com.web.puppylink.config.code.CommonCode;
+import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.config.util.SecurityUtil;
+import com.web.puppylink.dto.BasicResponseDto;
+import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.PasswordDto;
+import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.model.Authority;
+import com.web.puppylink.model.Member;
+import com.web.puppylink.model.redis.AccessToken;
+import com.web.puppylink.repository.AccessRedisRepository;
+import com.web.puppylink.repository.AuthRedisRepository;
+import com.web.puppylink.repository.FoundationRepository;
+import com.web.puppylink.repository.MemberRepository;
+import com.web.puppylink.repository.RefreshRedisRepository;
+
+
 
 @Component("memberService")
 public class MemberServiceImpl implements MemberService{
@@ -204,12 +218,29 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	@Transactional
-	public void update(String newPassword, String nickName) {
+	public Object update(PasswordDto passwordDto, String nickName) {
 		 Member member = memberRepository.findByNickName(nickName).orElseThrow(()
 				 -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+		 
+		 if(!member.getPassword().equals(passwordDto.getRawPassword())) {
+		        return new ResponseEntity<BasicResponseDto>(
+		            	new BasicResponseDto(
+		            			CommonCode.FAILED_UPDATE_PWD,
+		            			null
+		            	), 
+		            	HttpStatus.NOT_FOUND
+		            );
+		 }
 
-		 String encPassword = passwordEncoder.encode(newPassword);
+		String encPassword = passwordEncoder.encode(passwordDto.getNewPassword());
 		member.setPassword(encPassword);
+		 return new ResponseEntity<BasicResponseDto>(
+	            	new BasicResponseDto(
+	            			CommonCode.SUCCESS_UPDATE_PWD,
+	            			null
+	            	), 
+	            	HttpStatus.OK
+	      );
 	}
 
     @Override

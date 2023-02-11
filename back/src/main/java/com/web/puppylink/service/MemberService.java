@@ -2,6 +2,7 @@ package com.web.puppylink.service;
 
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.MemberDto;
+import com.web.puppylink.dto.PasswordDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.Auth;
@@ -22,7 +23,7 @@ public interface MemberService {
 	boolean duplicateCheckNickName(String nickName);
     void updateRefresh(String email, String refresh);
     Map<String, String> refresh(Authentication authentication);
-    public void update(String newPassword, String nickName) ;
+    public Object update(PasswordDto passwordDto, String nickName);
     public void deleteMemberByToken(TokenDto token) throws Exception;
 
 

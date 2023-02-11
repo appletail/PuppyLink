@@ -10,7 +10,9 @@ import com.web.puppylink.model.Comment;
 public interface BoardService {
 	Board getBoard(int boardNo);
 	List<Board> getBoardAll();
-	List<Board> getBestBoard();
+	List<Board> getBoardBest();
+	int getBoardRecent();
+	List<Board> getBoardInfinite(int boardNo);
 	Board create(BoardDto board);
 	Board update(BoardDto board);
 	void delete(int boardNo);
