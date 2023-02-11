@@ -1,10 +1,16 @@
-import LoginPage from '@/pages/Login/LoginPage';
+import PrivateRouter from './PrivateRouter';
 
+import LoginPage from '@/pages/Login/LoginPage';
 
 const Login = [
   {
-    path: '/login',
-    element: <LoginPage />,
+    element: <PrivateRouter authentication={false} />,
+    children: [
+      {
+        path: '/login',
+        element: <LoginPage />
+      }
+    ]
   },
 ]
 

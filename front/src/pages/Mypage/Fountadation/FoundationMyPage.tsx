@@ -7,7 +7,7 @@ import { buttons, NavTop } from '@/components'
 import { LoginState } from '@/states/LoginState'
 
 
-function UserMyPage() {
+function FoundationMyPage() {
   let useremail = ""
   let usernickName = ""
   // recoil에서 로그인 여부를 판단한다.
@@ -41,9 +41,9 @@ function UserMyPage() {
       </div>
       <hr className='w-screen bg-grey border-none h-[0.5px] mb-5' />
       <div className='px-5 mb-8'>
-        <p className='text-title2-bold mb-8'>나의 봉사 현황</p>
+        <p className='text-title2-bold mb-8'>단체 정보 관리</p>
         <div className='flex flex-col gap-2'>
-          <Link to='/mypage/user/vollist'><p className='h-10 flex items-center'>봉사 신청 내역</p></Link>
+          <Link to='/mypage/vollist'><p className='h-10 flex items-center'>단체 소개</p></Link>
           <p className='h-10 flex items-center'>내 후기</p>
         </div>
       </div>
@@ -60,4 +60,4 @@ function UserMyPage() {
   )
 }
 
-export default UserMyPage
+export default FoundationMyPage
