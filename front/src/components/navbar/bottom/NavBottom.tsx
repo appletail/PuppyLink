@@ -9,15 +9,24 @@ import NavStyle from './NavBottom.module.css'
 
 function NavBottom(): JSX.Element {
 
-  const role = { 'member': 'member', 'foundation': 'foundation', 'undefined': undefined }
+  const roleIdentify = { 'member': 'ROLE_USER', 'foundation': 'ROLE_MANAGER', 'undefined': "" }
+  // const roles = 'member'
+  // const roleIdentify = { 'member': 'member', 'foundation': 'foundation', 'undefined': "" }
+  let roles = ""
 
-  const roles = 'member'
+  const isAuthenticated = localStorage.getItem("access-token")
+  if (isAuthenticated) {
+    const userData = localStorage.getItem("userData") || ""
+    const { role } = JSON.parse(userData)
+    roles = role
+  }
+  console.log(roles)
 
   const icons = [
     { id: 'Home', link: '/', fill: AiFillHome, empty: AiOutlineHome },
     {
       id: 'Volunteer',
-      link: roles == undefined ? '/login' : roles == role.foundation ? '/volunteer/admin' : 'volunteer',
+      link: roles == roleIdentify.undefined ? '/login' : roles == roleIdentify.foundation ? '/volunteer/admin' : 'volunteer',
       fill: RiHandHeartFill, empty: RiHandHeartLine
     },
     { id: 'Review', link: '/review', fill: IoNewspaperSharp, empty: IoNewspaperOutline },
