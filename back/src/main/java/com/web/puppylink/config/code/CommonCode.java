@@ -60,6 +60,8 @@ public enum CommonCode {
 	SUCCESS_S3_DELETE(2209, "필수서류 삭제에 성공하였습니다."),
 	FAILED_S3_DELETE(2210, "필수서류 삭제에 실패하였습니다"),
 	SUCCESS_DESCRIPTION(2211, "단체 소개글 등록에 성공하였습니다."),
+	SUCCESS_S3_UPDATE(2212, "필수서류 삭제 수정에 성공하였습니다."),
+	FAILED_S3_UPDATE(2213, "필수서류 삭제 수정에 실패하였습니다"),
 	
 	SELECT_GPS(2301, "해당하는 편명의 실시간 항공기 정보를 성공적으로 조회했습니다."),
 	FAILED_UPDATE_PWD(2302, "봉사자의 현재 비밀번호가 다릅니다."),

@@ -3,6 +3,7 @@ package com.web.puppylink.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.FlightTicketDto;
@@ -338,8 +343,6 @@ public class VolunteerServiceImpl implements VolunteerService{
 			// db 삭제
 			cancel(volunteerNo);							
 		}
-		
-		
 	}
 	
 
@@ -383,6 +386,33 @@ public class VolunteerServiceImpl implements VolunteerService{
 		System.out.println("response.getBody() : " + response.getBody());
 
 		return response;
+	}
+
+	@Transactional
+	@Override
+	public Volunteer updateFile(FileRequest file) {
+
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(file.getVolunteerNo()).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		try {
+			deleteFile(file);
+			
+			String ticketType = file.getTicketType();
+			String imagePath = file.getImagePath();
+			
+			if(ticketType.equals("flight")) {
+				volunteer.setFlightURL(imagePath);
+			} else {
+				volunteer.setPassportURL(imagePath);
+			}
+			
+		} catch (Exception e) {
+			  e.printStackTrace();
+			  throw new RuntimeException("s3 객체를 수정하는데 실패했습니다.");
+		}
+		return volunteer;
 	}
 
 }
