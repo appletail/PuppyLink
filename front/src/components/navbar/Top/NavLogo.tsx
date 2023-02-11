@@ -40,6 +40,7 @@ function NavTop(): JSX.Element {
     }).then(() => {
       localStorage.clear()
       setisLoggedIn(false)
+      navigate("/login")
     }
     ).catch((err) => { console.log(err) })
   }

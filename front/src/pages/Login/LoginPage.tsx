@@ -53,7 +53,7 @@ function LoginPage() {
           localStorage.setItem('access-token', access_token);
           localStorage.setItem('refresh-token', refresh_token);
 
-          // recoil에 Login한 user의 정보를 LoginData로 저장합니다
+          // local storage에 Login한 user의 정보를 userData로 저장합니다
           const LoginData: Member =
           {
             email: resData.email,
@@ -63,6 +63,7 @@ function LoginPage() {
             activated: true,
             authorities: [{ "authorityName": resData.authorities[0].authorityName }],
             joinDate: resData.joinDate,
+            role: resData.authorities[0].authorityName
           }
           localStorage.setItem('userData', JSON.stringify(LoginData))
 

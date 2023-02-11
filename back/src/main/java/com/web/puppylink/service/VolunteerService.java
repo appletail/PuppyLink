@@ -3,6 +3,7 @@ package com.web.puppylink.service;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.TokenDto;
@@ -63,9 +64,13 @@ public interface VolunteerService {
 	
 	// 봉사자 필수서류 삭제
 	void deleteFile(FileRequest file);
-
+	
+	// 봉사자 필수서류 수정
+	Volunteer updateFile(FileRequest file);
+	
 	// 회원탈퇴 시 s3에 저장된 필수서류 삭제
 	void deleteALLFile(TokenDto token);
 
 	ResponseEntity<String> flightInfo(int volunteerNo);
+
 }

@@ -1,14 +1,29 @@
+import PrivateRouter from './PrivateRouter';
+
+import ProtectRoute from './ProtectRoute';
+
 import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
 import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
 
 const Volunteer = [
   {
-    path: '/volunteer',
-    element: <VolUserResiPage />,
-  },
-  {
-    path: '/volunteer/admin',
-    element: <VolAdminPage />,
+    element: <PrivateRouter authentication={true} />,
+    // path: '/volunteer',
+    children: [
+      {
+        element: <ProtectRoute />,
+        children: [
+          {
+            path: '/volunteer/user',
+            element: <VolUserResiPage />,
+          },
+          {
+            path: '/volunteer/manager',
+            element: <VolAdminPage />,
+          }
+        ]
+      },
+    ]
   }
 ]
 

@@ -62,6 +62,7 @@ interface Member {
   activated: boolean
   authorities: Array<{ authorityName: string }>
   joinDate: Date
+  role: RoleType
 }
 
 interface Business {
@@ -82,4 +83,20 @@ interface Volunteer {
   email: member
   businessNo: Business
   description: string
+}
+
+interface Role {
+  USER: "ROLE_USER"
+  MANAGER: "ROLE_MANAGER"
+  ADMIN: "ROLE_ADMIN"
+}
+
+type RoleType = typeof Role[keyof Role]
+
+interface Category {
+  idx: number
+  name: string
+  path: string
+  role: Array<RoleType>
+  sub: Array<Category>
 }

@@ -11,5 +11,7 @@ public interface BoardRepository extends JpaRepository<Board,String>{
 	Optional<Board> findBoardByBoardNo(int boardNo);
 	Optional<List<Board>> findBoardAllByOrderByBoardNoDesc();
 	Optional<List<Board>> findBoardAllByOrderByLikesDesc();
+	Optional<Board> findTop1BoardByBoardNoLessThanOrderByBoardNoDesc(int boardNo);
+	Optional<List<Board>> findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(int boardNo);
 	void deleteBoardByBoardNo(int boardNo);
 }

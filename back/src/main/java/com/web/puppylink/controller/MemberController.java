@@ -235,7 +235,7 @@ public class MemberController {
 
     @GetMapping()
     @ApiOperation(value = "회원조회")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')")
     public ResponseEntity<Member> getMyInfo() {
         return ResponseEntity.ok(memberService.getMyMemberWithAuthorities().get());
     }

@@ -77,12 +77,40 @@ private final BoardServiceImpl boardService;
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/best")
     @ApiOperation(code = 200, value = "베스트 게시글 조회", notes = "베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
-    public Object selectBestBoard() {
+    public Object selectBoardBest() {
         // return ResponseEntity.ok(boardService.getBestBoard());
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_BEST,
-            			boardService.getBestBoard()
+            			boardService.getBoardBest()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 가장 최근에 작성된 게시글의 번호를 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/recent")
+    @ApiOperation(code = 200, value = "가장 최근에 작성된 게시글 번호 반환", notes = "가장 최근에 작성된 게시글의 번호를 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardRecent() {
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_RECENT,
+            			boardService.getBoardRecent()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 무한 스크롤이 적용된 게시글을 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/infinite/{boardNo}")
+    @ApiOperation(code = 200, value = "무한 스크롤 게시글 조회", notes = "현재 전달된 게시글보다 이전에 작성된 게시글 5개를 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardInfinite(@PathVariable final int boardNo) {
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_INFINITE,
+            			boardService.getBoardInfinite(boardNo)
             	), 
             	HttpStatus.OK
             );
@@ -132,8 +160,6 @@ private final BoardServiceImpl boardService;
     public void like(@PathVariable final int boardNo, @PathVariable final String nickName) {
     	boardService.like(boardNo, nickName);
     }
-    
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PostMapping("/comment")

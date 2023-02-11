@@ -64,9 +64,29 @@ public class BoardServiceImpl implements BoardService{
 	
 	@Transactional
 	@Override
-	public List<Board> getBestBoard() {
+	public List<Board> getBoardBest() {
 		List<Board> boardInfoList = boardRepository.findBoardAllByOrderByLikesDesc().orElseThrow(()->{
 			return new IllegalArgumentException("베스트 게시글 목록 정보를 찾을 수 없습니다.");
+		});
+		return boardInfoList;
+	}
+	
+	// 게시판 페이지에 존재하는 게시글의 번호 중, 가장 큰(가장 최근에 작성된) 번호를 반환받는다.
+	@Transactional
+	@Override
+	public int getBoardRecent() {
+		Board boardInfo = boardRepository.findTop1BoardByBoardNoLessThanOrderByBoardNoDesc(Integer.MAX_VALUE).orElseThrow(()->{
+			return new IllegalArgumentException("작성된 게시글이 없습니다.");
+		});
+		return boardInfo.getBoardNo();
+	}
+	
+	// 게시판 페이지에 존재하는 게시글의 번호 중, 가장 작은 번호를 매개변수로 전달받는다.
+	@Transactional
+	@Override
+	public List<Board> getBoardInfinite(int boardNo) {
+		List<Board> boardInfoList = boardRepository.findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(boardNo).orElseThrow(()->{
+			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
 		});
 		return boardInfoList;
 	}
@@ -119,7 +139,7 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 	
-	// 게시글 삭제시, 해당 게시글에 작성되어 있는 댓글들이 모두 삭제될 수 있도록 한다.
+	// 게시글 삭제시, 해당 게시글에 작성되어 있는 댓글들과 반영되어 있는 좋아요가 모두 삭제될 수 있도록 한다.
 	@Transactional
 	@Override
 	public void delete(int boardNo) {
@@ -130,6 +150,12 @@ public class BoardServiceImpl implements BoardService{
 		List<Comment> commentList = commentRepository.findCommentByBoardNo(boardInfo);
 		for(Comment comment : commentList) {
 			commentRepository.delete(comment);
+		}
+		
+		List<Likes> likesList = likesRepository.findLikesByBoardNo(boardInfo);
+		System.out.println(likesList);
+		for(Likes like : likesList) {
+			likesRepository.delete(like);
 		}
 		
 		boardRepository.deleteBoardByBoardNo(boardNo);
