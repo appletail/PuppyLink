@@ -1,18 +1,32 @@
 import { useEffect, useState } from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import FooterController from './FooterController'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
+import { LoginState } from '@/states/LoginState'
 
 function UserSortedVol({ status }: { status: status }) {
 
   const [volunteers, setVolunteers] = useState([])
   const [modal, setModal] = useState<boolean[]>([])
 
+
+  let usernickName = ""
+  // recoil에서 로그인 여부를 판단한다.
+  const isLoggedIn = useRecoilValue(LoginState)
+  if (isLoggedIn) {
+    // 로그인 되어있다면 userData를 가져온다
+    const userData = localStorage.getItem("userData") || ""
+    const { nickName } = JSON.parse(userData)
+    usernickName = nickName
+  }
+
   useEffect(() => {
     axBase({
-      url: `/volunteer/member/${'bread'}/${status}`,
+      url: `/volunteer/member/${usernickName}/${status}`,
     })
       .then((res) => setVolunteers(res.data.data))
   }, [status])
