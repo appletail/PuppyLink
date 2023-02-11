@@ -319,7 +319,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		List<Volunteer> volList = volunteerRepository.findVolunteerByEmail(member);
-		
+		System.out.println(volList.size());
 		for (int i = 0; i < volList.size(); i++) {
 			Volunteer volunteer = volList.get(i);
 			int volunteerNo = volunteer.getVolunteerNo();

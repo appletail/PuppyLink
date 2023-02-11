@@ -2,11 +2,13 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { ErrorMessage } from '@hookform/error-message';
+import { useRecoilValue } from 'recoil';
 
 import { NavTop, buttons, inputs } from '@/components'
+import { LoginState } from '@/states/LoginState';
 
 interface PasswordProps {
-  currentPassword: string;
+  rawPassword: string;
   newPassword: string;
   newPasswordConfirm: string;
 }
@@ -29,6 +31,19 @@ function UserChangePassword() {
 
   const onSubmit: SubmitHandler<PasswordProps> = (data) => { console.log(data) }
 
+  let useremail = ""
+  let usernickName = ""
+  // recoil에서 로그인 여부를 판단한다.
+  const isLoggedIn = useRecoilValue(LoginState)
+  if (isLoggedIn) {
+    // 로그인 되어있다면 userData를 가져온다
+    const userData = localStorage.getItem("userData") || ""
+    const { email, nickName } = JSON.parse(userData)
+    useremail = email
+    usernickName = nickName
+  }
+
+
   return (
     <div>
       <div><NavTop.NavBack NavContent='비밀번호 변경' /></div>
@@ -40,11 +55,11 @@ function UserChangePassword() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <inputs.InputForm control={control}
-              name="currentPassword"
+              name="rawPassword"
               placeholder="현재 비밀번호"
               rules={{}}
               type="password" />
-            <ErrorMessage errors={errors} name="currentPassword" />
+            <ErrorMessage errors={errors} name="rawPassword" />
 
             <inputs.InputForm control={control}
               name="newPassword"
