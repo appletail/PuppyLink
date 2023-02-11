@@ -8,8 +8,11 @@ import {
 import { axBase } from '@/apis/api/axiosInstance'
 import  {Airplanes} from '@/assets/Airplanes'
 
+//setinterval로 하지 않고 밖에서 1회성의 공항 마크 찍기가 필요함
+
+
 const mapOptions = {
-  zoom: 12,
+  zoom: 9,
   center: {
     lat: 43.68,
     lng: -79.43,
@@ -125,8 +128,6 @@ function Location() {
     markerRef.current = new google.maps.Marker({ map,
     icon : icons[0].icon });
   }, [map]);
-
-
 
   setInterval(() => {
     if (!markerRef.current || !map) return;

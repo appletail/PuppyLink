@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { footers, buttons, labels } from '@/components'
 
 
-function FooterController(status: status) {
+function FooterController({ status, volNo }: { status: status, volNo: number }) {
 
 
   const Controller = {
@@ -13,7 +13,11 @@ function FooterController(status: status) {
       BtnRight={<labels.Label LabelValue='접수 대기' />}
       onClick={(e) => e.stopPropagation()} />,
     'regist': <footers.FooterBtn
+<<<<<<< HEAD
       BtnLeft={<Link to='/mypage/user/userfiledocs'><buttons.BtnSm BtnValue='서류 제출' /></Link>}
+=======
+      BtnLeft={<Link state={{ volNo }} to='/mypage/userfiledocs'><buttons.BtnSm BtnValue='서류 제출' /></Link>}
+>>>>>>> dev
       BtnRight={<labels.Label LabelValue='접수 완료' />}
       onClick={(e) => e.stopPropagation()} />,
     'lack': <footers.FooterBtn

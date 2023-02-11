@@ -38,7 +38,7 @@ function NewVolCarousel() {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController('submit')}
+            CardFooter={FooterController('submit', volunteer.volunteerNo)}
             CardTitle={volunteer.email.name}
           />
         </div>
@@ -56,7 +56,8 @@ function NewVolCarousel() {
 
 
   return (
-    <div className='flex gap-4 overflow-y-scroll'>
+    <div className='flex gap-4 overflow-y-scroll h-48'>
+      {volunteers.length == 0 && <p className='text-title3-bold'>새로운 요청이 없습니다.</p>}
       {volunteerCards}
     </div>
   )

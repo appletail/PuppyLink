@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 public class PasswordDto {
 	@ApiModelProperty(name = "새 비밀번호", required = true)
 	private String newPassword;
+<<<<<<< HEAD
 	@ApiModelProperty(name = "기존 비밀번호", required = true)
+=======
+	@ApiModelProperty(dataType = "기존 비밀번호", required = true)
+>>>>>>> dev
 	private String rawPassword;
 }

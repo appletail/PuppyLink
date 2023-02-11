@@ -1,13 +1,26 @@
 import React from 'react'
 
+import { axBase } from '@/apis/api/axiosInstance'
 import { footers, buttons, labels } from '@/components'
 
 
-function FooterController(status: status) {
+function FooterController(status: status, volunteerNo: number) {
+
+
+  const regist = () => {
+    axBase({
+      method: 'put',
+      url: `/volunteer/regist/${volunteerNo}`,
+      // data: { volunteerNo }
+    })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+
+  }
 
   const Controller = {
     'submit': <footers.FooterBtn
-      BtnLeft={<buttons.BtnSm BtnValue='수락' />}
+      BtnLeft={<buttons.BtnSm BtnValue='수락' onClick={regist} />}
       BtnRight={<buttons.BtnSm BtnValue='거절' />}
       onClick={(e) => e.stopPropagation()} />,
     'regist': <footers.FooterBtn

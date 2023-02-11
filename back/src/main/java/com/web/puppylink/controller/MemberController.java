@@ -284,9 +284,9 @@ public class MemberController {
 
     @PutMapping("/{nickName}/change")
     @ApiOperation(value = "비밀번호 변경")
-    public ResponseEntity<Integer> update(@RequestBody PasswordDto passwordDto, @PathVariable String nickName) {
-    	memberService.update(passwordDto, nickName);
-    	return new ResponseEntity<Integer>(1, HttpStatus.OK);
+    public Object update(@RequestBody PasswordDto passwordDto, @PathVariable String nickName) {
+    	
+    	return memberService.update(passwordDto, nickName);
     }
 
     @GetMapping("/checkEmail/{email}")
