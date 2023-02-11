@@ -1,8 +1,6 @@
 package com.web.puppylink.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,14 +9,24 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@ApiModel
 public class GpsDto {
 	//위도 , 경도, 방향, 출발공항(위도 경도), 도착공항(위도 경도)
-    @ApiModelProperty(name = "위도", required = true, example = "0")
+    @ApiModelProperty(name = "항공기 위도", required = true, example = "0")
     private String lat;
-    @ApiModelProperty(name = "경도", required = true, example = "0")
+    @ApiModelProperty(name = "항공기 경도", required = true, example = "0")
     private String lng;
     @ApiModelProperty(name = "방향", required = true, example = "0")
     private String dir;
+    
+    @ApiModelProperty(name = "출발 공항 위도", required = true, example = "0")
+    private String depLat;
+    @ApiModelProperty(name = "출발 공항 경도", required = true, example = "0")
+    private String depLng;
+    
+    @ApiModelProperty(name = "도착 공항 위도", required = true, example = "0")
+    private String arriveLat;
+    @ApiModelProperty(name = "도착 공항 경도", required = true, example = "0")
+    private String arriveLng;
+    
 }

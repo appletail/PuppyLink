@@ -222,13 +222,13 @@ public class MemberServiceImpl implements MemberService{
 		 Member member = memberRepository.findByNickName(nickName).orElseThrow(()
 				 -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 		 
-		 if(!member.getPassword().equals(passwordDto.getRawPassword())) {
+		 if ( !passwordEncoder.matches(passwordDto.getRawPassword(), member.getPassword())) {
 		        return new ResponseEntity<BasicResponseDto>(
 		            	new BasicResponseDto(
-		            			CommonCode.FAILED_UPDATE_PWD,
+		            			CommonCode.FAILED_UPDATE_PWD.getCode(),
 		            			null
 		            	), 
-		            	HttpStatus.NOT_FOUND
+		            	HttpStatus.OK
 		            );
 		 }
 
@@ -236,7 +236,7 @@ public class MemberServiceImpl implements MemberService{
 		member.setPassword(encPassword);
 		 return new ResponseEntity<BasicResponseDto>(
 	            	new BasicResponseDto(
-	            			CommonCode.SUCCESS_UPDATE_PWD,
+	            			CommonCode.SUCCESS_UPDATE_PWD.getCode(),
 	            			null
 	            	), 
 	            	HttpStatus.OK
