@@ -23,7 +23,7 @@ function UserFileDocs() {
     // 여권사진 전송
     const file = data.image[0]
     const fileDto = {
-      nickName: 'bread',
+      nickName: '무웅',
       ticketType: 'passport',
       volunteerNo,
     }
@@ -65,7 +65,7 @@ function UserFileDocs() {
   const submitOCR = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     const fileDto = {
-      nickName: 'bread',
+      nickName: '무웅',
       ticketType: 'flight',
       volunteerNo,
     }
