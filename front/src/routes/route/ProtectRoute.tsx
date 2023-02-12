@@ -50,6 +50,13 @@ const category: Array<Category> = [
             , role: [role.USER]
             , sub: []
           },
+          {
+            idx: 10
+            , name: "일반 회원 봉사 서류 제출 페이지"
+            , path: "/userfiledocs"
+            , role: [role.USER]
+            , sub: []
+          },
         ]
       },
       {

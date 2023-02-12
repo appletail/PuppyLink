@@ -5,7 +5,7 @@ export const interceptors = (instance: AxiosInstance) => {
     (config) => {
       const token = localStorage.getItem('access-token');
 
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
       return config;
     },
     (error) => Promise.reject(error.response)
@@ -32,10 +32,10 @@ const axiosAuthApi = (url: string, options?: object) => {
 };
 
 const axioskakao = (url: string, options?: object) => {
-  const instance = axios.create({ baseURL: url, ...options});
+  const instance = axios.create({ baseURL: url, ...options });
   return instance;
 }
 
 export const axBase = axiosApi(BASE_URL);
 export const axAuth = axiosAuthApi(BASE_URL);
-export const kakaoAuth  = axioskakao(KAKAO_URL);
+export const kakaoAuth = axioskakao(KAKAO_URL);

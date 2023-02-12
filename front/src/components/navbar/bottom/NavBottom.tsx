@@ -14,8 +14,6 @@ import { LoginState } from "@/states/LoginState";
 function NavBottom(): JSX.Element {
 
   const roleIdentify = { 'user': 'ROLE_USER', 'manager': 'ROLE_MANAGER', 'undefined': "" }
-  // const roleIdentify = { 'member': 'member', 'foundation': 'foundation', 'undefined': "" }
-  // const roles = 'member'
   let roles = ""
 
   const isAuthenticated: boolean = localStorage.getItem("access-token") ? true : false
