@@ -81,8 +81,8 @@ const category: Array<Category> = [
 
 function ProtectRoute(): ReactElement | null {
 
-  // 로그인 되어있을 때에는 roles를 변경한다.
-  const userData = localStorage.getItem("userData") || ""
+  // 로그인 되어있을 때(sessionStorage에서 가져온다) 에는 roles를 변경한다.
+  const userData = sessionStorage.getItem("userData") || ""
   const loginMember: Member = JSON.parse(userData)
   // console.log(loginMember.role)
 

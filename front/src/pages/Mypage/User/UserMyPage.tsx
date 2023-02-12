@@ -17,7 +17,7 @@ function UserMyPage() {
   const isLoggedIn = useRecoilValue(LoginState)
   if (isLoggedIn) {
     // 로그인 되어있다면 userData를 가져온다
-    const userData = localStorage.getItem("userData") || ""
+    const userData = sessionStorage.getItem("userData") || ""
     const { email, nickName } = JSON.parse(userData)
     useremail = email
     usernickName = nickName
@@ -27,8 +27,8 @@ function UserMyPage() {
   const [withdraw, setWithdraw] = useState(false)
   // 탈퇴
   const userWithdraw = () => {
-    const accessToken = localStorage.getItem('access-token')
-    const refreshToken = localStorage.getItem('refresh-token')
+    const accessToken = sessionStorage.getItem('access-token')
+    const refreshToken = sessionStorage.getItem('refresh-token')
     axBase({
       url: '/members',
       method: 'delete',
