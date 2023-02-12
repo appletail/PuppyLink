@@ -25,13 +25,14 @@ function UserSortedVol({ status, volCount }: { status: status, volCount: (count:
   }
 
   useEffect(() => {
-    axBase({
-      url: `/volunteer/member/${usernickName}/${status}`,
-    })
-      .then((res) => {
-        setVolunteers(res.data.data)
-        volCount(res.data.data.length)
+    usernickName &&
+      axBase({
+        url: `/volunteer/member/${usernickName}/${status}`,
       })
+        .then((res) => {
+          setVolunteers(res.data.data)
+          volCount(res.data.data.length)
+        })
   }, [status])
 
   useEffect(() => {

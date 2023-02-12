@@ -35,7 +35,6 @@ function UserVolLst() {
           {/* 봉사 카드 */}
           <UserSortedVol status={status} volCount={(count: number) => setCount(count)} />
         </div>
-
       </div>
     </div>
   )

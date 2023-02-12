@@ -13,7 +13,7 @@ function FooterController({ status, volNo }: { status: status, volNo: number }) 
       BtnRight={<labels.Label LabelValue='접수 대기' />}
       onClick={(e) => e.stopPropagation()} />,
     'regist': <footers.FooterBtn
-      BtnLeft={<Link state={{ volNo }} to='/mypage/userfiledocs'><buttons.BtnSm BtnValue='서류 제출' /></Link>}
+      BtnLeft={<Link state={{ volNo }} to='/mypage/user/userfiledocs'><buttons.BtnSm BtnValue='서류 제출' /></Link>}
       BtnRight={<labels.Label LabelValue='접수 완료' />}
       onClick={(e) => e.stopPropagation()} />,
     'lack': <footers.FooterBtn

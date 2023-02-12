@@ -1,14 +1,40 @@
 import { useState } from 'react'
 
+import { useRecoilValue } from 'recoil'
+
 import NewVolCarousel from './Components/NewVolCarousel'
 import SortedVol from './Components/SortedVol'
 
+import { axBase } from '@/apis/api/axiosInstance'
 import { NavTop } from '@/components'
+import { LoginState } from '@/states/LoginState'
 import style from '@/styles/pages/Volunteer/VolAdminPage.module.css'
 
 function VolAdminPage() {
 
   const [status, setStatus] = useState<status>("submit")
+  const [businessNo, setBusinessNo] = useState<string>("")
+
+  let nickName = ""
+
+  // recoil에서 로그인 여부를 판단한다.
+  const isLoggedIn = useRecoilValue(LoginState)
+  if (isLoggedIn) {
+    // 로그인 되어있다면 userData를 가져온다
+    const userData = localStorage.getItem("userData") || ""
+    const parsedUserData = JSON.parse(userData)
+    nickName = parsedUserData.nickName
+  }
+
+  axBase({ url: '/foundation/list' })
+    .then((res) => {
+      const datas = res.data.data
+      datas.forEach((cur: foundation) => {
+        if (cur.email.nickName === nickName) {
+          setBusinessNo(cur.businessNo)
+        }
+      })
+    })
 
   return (
     <div>
@@ -16,7 +42,7 @@ function VolAdminPage() {
       <div className={style.Carousel}>
         <p className={style.NewTitle}>새로 요청이 들어온 봉사자</p>
         {/* 새로운 요청이 들어온 봉사자 */}
-        <NewVolCarousel />
+        <NewVolCarousel businessNo={businessNo} />
       </div>
       <div className={style.Scroll}>
         <p className={style.SortTitle}>봉사자 관리하기</p>
@@ -31,7 +57,7 @@ function VolAdminPage() {
             <option value="complete">봉사 완료</option>
           </select>
         </div>
-        <SortedVol status={status} />
+        <SortedVol businessNo={businessNo} status={status} />
       </div>
     </div>
   )

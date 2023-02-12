@@ -70,7 +70,6 @@ function LoginPage() {
         }
       })
       .catch((err) => {
-        // console.log(err);
 
         toast.error(err.response.data.message, {
           autoClose: 3000,
@@ -81,9 +80,6 @@ function LoginPage() {
           progress: undefined,
           theme: 'colored',
         })
-
-
-
       });
   };
 

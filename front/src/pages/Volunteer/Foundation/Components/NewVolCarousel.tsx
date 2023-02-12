@@ -6,17 +6,18 @@ import Modal from './ModalVolunteer'
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
 
-function NewVolCarousel() {
+function NewVolCarousel({ businessNo }: { businessNo: string }) {
 
   const [volunteers, setVolunteers] = useState([])
   const [modal, setModal] = useState<boolean[]>([])
 
   useEffect(() => {
-    axBase({
-      url: `/volunteer/foundation/${'2308201019'}/submit`,
-    })
-      .then((res) => setVolunteers(res.data.data))
-  }, [])
+    businessNo &&
+      axBase({
+        url: `/volunteer/foundation/${businessNo}/submit`,
+      })
+        .then((res) => setVolunteers(res.data.data))
+  }, [businessNo])
 
   useEffect(() => {
     setModal(Array(volunteers.length).fill(false))
