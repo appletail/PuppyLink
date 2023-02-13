@@ -74,7 +74,7 @@ function LoginPage() {
       })
       .catch((err) => {
 
-        toast.error(err.response.data.message, {
+        toast.error(err, {
           autoClose: 3000,
           position: toast.POSITION.BOTTOM_CENTER,
           closeOnClick: true,
