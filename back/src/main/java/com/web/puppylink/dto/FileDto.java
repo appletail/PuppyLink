@@ -16,5 +16,7 @@ public class FileDto {
     private String ticketType;
     @ApiModelProperty(name = "닉네임")
     private String nickName;
+    @ApiModelProperty(name = "게시글 번호")
+    private int boardNo;
 
 }
