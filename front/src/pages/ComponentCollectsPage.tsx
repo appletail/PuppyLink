@@ -1,7 +1,7 @@
 import { FaPlaneDeparture } from 'react-icons/fa';
 
 import { ReactComponent as Korair } from '@/assets/Korair.svg'
-import { buttons, cards, labels, footers, imgs, NavBottom, inputs } from '@/components';
+import { buttons, cards, labels, footers, imgs, NavBottom, inputs, NavTop } from '@/components';
 
 function ComponentCollectsPage() {
   const whereareyou = (
@@ -13,6 +13,7 @@ function ComponentCollectsPage() {
 
   return (
     <div className="ComponentCollectsPage">
+      <NavTop.NavLogo />
       <footers.FooterHeart HeartCount={123} IsLiked={true} Username="harim" />
       <Korair />
       <labels.Label LabelValue="비행기 경로 확인" />
@@ -83,14 +84,10 @@ function ComponentCollectsPage() {
           src: 'https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg',
         }}
       />
-      <imgs.ImgLg src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
-      <imgs.ImgSm src='https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg' />
+      <imgs.ImgLg src="https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg" />
+      <imgs.ImgSm src="https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg" />
 
-      <inputs.Input
-        InputType="text"
-        helper="asdf??"
-        placeholder="r개편함"
-      />
+      <inputs.Input InputType="text" helper="asdf??" placeholder="r개편함" />
       <inputs.Input
         InputType="password"
         helper="비밀번호를 입력하세뇨"
@@ -107,6 +104,8 @@ function ComponentCollectsPage() {
           />
         }
       />
+
+
       <NavBottom />
     </div>
   );

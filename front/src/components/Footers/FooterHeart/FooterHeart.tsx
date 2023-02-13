@@ -1,6 +1,7 @@
-import FtStyle from './FooterHeart.module.css';
-import { FiHeart } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
+import { FiHeart } from 'react-icons/fi';
+
+import FtStyle from './FooterHeart.module.css';
 
 interface FooterHeart extends FooterProps {
   Username: string;

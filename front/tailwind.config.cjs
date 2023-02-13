@@ -24,6 +24,7 @@ module.exports = {
         30: '#FFF0C5',
         10: '#FFFAEC',
       },
+      select: '#F2F4F8',
     },
     fontSize: {
       caption2: [

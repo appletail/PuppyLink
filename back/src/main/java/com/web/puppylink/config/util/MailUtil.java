@@ -1,31 +1,28 @@
 package com.web.puppylink.config.util;
 
-import com.web.puppylink.dto.MailDto;
+import com.web.puppylink.model.redis.Auth;
 import lombok.NoArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.mail.SimpleMailMessage;
 
-import javax.annotation.Resource;
 import java.util.Random;
 
 @NoArgsConstructor
 public class MailUtil {
 
     private static final int leftLimit = 48;    // '0'
-    private static final int rightLimit = 122;  // 'z'
+    private static final int rightLimit = 56;  // 'z'
 
     public static String randomAuth() {
         Random random = new Random();
         String generatedString = random.ints(leftLimit, rightLimit + 1)
-                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >=97 ))
-                .limit(6)
+//                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >=97 ))
+                .limit(4)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         return generatedString;
     }
 
-    public static SimpleMailMessage createMail(MailDto mail) {
+    public static SimpleMailMessage createMail(Auth mail) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getEmail());

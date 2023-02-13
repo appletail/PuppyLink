@@ -1,10 +1,20 @@
 package com.web.puppylink.service;
 
-import com.web.puppylink.dto.MailDto;
+import com.web.puppylink.model.redis.AccessToken;
+import com.web.puppylink.model.redis.Auth;
+import com.web.puppylink.model.redis.RefreshToken;
+
+import javax.persistence.Access;
+import java.util.Optional;
 
 public interface RedisService {
 
-    void saveMail(MailDto mail) throws Exception;
-    void saveToken() throws Exception;
-    boolean getConfirmAuthByEamil(String email, String Auth) throws Exception;
+    void saveAuth(Auth auth);
+    Optional<Auth> findAuth(String email);
+    void saveRefreshToken(RefreshToken refresh);
+    boolean confirmRefreshToken(RefreshToken refresh);
+    public void delRefreshToken(RefreshToken token);
+    void saveAccessToken(AccessToken acess);
+    Optional<AccessToken> findAccessToken(AccessToken access);
+
 }

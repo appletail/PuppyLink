@@ -8,3 +8,9 @@
   line-height: 24px;
   font-weight: 400;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}

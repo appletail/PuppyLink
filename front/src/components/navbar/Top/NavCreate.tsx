@@ -1,5 +1,6 @@
-import NavStyle from './NavTop.module.css';
 import { FiChevronLeft } from 'react-icons/fi';
+
+import NavStyle from './NavTop.module.css';
 
 function NavCreate() {
   return (
