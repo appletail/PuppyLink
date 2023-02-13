@@ -1,10 +1,6 @@
 import SmStyle from './CardSm.module.css';
 
-interface SmProps extends Omit<CardProps, 'CardTitle'> {
-  CardTitle: JSX.Element;
-}
-
-function CardSm({ CardTitle, CardContents, CardFooter }: SmProps): JSX.Element {
+function CardSm({ CardTitle, CardContents, CardFooter }: CardProps): JSX.Element {
   return (
     <div className={SmStyle.SmBox}>
       <div>

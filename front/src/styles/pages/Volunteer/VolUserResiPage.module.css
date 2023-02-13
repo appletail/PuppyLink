@@ -8,7 +8,7 @@
 }
 
 .FlightWrapper {
-  @apply flex
+  @apply flex justify-center
     gap-4 mb-11;
 }
 
