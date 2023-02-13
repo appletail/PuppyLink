@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { buttons, NavTop, ModalForm } from '@/components'
@@ -10,11 +10,13 @@ import { LoginState } from '@/states/LoginState'
 
 function UserMyPage() {
 
+  const navigate = useNavigate();
   // user의 이메일과 닉네임 받아오는 부분
   let useremail = ""
   let usernickName = ""
   // recoil에서 로그인 여부를 판단한다.
   const isLoggedIn = useRecoilValue(LoginState)
+  const [LoggedIn, setLoggedIn] = useRecoilState(LoginState)
   if (isLoggedIn) {
     // 로그인 되어있다면 userData를 가져온다
     const userData = sessionStorage.getItem("userData") || ""
@@ -29,16 +31,23 @@ function UserMyPage() {
   const userWithdraw = () => {
     const accessToken = sessionStorage.getItem('access-token')
     const refreshToken = sessionStorage.getItem('refresh-token')
+
     axBase({
       url: '/members',
       method: 'delete',
-      data: { accessToken, refreshToken }
-    }).then((res) => console.log(res))
+      params: {
+        accessToken, refreshToken
+      }
+    }).then((res) => {
+      sessionStorage.clear()
+      setLoggedIn(false)
+      navigate("/")
+
+    })
       .catch((err) => console.log(err))
 
   }
 
-  const navigate = useNavigate();
 
   return (
     <div>

@@ -64,10 +64,18 @@ const category: Array<Category> = [
         , name: "단체 회원 단체페이지"
         , path: "/manager"
         , role: [role.MANAGER]
-        , sub: []
+        , sub: [
+          {
+            idx: 9
+            , name: "단체 회원 인포 수정페이지"
+            , path: "/introduce"
+            , role: [role.MANAGER]
+            , sub: []
+          },
+        ]
       },
       {
-        idx: 9
+        idx: 10
         , name: "비밀번호 변경페이지"
         , path: "/changepassword"
         , role: [role.USER, role.MANAGER]

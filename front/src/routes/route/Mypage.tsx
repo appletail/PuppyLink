@@ -2,6 +2,7 @@ import PrivateRouter from './PrivateRouter';
 
 import ProtectRoute from './ProtectRoute';
 
+import FoundationInfoPage from '@/pages/Mypage/Fountadation/Components/FoundationInfoPage';
 import FoundationMyPage from '@/pages/Mypage/Fountadation/FoundationMyPage';
 import UserFileDocs from '@/pages/Mypage/User/UserFileDocs';
 import UserMyPage from '@/pages/Mypage/User/UserMyPage';
@@ -35,7 +36,12 @@ const Mypage = [
           {
             path: '/mypage/changepassword',
             element: <UserChangePassword />
-          }
+          },
+          {
+            path: '/mypage/manager/introduce',
+            element: <FoundationInfoPage />
+          },
+
         ]
       },
     ]
