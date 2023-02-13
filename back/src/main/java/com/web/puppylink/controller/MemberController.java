@@ -119,8 +119,9 @@ public class MemberController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
-        return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
-                CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
+
+     return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
+               CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/reissuance")
@@ -210,7 +211,7 @@ public class MemberController {
         
         logger.debug("회원가입에 필요한 정보 : {}", member);
         // 인증번호가 맞는지 확인한다.
-        if( !redisService.findAuth(member.getEmail()).isPresent() ) {
+        if( redisService.findAuth(member.getEmail()).isPresent() ) {
             return new ResponseEntity<>(new BasicResponseDto<>(
                     ExceptionCode.EXCEPTION_DATA,null),HttpStatus.BAD_REQUEST);
         }

@@ -22,7 +22,7 @@ function UserVolLst() {
               <p>진행 상태</p>
               <select className="text-caption1" onChange={(e) => { setStatus(e.target.value as status) }}>
                 <option value="submit">접수 대기</option>
-                <option value="regist">서류 제출</option>
+                <option value="regist">접수 완료</option>
                 <option value="lack">서류 미흡</option>
                 <option value="docs">서류 승인 대기</option>
                 <option value="confirm">봉사 진행 중</option>
@@ -35,7 +35,6 @@ function UserVolLst() {
           {/* 봉사 카드 */}
           <UserSortedVol status={status} volCount={(count: number) => setCount(count)} />
         </div>
-
       </div>
     </div>
   )

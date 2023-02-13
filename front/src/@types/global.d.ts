@@ -62,7 +62,17 @@ interface Member {
   activated: boolean
   authorities: Array<{ authorityName: string }>
   joinDate: Date
-  role: RoleType
+  role: RoleTyp
+}
+
+interface foundation {
+  businessNo: string
+  profileURL?: string
+  businessName: string
+  presidentName: string
+  startDate: Date
+  email: Member
+  description: string
 }
 
 interface Business {

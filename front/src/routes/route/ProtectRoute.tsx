@@ -44,30 +44,38 @@ const category: Array<Category> = [
         , role: [role.USER]
         , sub: [
           {
-            idx: 7
+            idx: 6
             , name: "일반 회원 봉사 관리페이지"
             , path: "/vollist"
+            , role: [role.USER]
+            , sub: []
+          },
+          {
+            idx: 7
+            , name: "일반 회원 파일 제출 페이지"
+            , path: "/userfiledocs"
             , role: [role.USER]
             , sub: []
           },
         ]
       },
       {
-        idx: 6
+        idx: 8
         , name: "단체 회원 단체페이지"
         , path: "/manager"
         , role: [role.MANAGER]
-        , sub: []
+        , sub: [
+          {
+            idx: 9
+            , name: "단체 회원 인포 수정페이지"
+            , path: "/introduce"
+            , role: [role.MANAGER]
+            , sub: []
+          },
+        ]
       },
       {
-        idx: 8
-        , name: "일반 회원 파일 제출 페이지"
-        , path: "/user/userfiledocs"
-        , role: [role.USER]
-        , sub: []
-      },
-      {
-        idx: 9
+        idx: 10
         , name: "비밀번호 변경페이지"
         , path: "/changepassword"
         , role: [role.USER, role.MANAGER]
@@ -81,14 +89,12 @@ const category: Array<Category> = [
 
 function ProtectRoute(): ReactElement | null {
 
-  // 로그인 되어있을 때에는 roles를 변경한다.
-  const userData = localStorage.getItem("userData") || ""
+  // 로그인 되어있을 때(sessionStorage에서 가져온다) 에는 roles를 변경한다.
+  const userData = sessionStorage.getItem("userData") || ""
   const loginMember: Member = JSON.parse(userData)
   // console.log(loginMember.role)
 
   const menu: Category = { ...category[0], sub: [...category] }
-  // const mypage: Category = { ...category[1], sub: [...category] }
-
 
   // 현재 URL정보를 useLocation과 split을 이용해서 가져온다.
   const location = useLocation();
@@ -110,9 +116,7 @@ function ProtectRoute(): ReactElement | null {
   }
   // roleCheck함수에 최종 반환 되는건 접근가능한 menu 항목이다.
   const result: Array<Category> = roleCheck(menu, pathArr)
-  // console.log(result)
-  // const result_2: Array<Category> = roleCheck(mypage, pathArr)
-  // console.log(result_2)
+
 
   /**
    * roleCheck에서 최종 반환 되는 항목은 접근가능한 menu항목이기 때문에,

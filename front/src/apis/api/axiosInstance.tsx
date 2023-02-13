@@ -5,7 +5,7 @@ export const interceptors = (instance: AxiosInstance) => {
     (config) => {
       const token = localStorage.getItem('access-token');
 
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
       return config;
     },
     (error) => Promise.reject(error.response)
@@ -13,8 +13,8 @@ export const interceptors = (instance: AxiosInstance) => {
   return instance;
 };
 
-// const BASE_URL = 'http://i8c107.p.ssafy.io:8085/puppy'; // ec2에 올릴 경우 체인지
-const BASE_URL = 'http://localhost:8085/puppy';
+const BASE_URL = 'http://i8c107.p.ssafy.io:8085/puppy'; // ec2에 올릴 경우 체인지
+// const BASE_URL = 'http://localhost:8085/puppy';
 // 카카오 로그인 요청을 보내는 URL
 const KAKAO_URL = 'https://kauth.kakao.com';
 
@@ -32,10 +32,10 @@ const axiosAuthApi = (url: string, options?: object) => {
 };
 
 const axioskakao = (url: string, options?: object) => {
-  const instance = axios.create({ baseURL: url, ...options});
+  const instance = axios.create({ baseURL: url, ...options });
   return instance;
 }
 
 export const axBase = axiosApi(BASE_URL);
 export const axAuth = axiosAuthApi(BASE_URL);
-export const kakaoAuth  = axioskakao(KAKAO_URL);
+export const kakaoAuth = axioskakao(KAKAO_URL);

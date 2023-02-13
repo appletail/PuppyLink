@@ -25,7 +25,6 @@ function PassportUpload({ name, rules, control, setImageData }: PassPortProps) {
     if (image && image.length > 0) {
       const file = image[0];
       setImgPreview(URL.createObjectURL(file));
-      console.log('패스포트 이미지: ', image)
       setImageData(image)
     }
   }, [image]);

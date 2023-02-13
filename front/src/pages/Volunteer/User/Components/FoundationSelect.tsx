@@ -4,14 +4,6 @@ import { useController } from 'react-hook-form'
 import { ModalCard } from '@/components'
 
 
-interface foundation {
-  businessNo: string
-  businessName: string
-  presidentName: string
-  startDate: Date
-  description: string
-  profileURL?: string
-}
 interface FoundationProps extends UCProps {
   foundations: foundation[]
 }

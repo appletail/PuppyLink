@@ -1,5 +1,5 @@
 .LgBox {
-  @apply w-[21.875rem] h-48
+  @apply w-[21.875rem] min-h-[12rem]
     rounded-lg
   bg-white
     pt-5 pb-2 px-5

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { axBase } from '@/apis/api/axiosInstance'
+import { axBase, axAuth } from '@/apis/api/axiosInstance'
 import { footers, buttons, labels } from '@/components'
 
 
@@ -8,14 +8,10 @@ function FooterController(status: status, volunteerNo: number) {
 
 
   const regist = () => {
-    axBase({
+    axAuth({
       method: 'put',
       url: `/volunteer/regist/${volunteerNo}`,
-      // data: { volunteerNo }
     })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-
   }
 
   const Controller = {

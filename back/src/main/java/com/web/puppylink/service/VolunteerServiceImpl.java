@@ -295,16 +295,20 @@ public class VolunteerServiceImpl implements VolunteerService{
 				fileUrl = volunteer.getPassportURL();
 			}
 			
-			String fileKey= fileUrl.split("com/")[1]; 		
+			// fileURL없는 경우
+			if(fileUrl != null && !fileUrl.equals("")) {
+				String fileKey= fileUrl.split("com/")[1]; 		
 
-            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
+	            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
 
-            try {
-                s3.deleteObject(Bucket, fileKey);
-            } catch (AmazonServiceException e) {
-                System.err.println(e.getErrorMessage());
-                System.exit(1);
-            }
+	            try {
+	                s3.deleteObject(Bucket, fileKey);
+	            } catch (AmazonServiceException e) {
+	                System.err.println(e.getErrorMessage());
+	                System.exit(1);
+	            }
+			}
+			
 	    } catch (Exception e) {
 	       e.printStackTrace();
 	       throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
@@ -324,7 +328,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
 		});
 		List<Volunteer> volList = volunteerRepository.findVolunteerByEmail(member);
-		
+		System.out.println(volList.size());
 		for (int i = 0; i < volList.size(); i++) {
 			Volunteer volunteer = volList.get(i);
 			int volunteerNo = volunteer.getVolunteerNo();
