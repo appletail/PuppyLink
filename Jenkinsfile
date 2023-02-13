@@ -9,14 +9,14 @@ pipeline{
         springImg = ""
         nginxImg = ""
         mariaImg = ""
-        ver = "0.7"
+        ver = "0.7.$BUILD_NUMBER"
     }
     stages{
         stage('checkout') {
             steps {
                 sh 'mvn -v'
-                // gitlab에서 pull 가져오기 (성공)
-                git branch: 'test/BE/jenkins-config',
+                // gitlab에서 pull 가져오기 (성공) // dev 및 main 올릴때 꼭!! 수정필요
+                git branch: 'dev',
                     credentialsId: 'ssafy_project_puppylink',
                     url: 'https://lab.ssafy.com/s08-webmobile2-sub2/S08P12C107.git'
             }

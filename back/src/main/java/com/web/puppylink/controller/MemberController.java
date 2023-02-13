@@ -210,7 +210,7 @@ public class MemberController {
         
         logger.debug("회원가입에 필요한 정보 : {}", member);
         // 인증번호가 맞는지 확인한다.
-        if( !redisService.findAuth(member.getEmail()).isPresent() ) {
+        if( redisService.findAuth(member.getEmail()).isPresent() ) {
             return new ResponseEntity<>(new BasicResponseDto<>(
                     ExceptionCode.EXCEPTION_DATA,null),HttpStatus.BAD_REQUEST);
         }
