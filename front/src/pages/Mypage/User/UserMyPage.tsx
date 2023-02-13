@@ -76,7 +76,7 @@ function UserMyPage() {
         <p className='text-title2-bold mb-8'>기타</p>
         <div className='flex flex-col gap-2'>
           <p className='h-10 flex items-center'>공지사항</p>
-          <div onClick={() => setWithdraw(!withdraw)}>
+          <div aria-hidden='true' onClick={() => setWithdraw(!withdraw)}>
             <p className='h-10 flex items-center text-red'>탈퇴하기</p>
             {
               withdraw && <ModalForm

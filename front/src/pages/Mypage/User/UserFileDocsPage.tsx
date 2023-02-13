@@ -73,11 +73,7 @@ function UserFileDocs() {
   const submitOCR = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     const fileDto = {
-<<<<<<< HEAD:front/src/pages/Mypage/User/UserFileDocsPage.tsx
       nickName,
-=======
-      nickName: '무웅',
->>>>>>> feat/FE/비밀번호변경:front/src/pages/Mypage/User/UserFileDocs.tsx
       ticketType: 'flight',
       volunteerNo,
     }
