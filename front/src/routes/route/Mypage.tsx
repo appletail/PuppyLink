@@ -5,9 +5,9 @@ import ProtectRoute from './ProtectRoute';
 import FoundationInfoPage from '@/pages/Mypage/Fountadation/Components/FoundationInfoPage';
 import FoundationMyPage from '@/pages/Mypage/Fountadation/FoundationMyPage';
 
-import UserFileDocs from '@/pages/Mypage/User/UserFileDocs';
+import UserFileDocs from '@/pages/Mypage/User/UserFileDocsPage';
 import UserMyPage from '@/pages/Mypage/User/UserMyPage';
-import UserVolLst from '@/pages/Mypage/User/UserVolLst';
+import UserVolLst from '@/pages/Mypage/User/UserVolLstPage';
 import UserChangePassword from '@/pages/Mypage/UserChangePassword';
 
 
