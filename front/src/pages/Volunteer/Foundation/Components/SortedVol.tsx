@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import SortedFooter from './FooterController'
+import FooterController from './FooterController'
 import Modal from './ModalVolunteer'
 
 import { axBase } from '@/apis/api/axiosInstance'
@@ -40,7 +40,7 @@ function SortedVol({ status }: { status: status }) {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={SortedFooter(status)}
+            CardFooter={FooterController(status, volunteer.volunteerNo)}
             CardTitle={volunteer.email.name}
           />
         </div>

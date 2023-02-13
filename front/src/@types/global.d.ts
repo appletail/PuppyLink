@@ -85,6 +85,18 @@ interface Volunteer {
   description: string
 }
 
+
+interface ocrData {
+  ticketNo: number
+  passengerName: string
+  bookingReference: string
+  depCity: string
+  depDate: Date
+  arriveCity: string
+  arriveDate: Date
+  flight: string
+}
+
 interface Role {
   USER: "ROLE_USER"
   MANAGER: "ROLE_MANAGER"

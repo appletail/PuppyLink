@@ -8,7 +8,7 @@ import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
 import { LoginState } from '@/states/LoginState'
 
-function UserSortedVol({ status }: { status: status }) {
+function UserSortedVol({ status, volCount }: { status: status, volCount: (count: number) => void }) {
 
   const [volunteers, setVolunteers] = useState([])
   const [modal, setModal] = useState<boolean[]>([])
@@ -28,7 +28,10 @@ function UserSortedVol({ status }: { status: status }) {
     axBase({
       url: `/volunteer/member/${usernickName}/${status}`,
     })
-      .then((res) => setVolunteers(res.data.data))
+      .then((res) => {
+        setVolunteers(res.data.data)
+        volCount(res.data.data.length)
+      })
   }, [status])
 
   useEffect(() => {
@@ -53,7 +56,7 @@ function UserSortedVol({ status }: { status: status }) {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController(status)}
+            CardFooter={FooterController({ status, volNo: volunteer.volunteerNo })}
             CardTitle={volunteer.email.name}
           />
         </div>
