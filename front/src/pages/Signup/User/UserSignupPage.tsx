@@ -27,7 +27,6 @@ function UserSignupPage() {
     getValues,
     setError,
     watch,
-    clearErrors,
   } = useForm<SignupProps>({});
 
   // 이메일 & 비밀번호 유효성 검사 형식

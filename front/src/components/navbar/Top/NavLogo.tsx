@@ -10,14 +10,13 @@ import LogoWhite from '@/assets/logo-white.svg';
 import { LoginState } from '@/states/LoginState';
 
 
-
 function NavTop(): JSX.Element {
   // 로그인 되어있는지 확인
   const auth = useRecoilValue(LoginState);
 
   const [isLoggedIn, setisLoggedIn] = useRecoilState(LoginState);
-  const accessToken = localStorage.getItem('access-token');
-  const refreshToken = localStorage.getItem('refresh-token')
+  const accessToken = sessionStorage.getItem('access-token');
+  const refreshToken = sessionStorage.getItem('refresh-token')
   useEffect(() => {
     if (accessToken) {
       setisLoggedIn(true);
@@ -38,7 +37,7 @@ function NavTop(): JSX.Element {
         refreshToken: refreshToken
       }
     }).then(() => {
-      localStorage.clear()
+      sessionStorage.clear()
       setisLoggedIn(false)
       navigate("/login")
     }

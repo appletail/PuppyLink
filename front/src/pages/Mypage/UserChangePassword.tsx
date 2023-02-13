@@ -1,12 +1,22 @@
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-import { ErrorMessage } from '@hookform/error-message';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
+import { ErrorMessage } from '@hookform/error-message';
+import { useRecoilValue } from 'recoil';
+
+import { axBase } from '@/apis/api/axiosInstance';
 import { NavTop, buttons, inputs } from '@/components'
+import { LoginState } from '@/states/LoginState';
+
+
+
+import 'react-toastify/dist/ReactToastify.css';
 
 interface PasswordProps {
-  currentPassword: string;
+  rawPassword: string;
   newPassword: string;
   newPasswordConfirm: string;
 }
@@ -27,7 +37,57 @@ function UserChangePassword() {
     watch
   } = useForm<PasswordProps>({});
 
-  const onSubmit: SubmitHandler<PasswordProps> = (data) => { console.log(data) }
+
+
+  let usernickName = ""
+  // recoil에서 로그인 여부를 판단한다.
+  const isLoggedIn = useRecoilValue(LoginState)
+  if (isLoggedIn) {
+    // 로그인 되어있다면 userData를 가져온다
+    const userData = sessionStorage.getItem("userData") || ""
+    const { nickName } = JSON.parse(userData)
+    usernickName = nickName
+  }
+
+  const navigate = useNavigate();
+  const onSubmit: SubmitHandler<PasswordProps> = (data) => {
+    axBase({
+      url: `/members/${usernickName}/change`,
+      method: "put",
+      data: {
+        rawPassword: data.rawPassword,
+        newPassword: data.newPassword
+      }
+    }).then((res) => {
+      const code = res.data.code
+      if (code === 2302) {
+        toast.error("현재 비밀번호를 확인해주세요", {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+      }
+      else {
+        toast.success("비밀번호 변경 성공", {
+          autoClose: 3000,
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
+      }
+    })
+      .catch((err) => console.log(err))
+    // .then(() =>
+    //   navigate("/")
+    // )
+  }
 
   return (
     <div>
@@ -40,18 +100,20 @@ function UserChangePassword() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <inputs.InputForm control={control}
-              name="currentPassword"
+              name="rawPassword"
               placeholder="현재 비밀번호"
-              rules={{}}
-              type="password" />
-            <ErrorMessage errors={errors} name="currentPassword" />
+              type="password"
+              rules={{
+                required: { value: true, message: '현재 비밀번호를 입력해주세요' },
+              }} />
+            <ErrorMessage errors={errors} name="rawPassword" />
 
             <inputs.InputForm control={control}
               name="newPassword"
               placeholder="새 비밀번호 (대문자, 특수문자를 포함해 8자 이상)"
               type="password"
               rules={{
-                required: { value: true, message: '비밀번호를 입력해주세요' },
+                required: { value: true, message: '변경할 비밀번호를 입력해주세요' },
                 pattern: {
                   value: Regex.password,
                   message: '대문자, 특수문자를 포함해 8자 이상입력해주세요',
@@ -80,6 +142,7 @@ function UserChangePassword() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }

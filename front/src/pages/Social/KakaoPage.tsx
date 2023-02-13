@@ -17,8 +17,8 @@ function KakaoPage() {
             const refresh_token = response.headers.refreshtoken.split(" ")[1];
 
             if (access_token) {
-                localStorage.setItem('access-token', access_token);
-                localStorage.setItem('refresh-token', refresh_token);
+                sessionStorage.setItem('access-token', access_token);
+                sessionStorage.setItem('refresh-token', refresh_token);
             }
         }
         navigate('/')

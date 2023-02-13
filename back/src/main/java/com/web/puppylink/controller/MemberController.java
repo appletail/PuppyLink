@@ -119,8 +119,9 @@ public class MemberController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token.getAccessToken());
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
-        return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
-                CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
+
+     return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
+               CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/reissuance")
