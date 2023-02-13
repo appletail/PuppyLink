@@ -31,6 +31,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
+import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
@@ -348,7 +349,108 @@ public class VolunteerServiceImpl implements VolunteerService{
 			cancel(volunteerNo);							
 		}
 	}
-	
+
+	@Transactional
+	@Override
+	public AirportDto airportInfo(int volunteerNo) {
+		//1. 봉사자의 정보를 가져온다.
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		//2. 봉자자의 티켓정보에서 출발공항 id, 도착공항 id를 가져온다. 
+		String depCity = volunteer.getTicketNo().getDepCity();
+		String arriveCity = volunteer.getTicketNo().getArriveCity();
+		
+		
+		//3. AirLabs로 API 요청을 보내고 출발, 도착 공항에 해당하는 각종 정보를 받는다.
+		RestTemplate rt = new RestTemplate();
+		
+
+		//3-1. 도착 공항 데이터 요청
+		//HttpHeader 오브젝트 생성
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+			    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
+		
+		//HttpBody 오브젝트 생성									
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("iata_code", depCity);
+		params.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
+
+		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
+				new HttpEntity<>(params, headers);
+		
+		ResponseEntity<Map> response = rt.exchange(
+				"https://airlabs.co/api/v9/airports",
+				HttpMethod.POST,
+				airLabsRequest,
+				Map.class
+		);
+		ArrayList ls =  (ArrayList) response.getBody().get("response");
+		LinkedHashMap map = (LinkedHashMap) ls.get(0);
+
+		Double depLat = (Double) map.get("lat");  
+		Double depLng = (Double) map.get("lng");
+		System.out.println("depLat : "+ depLat);
+		
+		//3-2. 도착 공항 데이터 요청
+		//HttpHeader 오브젝트 생성
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers2.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+			    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
+		
+		//HttpBody 오브젝트 생성									
+		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
+		params2.add("iata_code", arriveCity);
+		params2.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
+
+		HttpEntity<MultiValueMap<String, String>> airLabsRequest2 = 
+				new HttpEntity<>(params2, headers2);
+		
+		ResponseEntity<Map> response2 = rt.exchange(
+				"https://airlabs.co/api/v9/airports",
+				HttpMethod.POST,
+				airLabsRequest2,
+				Map.class
+		);
+		System.out.println("response2 : " + response2);
+		System.out.println("response2.body : " + response2.getBody());
+		System.out.println("response2.header : " + response2.getHeaders());
+		System.out.println("response2.getStatusCodeValue : " + response2.getStatusCodeValue());
+		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
+
+		ArrayList m =  (ArrayList) response2.getBody().get("response");
+//		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
+		System.out.println("ArrayList m  : "  + m);
+		System.out.println("m.get(0) : " +  m.get(0));
+		LinkedHashMap a = (LinkedHashMap) m.get(0);
+		System.out.println("LinkedHashMap a : " + a);
+		System.out.println("a.keyset" + a.keySet());
+		System.out.println("a.get(\"lat\") :"  + a.get("lat"));
+		
+		Double arriveLat = (Double) a.get("lat");  
+		Double arriveLng = (Double) a.get("lng");
+		System.out.println( "arriveLat : " + arriveLat);
+		 
+
+		
+    	AirportDto airportDto = AirportDto.builder()
+		.depCity(depCity)
+		.depLat(depLat)
+		.depLng(depLng)
+		.arriveCity(arriveCity)
+		.arriveLat(arriveLat)
+		.arriveLng(arriveLng)
+		.build();
+		
+//		AirportDto airportDto = new AirportDto(depCity, depLat, depLng);
+    	
+    	System.out.println("airportDto : " + airportDto.toString());
+		return airportDto;
+		
+	}
 
 	@Transactional
 	@Override
@@ -374,7 +476,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("_view", "array");
 		params.add("_fields", "lat,lng,dir");
-		params.add("api_key", "fdf4a6cd-42f2-48d4-87f1-1a375d234b94");
+		params.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
 		params.add("flight_iata", flightNum);
 
 		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
@@ -388,43 +490,6 @@ public class VolunteerServiceImpl implements VolunteerService{
 		);
 		
 		System.out.println("response.getBody() : " + response.getBody());
-		
-		
-		//HttpHeader 오브젝트 생성
-		HttpHeaders headers2 = new HttpHeaders();
-		headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
-		headers2.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
-			    " AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
-		
-		//HttpBody 오브젝트 생성									
-		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
-		params2.add("iata_code", "CDG");
-		params2.add("api_key", "fdf4a6cd-42f2-48d4-87f1-1a375d234b94");
-
-		HttpEntity<MultiValueMap<String, String>> airLabsRequest2 = 
-				new HttpEntity<>(params2, headers2);
-		
-		ResponseEntity<Map> response2 = rt.exchange(
-				"https://airlabs.co/api/v9/airports",
-				HttpMethod.POST,
-				airLabsRequest2,
-				Map.class
-		);
-		System.out.println("response2 : " + response2);
-		System.out.println("response2.body : " + response2.getBody());
-		System.out.println("response2.header : " + response2.getHeaders());
-		System.out.println("response2.getStatusCodeValue : " + response2.getStatusCodeValue());
-		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
-
-		ArrayList m =  (ArrayList) response2.getBody().get("response");
-//		System.out.println("response2.getBody().get(\"response\") : " + response2.getBody().get("response"));
-		System.out.println("ArrayList m  : "  + m);
-		System.out.println("m.get(0) : " +  m.get(0));
-		LinkedHashMap a = (LinkedHashMap) m.get(0);
-		System.out.println("LinkedHashMap a : " + a);
-		System.out.println("a.keyset" + a.keySet());
-		System.out.println("a.get(\"lat\") :"  + a.get("lat"));
-//		System.out.println(	m.get(4));
 
 		return response;
 	}

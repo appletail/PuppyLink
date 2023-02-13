@@ -64,8 +64,8 @@ public enum CommonCode {
 	FAILED_S3_UPDATE(2213, "필수서류 삭제 수정에 실패하였습니다"),
 	
 	SELECT_GPS(2301, "해당하는 편명의 실시간 항공기 정보를 성공적으로 조회했습니다."),
-	FAILED_UPDATE_PWD(2302, "봉사자의 현재 비밀번호가 다릅니다."),
-	SUCCESS_UPDATE_PWD(2303, "봉사자의 현재 비밀번호가 다릅니다.");
+	FAILED_UPDATE_PWD(2302, "현재 비밀번호가 다릅니다."),
+	SUCCESS_UPDATE_PWD(2303, "비밀번호가 성공적으로 변경됐습니다.");
 	
 	
     private int code;

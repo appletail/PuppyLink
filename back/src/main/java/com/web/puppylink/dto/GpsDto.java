@@ -18,15 +18,12 @@ public class GpsDto {
     private String lng;
     @ApiModelProperty(name = "방향", required = true, example = "0")
     private String dir;
-    
-    @ApiModelProperty(name = "출발 공항 위도", required = true, example = "0")
-    private String depLat;
-    @ApiModelProperty(name = "출발 공항 경도", required = true, example = "0")
-    private String depLng;
-    
-    @ApiModelProperty(name = "도착 공항 위도", required = true, example = "0")
-    private String arriveLat;
-    @ApiModelProperty(name = "도착 공항 경도", required = true, example = "0")
-    private String arriveLng;
+    @ApiModelProperty(name = "항공기 구분자", required = true, example = "0")
+    private String FlightId;
+
+    @ApiModelProperty(name = "출발 공항 구분자", required = true, example = "0")
+    private String depId;
+    @ApiModelProperty(name = "도착 공항 구분자", required = true, example = "0")
+    private String arriveId;
     
 }

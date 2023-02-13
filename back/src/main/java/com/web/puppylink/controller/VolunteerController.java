@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.puppylink.config.code.CommonCode;
+import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.VolunteerDto;
@@ -255,10 +256,9 @@ public class VolunteerController {
     }
     
     //항공 GPS 정보 요청
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/gps/{volunteerNo}")
     @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
-//    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
+    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
     public @ResponseBody String GPS(@PathVariable final int volunteerNo) {
     	System.out.println("gps 호출");
         // return ResponseEntity.ok(volunteerService.ocr(volunteerNo));
@@ -273,4 +273,32 @@ public class VolunteerController {
 //            	HttpStatus.OK
 //            );
     }
+    
+    //공항 정보 요청
+	@GetMapping("/airport/{volunteerNo}")
+//    @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
+//    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
+    public @ResponseBody AirportDto airport(@PathVariable final int volunteerNo) {
+    	System.out.println("airport 호출");
+//    	
+//    	AirportDto airportDto = AirportDto.builder()
+//    						.depId(depId)
+//    						.arriveId(arriveId)
+//    						.build();
+//    	
+    	AirportDto ans = volunteerService.airportInfo(volunteerNo);
+    	
+    	
+//    	System.out.println(" ans  : "  +  ans.getBody());
+    	return ans;
+//        return new ResponseEntity(
+//            	new BasicResponseDto(
+//            			CommonCode.SELECT_GPS,
+//            			ans
+//            	), 
+//            	HttpStatus.OK
+//            );
+    }
+    
+    
 }
