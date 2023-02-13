@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
@@ -130,6 +132,7 @@ private final BoardServiceImpl boardService;
             );
     }
     
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PutMapping
     @ApiOperation(code = 200, value = "게시글 수정", notes = "게시글을 수정한다.", response = ResponseEntity.class)
@@ -218,6 +221,19 @@ private final BoardServiceImpl boardService;
             	new BasicResponseDto(
             			CommonCode.SELECT_COMMENT_ALL,
             			boardService.getCommentAll(boardNo)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/{boardNo}/pic")
+    @ApiOperation(code = 200, value = "게시글 사진 조회", notes = "게시글에 작성된 사진을 조회한다.", response = ResponseEntity.class)
+    public Object selectPic(@PathVariable final int boardNo) {
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_PIC,
+            			boardService.getPic(boardNo)
             	), 
             	HttpStatus.OK
             );

@@ -48,6 +48,7 @@ public enum CommonCode {
 	CREATE_COMMENT(2126, "댓글 작성이 완료되었습니다."),
 	UPDATE_COMMENT(2127, "댓글 수정이 완료되었습니다."),
 	DELETE_COMMENT(2128, "댓글 삭제가 완료되었습니다."),
+	SELECT_PIC(2129, "게시글 사진 조회가 완료되었습니다."),
 
 	SUCCESS_EMAIL(2201, "사용가능한 이메일입니다."),
     DUPLICATE_EMAIL(2202, "이미 사용중인 이메일입니다."),
