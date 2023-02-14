@@ -525,4 +525,22 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return volunteer;
 	}
 
+	public String getPassportUrl(int volunteerN) {
+
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerN).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		return volunteer.getPassportURL();
+	}
+
+	public Object getFlightInto(int volunteerN) {
+
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerN).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		return volunteer.getTicketNo();
+	}
+
 }

@@ -80,7 +80,7 @@ public class FileController {
 	// postman에서 테스트 
 	@PostMapping(value= "/history")
 	@ApiOperation(value = "파일 업로드 : 봉사자 필수서류 제출)")
-	@PreAuthorize("hasRole('ROLE_USER')")
+//	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiResponses(value = {
             @ApiResponse(code=200, message="성공적으로 업로드했습니다.", response = ResponseEntity.class)
         })
