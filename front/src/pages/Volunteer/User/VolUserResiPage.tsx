@@ -64,8 +64,10 @@ function VolUserResi() {
       url: '/volunteer/submit',
       data: data
     })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err.response.data))
+      .then(() => {
+        alert('봉사 신청이 완료되었습니다.')
+        navigate('/mypage/user/vollist')
+      })
   }
 
   const navigate = useNavigate()

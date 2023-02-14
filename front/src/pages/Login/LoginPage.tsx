@@ -50,8 +50,6 @@ function LoginPage() {
 
         // session storage에 access token과 refresh token을 저장합니다
         if (access_token) {
-          // localStorage.setItem('access-token', access_token);
-          // localStorage.setItem('refresh-token', refresh_token);
           sessionStorage.setItem('access-token', access_token);
           sessionStorage.setItem('refresh-token', refresh_token);
 
@@ -67,7 +65,6 @@ function LoginPage() {
             joinDate: resData.joinDate,
             role: resData.authorities[0].authorityName
           }
-          // localStorage.setItem('userData', JSON.stringify(LoginData))
           sessionStorage.setItem('userData', JSON.stringify(LoginData))
 
         }
