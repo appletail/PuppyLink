@@ -12,6 +12,7 @@ public enum CommonCode {
 	EXIST_MEMBER(2010,"이미 가입되어 있는 유저가 존재합니다."),
     SUCCESS_LOGIN(2003, "로그인이 성공하였습니다."),
     FAILED_LOGIN(2004, "로그인이 실패하였습니다."),
+	ALREADY_LOGOUT(2010,"로그아웃된 계정입니다."),
     SUCCESS_SECESSION(2005, "회원탈퇴가 정상적으로 되었습니다."),
     FAILED_SECESSION(2006, "회원탈퇴가 이루어지지 않았습니다."),
     SUCCESS_MAIL(2007, "메일 전송이 되었습니다."),

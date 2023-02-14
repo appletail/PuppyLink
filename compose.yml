@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   web:
-    image: qlwms221/nginx:0.3
+    image: qlwms221/nginx:0.4
     # image: qlwms221/vue:latest
     build: ./front
     # platform: linux/amd64
@@ -14,7 +14,7 @@ services:
     networks:
       - puppy-net
   was:
-    image: qlwms221/spring:0.3
+    image: qlwms221/spring:0.4
     build: ./back
     restart: always
     # platform: linux/amd64

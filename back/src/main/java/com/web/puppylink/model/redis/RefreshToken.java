@@ -7,13 +7,15 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@RedisHash("Refresh")
-public class RefreshToken {
-
+@RedisHash( value = "Refresh", timeToLive = 3600 * 24)
+public class RefreshToken implements Serializable {
+    // redis hash값 = Refresh timeToLive (second 단위)
     @Id
     private String email;
     private String refreshToken;

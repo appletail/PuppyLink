@@ -2,7 +2,6 @@ package com.web.puppylink.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,12 +15,11 @@ import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
-import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
-import com.web.puppylink.repository.AuthRedisRepository;
+import com.web.puppylink.repository.redis.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
-import com.web.puppylink.repository.RefreshRedisRepository;
+import com.web.puppylink.repository.redis.RefreshRedisRepository;
 
 @Component("foundationService")
 public class FoundationServiceImpl implements FoundationService{

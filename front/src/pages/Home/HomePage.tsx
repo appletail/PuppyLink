@@ -1,4 +1,4 @@
-import { NavTop } from '@/components'
+import { NavTop } from '@/components';
 
 function HomePage() {
   return (

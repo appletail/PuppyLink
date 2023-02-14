@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -27,8 +28,8 @@ public class KakaoUtil {
     private static final String LOGOUT = "https://kapi.kakao.com/v1/user/logout";
     private static final String KEY = "c1a6f5a36cc3ee5bb64b3fb804e37407";
     private static final String ADMIN_KEY = "f25ba205fb42653c1d8c426f6bf6ad5e";
-//    private static final String REQUEST = "http://localhost:3000/Social/kakao";
-    private static final String REQUEST = "http://i8c107.p.ssafy.io:3000/Social/kakao";
+    private static final String REQUEST = "http://localhost:3000/Social/kakao";
+//    private static final String REQUEST = "http://i8c107.p.ssafy.io:3000/Social/kakao";
 
     // 카카오 로그인해서 얻은 인가코드롤 AccessToken 및 refresh 토큰 얻는 함수
     public static TokenDto getAccessTokenByKakao(String code) {
@@ -94,7 +95,7 @@ public class KakaoUtil {
         member.setEmail(kakao_account.get("email").getAsString());
         member.setPassword("social_" + kakaoUser.get("id").getAsString());
         member.setPhone("00000000000");
-        member.setName(properties.get("nickname").getAsString());
+        member.setName(properties.get("nickname").getAsString() + kakaoUser.get("id").getAsString());
         member.setNickName(properties.get("nickname").getAsString());
 
         return member;
@@ -103,13 +104,18 @@ public class KakaoUtil {
     public static String logoutToKakao(Member member) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK  " + ADMIN_KEY);
+        headers.set("Authorization", "KakaoAK " + ADMIN_KEY);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
 
-        params.add("target_id_type",member.getEmail());
-        params.add("target_id", member.getPassword().replace("social_",""));
+        params.add("target_id_type","user_id");
+        params.add("target_id", member.getName().replace(member.getNickName(),""));
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity(LOGOUT, request, String.class);
 
         return "SUCCESS";
     }

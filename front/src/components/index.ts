@@ -37,3 +37,4 @@ export { default as NavBottom } from './navbar/bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
 export { default as ModalCard } from './Modal/ModalCard';
 export { default as ModalForm } from './Modal/ModalForm/ModalForm';
+export { default as ChannelTalk } from './ChannelTalk/ChannelService'; 

@@ -177,24 +177,15 @@ public class MemberController {
     public void logout(@RequestBody TokenDto tokenDto) {
         logger.info("토큰 확인하기 : {}", tokenDto);
         // AccessToken 객체 생성
-        AccessToken accessToken = AccessToken.builder()
-                .accessToken(tokenDto.getAccessToken())
-                .expired(tokenProvider.getExpired(tokenDto.getAccessToken()))
-                .build();
+        AccessToken accessToken = memberService.getAccessEntityByToken(tokenDto.getAccessToken());
+        // RefreshToken 객체 생성
+        RefreshToken refreshToken = memberService.getRefreshEntityByToken(tokenDto.getRefreshToken());
 
-        // 1. token에서 토큰정보 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        RefreshToken refreshToken = RefreshToken.builder()
-                        .email(principal.getUsername())
-                        .refreshToken(tokenDto.getRefreshToken())
-                        .build();
         // 카카오 이메일이면 카카오도 로그아웃되도록 처리
-        Authentication authoriztion = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
-        String memberEmail = ((PrincipalDetails) authentication.getPrincipal()).getUsername();
+        String memberEmail = refreshToken.getEmail();
         if( memberEmail.contains("@kakao.com") ) {
             Optional<Member> member = memberService.getMemberWithAuthorities(memberEmail);
-            String result = KakaoUtil.logoutToKakao(member.get());
+            KakaoUtil.logoutToKakao(member.get());
         }
         // 2. redis에 refresh Token 삭제
         redisService.delRefreshToken(refreshToken);
@@ -237,7 +228,7 @@ public class MemberController {
 
     @GetMapping()
     @ApiOperation(value = "회원조회")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<Member> getMyInfo() {
         return ResponseEntity.ok(memberService.getMyMemberWithAuthorities().get());
     }
@@ -287,7 +278,7 @@ public class MemberController {
     @PutMapping("/{nickName}/change")
     @ApiOperation(value = "비밀번호 변경")
     public Object update(@RequestBody PasswordDto passwordDto, @PathVariable String nickName) {
-    	
+
     	return memberService.update(passwordDto, nickName);
     }
 

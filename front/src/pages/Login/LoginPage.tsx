@@ -8,7 +8,7 @@ import { ErrorMessage } from '@hookform/error-message';
 
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { NavTop, inputs, buttons } from '@/components';
+import { NavTop, inputs, buttons, ChannelTalk } from '@/components';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -66,7 +66,15 @@ function LoginPage() {
             role: resData.authorities[0].authorityName
           }
           sessionStorage.setItem('userData', JSON.stringify(LoginData))
-
+          // 챗봇 프로필 정보 삽입
+          ChannelTalk.updateUser({
+            language: 'ko',
+            profile: {
+              email: resData.email,
+              phone: resData.phone,
+              nickName: resData.nickName,
+            }
+          });
         }
       })
       .catch((err) => {
