@@ -3,15 +3,12 @@ package com.web.puppylink.service;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
 import com.web.puppylink.model.redis.RefreshToken;
-import com.web.puppylink.repository.AccessRedisRepository;
-import com.web.puppylink.repository.AuthRedisRepository;
-import com.web.puppylink.repository.RefreshRedisRepository;
-import io.lettuce.core.RedisException;
+import com.web.puppylink.repository.redis.AccessRedisRepository;
+import com.web.puppylink.repository.redis.AuthRedisRepository;
+import com.web.puppylink.repository.redis.RefreshRedisRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

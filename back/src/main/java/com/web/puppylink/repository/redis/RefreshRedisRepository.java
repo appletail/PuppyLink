@@ -1,4 +1,4 @@
-package com.web.puppylink.repository;
+package com.web.puppylink.repository.redis;
 
 import com.web.puppylink.model.redis.RefreshToken;
 import org.springframework.data.repository.CrudRepository;

@@ -21,7 +21,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         TokenCode exceptionCode;
         exceptionCode = TokenCode.PERMISSION_DENIED;
         setResponse(response, exceptionCode);
-
     }
 
     private void setResponse(HttpServletResponse response, TokenCode exceptionCode) throws IOException {
