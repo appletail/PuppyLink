@@ -20,16 +20,12 @@ function UserFileDocs() {
   let nickName = ""
   const navigate = useNavigate()
 
-  // recoil에서 로그인 여부를 판단한다.
-  const isLoggedIn = useRecoilValue(LoginState)
-  if (isLoggedIn) {
-    // 로그인 되어있다면 userData를 가져온다
-    const userData = sessionStorage.getItem("userData") || ""
-    const parsedUserData = JSON.parse(userData)
-    nickName = parsedUserData.nickName
-  }
 
-  // 로그인이 안되어있으면 로그인 페이지로 리다이렉트 한다.
+  const userData = sessionStorage.getItem("userData") || ""
+  const parsedUserData = JSON.parse(userData)
+  nickName = parsedUserData.nickName
+
+
   const location = useLocation()
   const volunteerNo = location.state.volNo
 
