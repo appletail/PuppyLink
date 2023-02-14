@@ -75,5 +75,7 @@ public interface VolunteerService {
 	ResponseEntity<String> flightInfo(int volunteerNo);
 
 	AirportDto airportInfo(int volunteerNo);
+	
+	String getPassportUrl(int volunteerN);
 
 }
