@@ -23,6 +23,10 @@ function NewVolCarousel({ businessNo }: { businessNo: string }) {
     setModal(Array(volunteers.length).fill(false))
   }, [volunteers])
 
+  const removeCard = (volunteerNo: number) => {
+    setVolunteers(volunteers.filter((volunteer: Volunteer) => volunteer.volunteerNo != volunteerNo))
+  }
+
   const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
     const cardBody = [
@@ -39,7 +43,7 @@ function NewVolCarousel({ businessNo }: { businessNo: string }) {
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController('submit', volunteer.volunteerNo)}
+            CardFooter={FooterController('submit', volunteer.volunteerNo, removeCard)}
             CardTitle={volunteer.email.name}
           />
         </div>

@@ -24,6 +24,9 @@ function SortedVol({ status, businessNo }: { status: status, businessNo: string 
     setModal(Array(volunteers.length).fill(false))
   }, [volunteers])
 
+  const removeCard = (volunteerNo: number) => {
+    setVolunteers(volunteers.filter((volunteer: Volunteer) => volunteer.volunteerNo != volunteerNo))
+  }
 
   const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
@@ -42,7 +45,7 @@ function SortedVol({ status, businessNo }: { status: status, businessNo: string 
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController(status, volunteer.volunteerNo)}
+            CardFooter={FooterController(status, volunteer.volunteerNo, removeCard)}
             CardTitle={volunteer.email.name}
           />
         </div>
@@ -56,7 +59,6 @@ function SortedVol({ status, businessNo }: { status: status, businessNo: string 
         }
       </div >
     )
-
   })
 
   return (

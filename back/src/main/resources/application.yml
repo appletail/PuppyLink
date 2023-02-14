@@ -4,12 +4,11 @@ server:
     context-path: /puppy
 spring:
 
-#  datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
-#    username: puppy
-#    password: ssafy
-
+  # datasource:
+  #   driverClassName: com.mysql.cj.jdbc.Driver
+  #   url: jdbc:mysql://localhost:3306/puppylink?serverTimezone=Asia/Seoul
+  #   username: puppy
+  #   password: ssafy
 
   jpa:
     open-in-view: true
@@ -43,13 +42,11 @@ spring:
           starttls:
             enable: true
             required: true
-
-#  session:
-#    store-type: redis
-#  redis:
-#    host: localhost
-#    port: 6379
-
+  session:
+    store-type: redis
+  # redis:
+  #   host: localhost
+  #   port: 6379
   cache:
     type: redis
 
