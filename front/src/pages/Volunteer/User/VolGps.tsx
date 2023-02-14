@@ -8,8 +8,7 @@ import {
 import { axBase } from '@/apis/api/axiosInstance'
 import  {Airplanes} from '@/assets/Airplanes'
 
-//setinterval로 하지 않고 밖에서 1회성의 공항 마크 찍기가 필요함
-
+import {  NavTop } from '@/components';
 
 const mapOptions = {
   zoom: 9,
@@ -276,6 +275,7 @@ function Location() {
   );//end of useEffect
 
   setInterval(() => {
+    if (location.pathname !== '/gps') return
     if (!markerRef.current || !map) return;
     if (isNaN(lat.current) || isNaN(lng.current)) return;
     console.log('setInterval 반복 ')
@@ -353,5 +353,5 @@ function Location() {
   map.panTo({ lat: lat.current, lng: lng.current });
 
   }, 5000);
-  return (<></>)
+  return (        <NavTop.NavBack NavContent='실시간 항공기 위치' />)
 }

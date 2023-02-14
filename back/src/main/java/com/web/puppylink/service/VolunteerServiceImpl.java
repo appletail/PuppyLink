@@ -22,7 +22,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.beans.factory.annotation.Value;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -49,6 +49,7 @@ import com.web.puppylink.repository.VolunteerRepository;
 public class VolunteerServiceImpl implements VolunteerService{
 	private @Value("${cloud.aws.s3.bucket}") String Bucket;
 	private @Value("${cloud.aws.region.static}") String Region;
+	private @Value("${api.serviceKeyGps}") String apiKeyGps;
 	
 	private final MemberRepository memberRepository;
 	private final FoundationRepository foundationRepository;
@@ -380,7 +381,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		//HttpBody 오브젝트 생성									
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("iata_code", depCity);
-		params.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
+		params.add("api_key", apiKeyGps);
 
 		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
 				new HttpEntity<>(params, headers);
@@ -408,7 +409,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		//HttpBody 오브젝트 생성									
 		MultiValueMap<String, String> params2 = new LinkedMultiValueMap<>();
 		params2.add("iata_code", arriveCity);
-		params2.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
+		params2.add("api_key", apiKeyGps);
 
 		HttpEntity<MultiValueMap<String, String>> airLabsRequest2 = 
 				new HttpEntity<>(params2, headers2);
@@ -480,7 +481,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("_view", "array");
 		params.add("_fields", "lat,lng,dir");
-		params.add("api_key", "778c8ff8-c44d-4029-b20d-4dd900b79b9c");
+		params.add("api_key", apiKeyGps);
 		params.add("flight_iata", flightNum);
 
 		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
