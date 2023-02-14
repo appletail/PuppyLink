@@ -541,7 +541,16 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		
-		return volunteer.getTicketNo();
+		FlightTicket ticketInfo = volunteer.getTicketNo();
+		String name = volunteer.getEmail().getName();
+		String status = volunteer.getStatus();
+		
+		ArrayList<Object> list = new ArrayList<>();
+		list.add(name);
+		list.add(status);
+		list.add(ticketInfo);
+		
+		return list;
 	}
 
 }
