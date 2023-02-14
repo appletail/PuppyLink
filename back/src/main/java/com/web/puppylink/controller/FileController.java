@@ -271,7 +271,7 @@ public class FileController {
 	@ApiResponses(value = {
             @ApiResponse(code=200, message="성공적으로 업로드했습니다.", response = ResponseEntity.class)
         })
-	public Object uploadPic(@RequestPart("multipartFile") MultipartFile multipartFile, @RequestParam int boardNo) throws Exception {
+	public Object uploadPic(@RequestPart("multipartFile") MultipartFile multipartFile, @RequestParam String boardNo) throws Exception {
 		
 		String imagePath = "";
 		FileRequest fileRequest = null;
@@ -300,7 +300,7 @@ public class FileController {
 			
 			fileRequest = FileRequest.builder()
 					.imagePath(imagePath)
-					.boardNo(boardNo)
+					.boardNo(Integer.parseInt(boardNo))
 					.build();
 			
 			return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
