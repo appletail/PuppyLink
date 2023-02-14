@@ -263,8 +263,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		String status = volunteer.getStatus();
-		if(status.contentEquals("승인 완료")) {
-			volunteer.setStatus("봉사 완료");
+		if(status.contentEquals("confirm")) {
+			volunteer.setStatus("complete");
 			
 			FileRequest fileRequest = FileRequest.builder()
 					.volunteerNo(volunteerNo)
@@ -523,6 +523,24 @@ public class VolunteerServiceImpl implements VolunteerService{
 			  throw new RuntimeException("s3 객체를 수정하는데 실패했습니다.");
 		}
 		return volunteer;
+	}
+
+	public String getPassportUrl(int volunteerN) {
+
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerN).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		return volunteer.getPassportURL();
+	}
+
+	public Object getFlightInto(int volunteerN) {
+
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerN).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		
+		return volunteer.getTicketNo();
 	}
 
 }

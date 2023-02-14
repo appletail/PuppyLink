@@ -48,6 +48,7 @@ public enum CommonCode {
 	CREATE_COMMENT(2126, "댓글 작성이 완료되었습니다."),
 	UPDATE_COMMENT(2127, "댓글 수정이 완료되었습니다."),
 	DELETE_COMMENT(2128, "댓글 삭제가 완료되었습니다."),
+	SELECT_PIC(2129, "게시글 사진 조회가 완료되었습니다."),
 
 	SUCCESS_EMAIL(2201, "사용가능한 이메일입니다."),
     DUPLICATE_EMAIL(2202, "이미 사용중인 이메일입니다."),
@@ -62,6 +63,8 @@ public enum CommonCode {
 	SUCCESS_DESCRIPTION(2211, "단체 소개글 등록에 성공하였습니다."),
 	SUCCESS_S3_UPDATE(2212, "필수서류 삭제 수정에 성공하였습니다."),
 	FAILED_S3_UPDATE(2213, "필수서류 삭제 수정에 실패하였습니다"),
+	SUCCESS_URL(2214, "필수서류 조회에 성공하였습니다."),
+	FAILED_URL(2215, "필수서류 조회에 실패하였습니다"),
 	
 	SELECT_GPS(2301, "해당하는 편명의 실시간 항공기 정보를 성공적으로 조회했습니다."),
 	FAILED_UPDATE_PWD(2302, "현재 비밀번호가 다릅니다."),

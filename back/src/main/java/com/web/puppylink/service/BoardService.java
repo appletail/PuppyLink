@@ -6,6 +6,7 @@ import com.web.puppylink.dto.BoardDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.model.Board;
 import com.web.puppylink.model.Comment;
+import com.web.puppylink.model.File.FileRequest;
 
 public interface BoardService {
 	Board getBoard(int boardNo);
@@ -22,4 +23,7 @@ public interface BoardService {
 	void deleteComment(int commentNo);
 	Comment getComment(int commentNo);
 	List<Comment> getCommentAll(int boardNo);
+	Board submitFile(FileRequest file);
+	void deleteFile(int boardNo);
+	Object getPic(int boardNo); 
 }

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
@@ -47,12 +49,13 @@ private final BoardServiceImpl boardService;
 	@GetMapping("/{boardNo}")
     @ApiOperation(code = 200, value = "게시글 단일 조회", notes = "특정 게시글 하나를 조회하여 반환한다.", response = ResponseEntity.class)
 	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1")
-    public Object selectBoard(@PathVariable final int boardNo) {
+    public Object selectBoard(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
         // return ResponseEntity.ok(boardService.getBoard(boardNo));
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_ONE,
-            			boardService.getBoard(boardNo)
+            			boardService.getBoard(boardN)
             	), 
             	HttpStatus.OK
             );
@@ -106,11 +109,12 @@ private final BoardServiceImpl boardService;
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/infinite/{boardNo}")
     @ApiOperation(code = 200, value = "무한 스크롤 게시글 조회", notes = "현재 전달된 게시글보다 이전에 작성된 게시글 5개를 조회하여 반환한다.", response = ResponseEntity.class)
-    public Object selectBoardInfinite(@PathVariable final int boardNo) {
+    public Object selectBoardInfinite(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_INFINITE,
-            			boardService.getBoardInfinite(boardNo)
+            			boardService.getBoardInfinite(boardN)
             	), 
             	HttpStatus.OK
             );
@@ -130,6 +134,7 @@ private final BoardServiceImpl boardService;
             );
     }
     
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PutMapping
     @ApiOperation(code = 200, value = "게시글 수정", notes = "게시글을 수정한다.", response = ResponseEntity.class)
@@ -147,8 +152,9 @@ private final BoardServiceImpl boardService;
     @DeleteMapping
     @ApiOperation(value = "게시글 삭제", notes = "게시글을 삭제한다.")
     @ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1")
-    public void delete(@RequestParam(required = true) final int boardNo) {
-    	boardService.delete(boardNo);
+    public void delete(@RequestParam(required = true) final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	boardService.delete(boardN);
     }
     
     @PutMapping("/like/{boardNo}/{nickName}")
@@ -157,14 +163,17 @@ private final BoardServiceImpl boardService;
     	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1"),    	
     	@ApiImplicitParam(name = "nickName", value = "회원 닉네임(Unique)", required = true, dataType = "string", defaultValue = "tom")
     })
-    public void like(@PathVariable final int boardNo, @PathVariable final String nickName) {
-    	boardService.like(boardNo, nickName);
+    public void like(@PathVariable final String boardNo, @PathVariable final String nickName) {
+    	int boardN = Integer.parseInt(boardNo);
+    	boardService.like(boardN, nickName);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PostMapping("/comment")
     @ApiOperation(code = 200, value = "댓글 작성", notes = "게시글에 댓글을 작성한다.", response = ResponseEntity.class)
     public Object comment(@RequestBody CommentDto comment) {
+    	// boardNo integer처리
+//    	int boardN = Integer.parseInt(comment.getBoardNo());
     	// return boardService.comment(comment);
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
@@ -218,6 +227,20 @@ private final BoardServiceImpl boardService;
             	new BasicResponseDto(
             			CommonCode.SELECT_COMMENT_ALL,
             			boardService.getCommentAll(boardNo)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/{boardNo}/pic")
+    @ApiOperation(code = 200, value = "게시글 사진 조회", notes = "게시글에 작성된 사진을 조회한다.", response = ResponseEntity.class)
+    public Object selectPic(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_PIC,
+            			boardService.getPic(boardN)
             	), 
             	HttpStatus.OK
             );

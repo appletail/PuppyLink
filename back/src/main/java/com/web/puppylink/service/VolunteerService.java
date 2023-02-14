@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.web.puppylink.dto.AirportDto;
+import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.FlightTicketDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
@@ -75,5 +76,7 @@ public interface VolunteerService {
 	ResponseEntity<String> flightInfo(int volunteerNo);
 
 	AirportDto airportInfo(int volunteerNo);
+
+	String getPassportUrl(int volunteerN);
 
 }

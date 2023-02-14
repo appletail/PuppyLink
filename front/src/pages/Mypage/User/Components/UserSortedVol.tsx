@@ -1,28 +1,19 @@
 import { useEffect, useState } from 'react'
 
-import { useRecoilValue } from 'recoil'
-
 import FooterController from './FooterController'
 
 import { axBase } from '@/apis/api/axiosInstance'
 import { cards } from '@/components'
-import { LoginState } from '@/states/LoginState'
+
 
 function UserSortedVol({ status, volCount }: { status: status, volCount: (count: number) => void }) {
 
   const [volunteers, setVolunteers] = useState([])
   const [modal, setModal] = useState<boolean[]>([])
 
-
-  let usernickName = ""
-  // recoil에서 로그인 여부를 판단한다.
-  const isLoggedIn = useRecoilValue(LoginState)
-  if (isLoggedIn) {
-    // 로그인 되어있다면 userData를 가져온다
-    const userData = sessionStorage.getItem("userData") || ""
-    const { nickName } = JSON.parse(userData)
-    usernickName = nickName
-  }
+  const userData = sessionStorage.getItem("userData") || ""
+  const { nickName } = JSON.parse(userData)
+  const usernickName = nickName
 
   useEffect(() => {
     usernickName &&
@@ -33,12 +24,15 @@ function UserSortedVol({ status, volCount }: { status: status, volCount: (count:
           setVolunteers(res.data.data)
           volCount(res.data.data.length)
         })
-  }, [status])
+  }, [status, usernickName, volCount])
 
   useEffect(() => {
     setModal(Array(volunteers.length).fill(false))
   }, [volunteers])
 
+  const removeCard = (volunteerNo: number) => {
+    setVolunteers(volunteers.filter((volunteer: Volunteer) => volunteer.volunteerNo != volunteerNo))
+  }
 
   const volunteerCards = volunteers.map((volunteer: Volunteer, idx: number) => {
 
@@ -57,7 +51,7 @@ function UserSortedVol({ status, volCount }: { status: status, volCount: (count:
           }, []))}>
           <cards.CardLg
             CardContents={cardBody}
-            CardFooter={FooterController({ status, volNo: volunteer.volunteerNo })}
+            CardFooter={FooterController({ status, volNo: volunteer.volunteerNo, removeCard })}
             CardTitle={volunteer.email.name}
           />
         </div>

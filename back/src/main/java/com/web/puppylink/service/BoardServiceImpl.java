@@ -6,15 +6,21 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.web.puppylink.dto.BoardDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.model.Board;
 import com.web.puppylink.model.Comment;
 import com.web.puppylink.model.Likes;
 import com.web.puppylink.model.Member;
+import com.web.puppylink.model.Volunteer;
+import com.web.puppylink.model.File.FileRequest;
 import com.web.puppylink.repository.BoardRepository;
 import com.web.puppylink.repository.CommentRepository;
 import com.web.puppylink.repository.FoundationRepository;
@@ -24,6 +30,8 @@ import com.web.puppylink.repository.VolunteerRepository;
 
 @Component("boardService")
 public class BoardServiceImpl implements BoardService{
+	private @Value("${cloud.aws.s3.bucket}") String Bucket;
+	private @Value("${cloud.aws.region.static}") String Region;
 	
 	private final MemberRepository memberRepository;
 	private final FoundationRepository foundationRepository;
@@ -139,7 +147,7 @@ public class BoardServiceImpl implements BoardService{
 		}
 	}
 	
-	// 게시글 삭제시, 해당 게시글에 작성되어 있는 댓글들과 반영되어 있는 좋아요가 모두 삭제될 수 있도록 한다.
+	// 게시글 삭제시, 해당 게시글에 작성되어 있는 댓글들과 반영되어 있는 좋아요와 s3객체가 모두 삭제될 수 있도록 한다.
 	@Transactional
 	@Override
 	public void delete(int boardNo) {
@@ -157,7 +165,7 @@ public class BoardServiceImpl implements BoardService{
 		for(Likes like : likesList) {
 			likesRepository.delete(like);
 		}
-		
+		deleteFile(boardNo);
 		boardRepository.deleteBoardByBoardNo(boardNo);
 	}
 
@@ -268,4 +276,63 @@ public class BoardServiceImpl implements BoardService{
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
+	
+	// 게시글 사진 등록
+	public Board submitFile(FileRequest file) {
+		
+		Board board = boardRepository.findBoardByBoardNo(file.getBoardNo()).orElseThrow(()->{
+			return new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+		});
+		
+		board.setPictureURL(file.getImagePath());
+		
+		boardRepository.save(board);
+		
+		return board;
+	}
+	
+	@Transactional
+	@Override
+	public void deleteFile(int boardNo) {
+		
+		Board board = boardRepository.findBoardByBoardNo(boardNo).orElseThrow(()->{
+			return new IllegalArgumentException("게시글을 찾을 수 없습니다.");
+		});
+		
+		try{
+			String fileUrl = board.getPictureURL();
+			
+			// fileURL없는 경우
+			if(fileUrl != null && !fileUrl.equals("")) {
+				String fileKey= fileUrl.split("com/")[1]; 		
+
+	            final AmazonS3 s3 = AmazonS3ClientBuilder.standard().withRegion(Region).build();
+
+	            try {
+	                s3.deleteObject(Bucket, fileKey);
+	            } catch (AmazonServiceException e) {
+	                System.err.println(e.getErrorMessage());
+	                System.exit(1);
+	            }
+			}
+			
+	    } catch (Exception e) {
+	       e.printStackTrace();
+	       throw new RuntimeException("s3 객체를 삭제하는데 실패했습니다.");
+	    }
+		
+		board.setPictureURL(null);
+	}
+
+	public Object getPic(int boardNo) {
+
+		Board boardInfo = boardRepository.findBoardByBoardNo(boardNo).orElseThrow(()->{
+			return new IllegalArgumentException("게시글 정보를 찾을 수 없습니다.");
+		});
+		if(boardInfo.getPictureURL() == null) {
+			return "해당 게시글엔 사진이 없습니다";
+		} else {
+			return boardInfo.getPictureURL();
+		}
+	}
 }
