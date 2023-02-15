@@ -3,23 +3,29 @@ package com.web.puppylink.service;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.web.puppylink.config.auth.PrincipalDetails;
+import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.BoardLikesDto;
+import com.web.puppylink.dto.BoardTokenDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.model.Board;
 import com.web.puppylink.model.Comment;
 import com.web.puppylink.model.Likes;
 import com.web.puppylink.model.Member;
-import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
 import com.web.puppylink.repository.BoardRepository;
 import com.web.puppylink.repository.CommentRepository;
@@ -27,29 +33,41 @@ import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.LikesRepository;
 import com.web.puppylink.repository.MemberRepository;
 import com.web.puppylink.repository.VolunteerRepository;
+import com.web.puppylink.repository.redis.AccessRedisRepository;
+import com.web.puppylink.repository.redis.RefreshRedisRepository;
 
 @Component("boardService")
 public class BoardServiceImpl implements BoardService{
 	private @Value("${cloud.aws.s3.bucket}") String Bucket;
 	private @Value("${cloud.aws.region.static}") String Region;
 	
+    @Autowired
+    private TokenProvider tokenProvider;
+    
 	private final MemberRepository memberRepository;
 	private final FoundationRepository foundationRepository;
 	private final VolunteerRepository volunteerRepository;
 	private final BoardRepository boardRepository;
 	private final LikesRepository likesRepository;
 	private final CommentRepository commentRepository;
+	private final RefreshRedisRepository refreshRedisRepository;
+	
+    @Autowired
+	private final AccessRedisRepository accessRedisRepository;
 	
 	public BoardServiceImpl(VolunteerRepository volunteerRepository,
 			MemberRepository memberRepository, FoundationRepository foundationRepository,
 			BoardRepository boardRepository, LikesRepository likesRepository,
-			CommentRepository commentRepository) {
+			CommentRepository commentRepository, RefreshRedisRepository refreshRedisRepository,
+			AccessRedisRepository accessRedisRepository) {
 		this.volunteerRepository = volunteerRepository;
 		this.memberRepository = memberRepository;
 		this.foundationRepository = foundationRepository;
 		this.boardRepository = boardRepository;
 		this.likesRepository = likesRepository;
 		this.commentRepository = commentRepository;
+		this.refreshRedisRepository = refreshRedisRepository;
+		this.accessRedisRepository = accessRedisRepository;
 	}
 	
 	@Transactional
@@ -69,6 +87,80 @@ public class BoardServiceImpl implements BoardService{
 		});
 		return boardInfoList;
 	}
+	
+	@Transactional
+    @Override
+    public List<BoardLikesDto> getBoardAllLikeNonMember() {
+    	// 비회원 접근(토큰 X)
+    	System.out.println("!!");
+    	List<Board> boardInfoList = boardRepository.findAll();
+    	List<BoardLikesDto> likesBoardList = new ArrayList<>();
+    		
+    	for(Board board : boardInfoList) {
+    		BoardLikesDto boardLikesInfo = new BoardLikesDto();
+    		boardLikesInfo.setBoardNo(board.getBoardNo());
+    		boardLikesInfo.setContents(board.getContents());
+    		boardLikesInfo.setEmail(board.getEmail());
+    		boardLikesInfo.setLikes(board.getLikes());
+    		boardLikesInfo.setIsLikes("false");
+    		boardLikesInfo.setPictureURL(board.getPictureURL());
+    		boardLikesInfo.setRegDate(board.getRegDate());
+    		boardLikesInfo.setSubject(board.getSubject());
+    					
+    		likesBoardList.add(boardLikesInfo);
+    	}
+    	return likesBoardList;
+    }
+	
+	@Transactional
+    @Override
+    public List<BoardLikesDto> getBoardAllLikeMember(BoardTokenDto token) {
+    	// 회원 접근(토큰 O)
+    	// 토큰에 있는 정보를 가져온다.
+        Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+            
+        Member member = memberRepository.findUserByEmail(principal.getUsername()).orElseThrow(()->{
+    		return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+    	});
+            
+    	List<Likes> likesInfoList = likesRepository.findLikesByEmail(member);
+    	List<Board> boardInfoList = boardRepository.findAll();
+    	List<BoardLikesDto> likesBoardList = new ArrayList<>();
+    		
+    	for(Board board : boardInfoList) {
+    		int boardNo = board.getBoardNo();
+    		for(Likes like : likesInfoList) {
+    			if(boardNo==like.getBoardNo().getBoardNo()) {
+    				BoardLikesDto boardLikesInfo = new BoardLikesDto();
+    				boardLikesInfo.setBoardNo(board.getBoardNo());
+    				boardLikesInfo.setContents(board.getContents());
+    				boardLikesInfo.setEmail(board.getEmail());
+    				boardLikesInfo.setLikes(board.getLikes());
+    				boardLikesInfo.setIsLikes("true");
+    				boardLikesInfo.setPictureURL(board.getPictureURL());
+    				boardLikesInfo.setRegDate(board.getRegDate());
+    				boardLikesInfo.setSubject(board.getSubject());
+    					
+    				likesBoardList.add(boardLikesInfo);
+    			}
+    			else {
+    				BoardLikesDto boardLikesInfo = new BoardLikesDto();
+    				boardLikesInfo.setBoardNo(board.getBoardNo());
+    				boardLikesInfo.setContents(board.getContents());
+    				boardLikesInfo.setEmail(board.getEmail());
+    				boardLikesInfo.setLikes(board.getLikes());
+    				boardLikesInfo.setIsLikes("false");
+    				boardLikesInfo.setPictureURL(board.getPictureURL());
+    				boardLikesInfo.setRegDate(board.getRegDate());
+    				boardLikesInfo.setSubject(board.getSubject());
+    					
+    				likesBoardList.add(boardLikesInfo);
+    			}
+    		}
+    	}
+    	return likesBoardList;
+    }
 	
 	@Transactional
 	@Override
@@ -97,6 +189,36 @@ public class BoardServiceImpl implements BoardService{
 			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
 		});
 		return boardInfoList;
+	}
+	
+	@Transactional
+	@Override
+	public List<Board> getBoardHistory(String nickName) {
+		Member memberInfo = memberRepository.findByNickName(nickName).orElseThrow(()->{
+			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+		});
+		
+		List<Board> boardInfoList = boardRepository.findBoardAllByEmail(memberInfo).orElseThrow(()->{
+			return new IllegalArgumentException("사용자가 작성한 게시글 목록 정보를 찾을 수 없습니다.");
+		});
+		
+		return boardInfoList;
+	}
+
+	@Override
+	public List<Member> getBoardLike(int boardNo) {
+		Board boardInfo = boardRepository.findBoardByBoardNo(boardNo).orElseThrow(()->{
+			return new IllegalArgumentException("게시글 정보를 찾을 수 없습니다.");
+		});
+		
+		List<Likes> likesInfoList = likesRepository.findLikesByBoardNo(boardInfo);
+		List<Member> memberInfoList = new ArrayList<Member>();
+		
+		for(Likes like : likesInfoList) {
+			memberInfoList.add(like.getEmail());
+		}
+		
+		return memberInfoList;
 	}
 	
 	// boardNo는 데이터베이스에서 자동 삽입되므로(Auto Increment) 삽입 정보에서 생략한다.
