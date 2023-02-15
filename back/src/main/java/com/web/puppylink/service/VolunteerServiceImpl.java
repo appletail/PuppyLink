@@ -4,10 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,27 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.beans.factory.annotation.Value;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.web.puppylink.config.auth.PrincipalDetails;
 import com.web.puppylink.config.jwt.TokenProvider;
 import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.FlightTicketDto;
+import com.web.puppylink.dto.GpsDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.model.Foundation;
+import com.web.puppylink.model.Location;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
 import com.web.puppylink.repository.FlightTicketRepository;
 import com.web.puppylink.repository.FoundationRepository;
+import com.web.puppylink.repository.LocationRepository;
 import com.web.puppylink.repository.MemberRepository;
 import com.web.puppylink.repository.VolunteerRepository;
 
@@ -55,16 +55,18 @@ public class VolunteerServiceImpl implements VolunteerService{
 	private final FoundationRepository foundationRepository;
 	private final VolunteerRepository volunteerRepository;
 	private final FlightTicketRepository flightTicketRepository;
+	private final LocationRepository locationRepository;
 	@Autowired
     private TokenProvider tokenProvider;
 	
 	public VolunteerServiceImpl(VolunteerRepository volunteerRepository,
 			MemberRepository memberRepository, FoundationRepository foundationRepository,
-			FlightTicketRepository flightTicketRepository) {
+			FlightTicketRepository flightTicketRepository, LocationRepository locationRepository) {
 		this.volunteerRepository = volunteerRepository;
 		this.memberRepository = memberRepository;
 		this.foundationRepository = foundationRepository;
 		this.flightTicketRepository = flightTicketRepository;
+		this.locationRepository = locationRepository;
 	}
 	
 	@Transactional
@@ -499,6 +501,60 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return response;
 	}
 
+
+	@Transactional
+	@Override
+	public void flightInfoDb(String ticketNo, @NotNull String flight) {
+		
+		//3. AirLabs로 API 요청을 보내고 편명에 해당하는 각종 정보를 받는다.
+		RestTemplate rt = new RestTemplate();
+		
+		//HttpHeader 오브젝트 생성
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+				" AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
+		
+		//HttpBody 오브젝트 생성									
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("_view", "array");
+		params.add("_fields", "lat,lng,dir");
+		params.add("api_key", apiKeyGps);
+		params.add("flight_iata", flight);
+		
+		HttpEntity<MultiValueMap<String, String>> airLabsRequest = 
+				new HttpEntity<>(params, headers);
+		
+		ResponseEntity<List> response= rt.exchange(
+				"https://airlabs.co/api/v9/flights",
+				HttpMethod.POST,
+				airLabsRequest,
+				List.class
+				);
+		
+		List s = response.getBody();
+//		System.out.println("=======flightInfoDB 테스트 중");
+		System.out.println("response.getBody() : " + response.getBody());
+		System.out.println("s : " + s);
+		System.out.println("s.get(0) : " + s.get(0));
+		List arr = (List) s.get(0);
+		System.out.println("arr.get(0) : " + arr.get(0));
+
+		//우선 해당 오브젝트를 String으로 변환한 후 Integer.parseInt
+		Double tmpLat = Double.parseDouble(String.valueOf(arr.get(0)));
+		Double tmpLng = Double.parseDouble(String.valueOf(arr.get(1)));
+		Double tmpDir = Double.parseDouble(String.valueOf(arr.get(2)));
+//		GpsDto gpsDto = GpsDto.builder()
+//				.lat(tmpLat)
+//				.lng(tmpLng)
+//				.dir(tmpDir)
+//				.build();
+
+//		System.out.println("=========flightInfoDB 테스트 끝");
+		locationRepository.mSave(ticketNo, flight, tmpLat, tmpLng, tmpDir);
+		return;
+	}
+
 	@Transactional
 	@Override
 	public Volunteer updateFile(FileRequest file) {
@@ -553,4 +609,23 @@ public class VolunteerServiceImpl implements VolunteerService{
 		return list;
 	}
 
+	@Transactional
+	@Override
+	public List<Location> pathInfo(int volunteerNo) {
+		//1. 봉사자의 정보를 가져온다.
+		Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerNo(volunteerNo).orElseThrow(()->{
+			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
+		});
+		//2. 봉자자의 해외 이동 봉사에 이용되는 티켓 넘버를 가져온다. 
+		String flightNum = volunteer.getTicketNo().getFlight();
+		System.out.println(flightNum);
+		
+		List<Location> pathList = locationRepository.findAllByFlight(flightNum);
+		System.out.println("pathList : " + pathList);
+//		for(Location l : pathList) {
+//			System.out.println("pathInfo l : " + l);
+//		}
+		
+		return pathList;
+	}
 }

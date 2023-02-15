@@ -1,3 +1,5 @@
+import path from "path";
+
 import { useState, useEffect, useRef } from "react";
 
 import {
@@ -18,7 +20,11 @@ const mapOptions = {
   },
   // mapContainerClassName : "map-container"
 };
-
+interface flightType extends Omit<Volunteer, "dest"> {
+  dest: number
+  flight: string
+  id: number
+}
 const icons: Record<number, { icon: string }> = {
 0: {
   icon: Airplanes.Airplane_0 ,
@@ -92,6 +98,12 @@ const icons: Record<number, { icon: string }> = {
 23: {
   icon: Airplanes.Airplane_23,
 },
+30: {
+  icon: Airplanes.dep_Airport,
+},
+31: {
+  icon: Airplanes.arr_Airport,
+},
 
 };
 
@@ -125,6 +137,9 @@ function Location() {
   const markerRef = useRef<google.maps.Marker>();
   const depAirportRef = useRef<google.maps.Marker>();
   const arriveAirportRef = useRef<google.maps.Marker>();
+  const pathRefArray = useRef<[]>([]);
+  pathRefArray.current= [];
+  // const addToRefs=(el : google.maps.Marker)=>{pathRefArray.current.push(el)};
 
   
   async function fetchApi() {
@@ -147,7 +162,11 @@ function Location() {
       console.log("초기화 항공기 -> lat : lng : dir= " + lat.current + " : " + lng.current + " : " + dir.current);
       
     })
-    .catch((err) => console.log(err));
+    .catch(() => {
+      console.log("첫 번째 동기 통신 에러 발생!");
+      lat.current = 0; 
+      lng.current = 0;
+      dir.current = 0;});
 
     if(dir.current < 15){
       iconIdx.current = 0;
@@ -203,8 +222,6 @@ function Location() {
     position: { lat: lat.current, lng: lng.current }
   });
 
-  
-  // const volunteerNo = 1;
   console.log("두 번째 동기 통신 : 공항 정보 호출");
   await axBase({
       method: 'get',
@@ -221,23 +238,26 @@ function Location() {
       arriveLng.current = res.data.arriveLng;
       console.log(" depLat.current " + depLat.current);
       console.log(" arriveLat.current " + arriveLat.current);
-
-
-      depAirportRef.current = new google.maps.Marker({ map,
-        icon : icons[6].icon,
-        position: { lat: depLat.current, lng: depLng.current }
-      });
-
-      arriveAirportRef.current = new google.maps.Marker({ map,
-        icon : icons[18].icon,
-        position: { lat: arriveLat.current, lng: arriveLng.current }
-      });
-
-
       
     })
-    .catch((err) => console.log(err));  
-    
+    .catch(() => {
+      console.log("두 번째 동기 통신 에러 발생!");
+      depLat.current = 10;
+      depLng.current = 0;
+      arriveLat.current = 20;
+      arriveLng.current = 0;});
+      
+      
+            depAirportRef.current = new google.maps.Marker({ map,
+              icon : icons[30].icon,
+              position: { lat: depLat.current, lng: depLng.current }
+            });
+      
+            arriveAirportRef.current = new google.maps.Marker({ map,
+              icon : icons[31].icon,
+              position: { lat: arriveLat.current, lng: arriveLng.current }
+            });
+      
     
     
     // airportRef.current = new google.maps.Marker({ map,
@@ -246,9 +266,31 @@ function Location() {
     // airportRef.current.setPosition({ lat: depLat.current, lng: depLng.current });
     // airportRef.current.setIcon(icons[12].icon);
 
-
-
+    // console.log("세 번째 동기 통신 : 항공기 path 정보 호출");
+    // await axBase({
+    //   method: 'get',
+    //   url: `volunteer/path/${volunteerNo}`,
+    // })
+    // .then((res) => { 
+    //   console.log("세 번째 동기 : 항공기 path 정보호출 then");
+    //   const data =  res.data;
+    //   console.log("res : ", res);
+    //   console.log("res.data : ", res.data);
+    //   // lat.current = data[0][0]; 
+    //   // lng.current = data[0][1];
+    //   // dir.current = data[0][2];
+      
+    //   // console.log(data);
+      
+      
+    //   data.map((cur: flightType) => {
+    //     pathRefArray.current. (useRef<google.maps.Marker>());
+    //     console.log(cur.flight)
+    //     })
+    // })
+    // .catch((err) => console.log(err));
   }
+
 
   useEffect(() => {
     console.log('맵:',map)
@@ -260,7 +302,7 @@ function Location() {
     //1. 항공기 gps 호출하기
     //2. 공항 호출하기
     fetchApi();
-    
+    // fetchApi2();
     
     // markerRef.current.setPosition({ lat: lat.current, lng: lng.current });
     // markerRef.current.setIcon(icons[iconIdx.current].icon);
@@ -295,7 +337,11 @@ function Location() {
       console.log("lat : lng : dir= " + lat.current + " : " + lng.current + " : " + dir.current);
       
     })
-    .catch((err) => console.log(err));
+    .catch(() => {
+      console.log("setInterval 에러 발생!");
+      lat.current = 0; 
+      lng.current = 0;
+      dir.current = 0;});
 
   if(dir.current < 15){
     iconIdx.current = 0;

@@ -11,7 +11,7 @@ import com.web.puppylink.model.Board;
 import com.web.puppylink.model.FlightTicket;
 
 public interface FlightTicketRepository extends JpaRepository<FlightTicket, String> {
-	@Query(value = "SELECT * FROM flightTicket a WHERE DATE(Now()) > DATE(a.arriveDate)",  nativeQuery = true)
+	@Query(value = "SELECT * FROM flightTicket a WHERE DATE(Now()) > DATE(a.depDate)",  nativeQuery = true)
 	//SELECT * FROM table_a WHERE create_dt >= '2021-03-24 00:00:00' 
 	List<FlightTicket> getAfterArrive();
 }

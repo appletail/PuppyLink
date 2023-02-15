@@ -22,6 +22,8 @@ import Airplane_6 from "@/assets/Airplanes/Airplane-6.png";
 import Airplane_7 from "@/assets/Airplanes/Airplane-7.png";
 import Airplane_8 from "@/assets/Airplanes/Airplane-8.png";
 import Airplane_9 from "@/assets/Airplanes/Airplane-9.png";
+import arr_Airport from "@/assets/Airplanes/arrAirport.png";
+import dep_Airport from "@/assets/Airplanes/depAirport.png";
 
 
-export const Airplanes = {Airplane_0, Airplane_1,  Airplane_2, Airplane_3, Airplane_4, Airplane_5, Airplane_6, Airplane_7, Airplane_8, Airplane_9, Airplane_10, Airplane_11, Airplane_12, Airplane_13, Airplane_14, Airplane_15, Airplane_16, Airplane_17, Airplane_18, Airplane_19, Airplane_20, Airplane_21, Airplane_22, Airplane_23  };
+export const Airplanes = {Airplane_0, Airplane_1,  Airplane_2, Airplane_3, Airplane_4, Airplane_5, Airplane_6, Airplane_7, Airplane_8, Airplane_9, Airplane_10, Airplane_11, Airplane_12, Airplane_13, Airplane_14, Airplane_15, Airplane_16, Airplane_17, Airplane_18, Airplane_19, Airplane_20, Airplane_21, Airplane_22, Airplane_23 , dep_Airport, arr_Airport };

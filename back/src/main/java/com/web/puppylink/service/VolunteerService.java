@@ -1,6 +1,9 @@
 package com.web.puppylink.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.validation.constraints.NotNull;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,9 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.FlightTicketDto;
+import com.web.puppylink.dto.GpsDto;
 import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.dto.VolunteerDto;
 import com.web.puppylink.model.FlightTicket;
+import com.web.puppylink.model.Location;
 import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
 
@@ -79,4 +84,7 @@ public interface VolunteerService {
 
 	String getPassportUrl(int volunteerN);
 
+	void flightInfoDb(String flightNo, @NotNull String string);
+	
+	public List<Location> pathInfo(int volunteerNo);
 }
