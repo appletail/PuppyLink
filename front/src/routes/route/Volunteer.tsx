@@ -2,6 +2,7 @@ import PrivateRouter from './PrivateRouter';
 
 import ProtectRoute from './ProtectRoute';
 
+import ReadDocsPage from '@/pages/Volunteer/Foundation/ReadDocsPage';
 import VolAdminPage from '@/pages/Volunteer/Foundation/VolAdminPage';
 import VolUserResiPage from '@/pages/Volunteer/User/VolUserResiPage';
 
@@ -20,6 +21,10 @@ const Volunteer = [
           {
             path: '/volunteer/manager',
             element: <VolAdminPage />,
+          },
+          {
+            path: '/volunteer/manager/docs',
+            element: <ReadDocsPage />,
           }
         ]
       },

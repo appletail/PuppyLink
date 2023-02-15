@@ -26,7 +26,15 @@ const category: Array<Category> = [
         , name: "단체 회원 봉사페이지"
         , path: "/manager"
         , role: [role.MANAGER]
-        , sub: []
+        , sub: [
+          {
+            idx: 11
+            , name: "단체 회원 서류 확인페이지"
+            , path: "/docs"
+            , role: [role.MANAGER]
+            , sub: []
+          },
+        ]
       },
     ],
 
