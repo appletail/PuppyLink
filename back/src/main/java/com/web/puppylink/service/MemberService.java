@@ -21,7 +21,7 @@ public interface MemberService {
     Optional<Member> getMyMemberWithAuthorities();
 	boolean duplicateCheckEmail(String email);
 	boolean duplicateCheckNickName(String nickName);
-    void updateRefresh(String email, String refresh);
+//    void updateRefresh(String email, String refresh);
 //    Map<String, String> refresh(Authentication authentication);
     Object update(PasswordDto newPassword, String nickName);
     void deleteMemberByToken(TokenDto token) throws Exception;

@@ -118,16 +118,6 @@ public class MemberServiceImpl implements MemberService{
     	return memberRepository.existsByNickName(nickName);
 	}
 
-    @Override
-    @Transactional
-    public void updateRefresh(String email, String refresh) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> {
-            return new IllegalArgumentException("회원 찾기 실패");
-        });
-        member.setRefreshToken(refresh);
-        //더티 체킹 : 변한 부분 DB에 자동 커밋됩니다
-    }
-
 //    @Override
 //    @Transactional
 //    public Map<String, String> refresh(Authentication authentication) {
@@ -280,4 +270,5 @@ public class MemberServiceImpl implements MemberService{
                 .refreshToken(refreshToken)
                 .build();
     }
+
 }

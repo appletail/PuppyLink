@@ -19,7 +19,8 @@ interface LoginProps {
 }
 
 function LoginPage() {
-
+  
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
