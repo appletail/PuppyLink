@@ -1,8 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { NavTop } from '@/components';
+import { NavTop, ChannelTalk } from '@/components';
 function GroupTabPage() {
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   return (
     <div >

@@ -8,6 +8,7 @@ import NavStyle from './NavTop.module.css';
 import { axBase } from '@/apis/api/axiosInstance';
 import LogoWhite from '@/assets/logo-white.svg';
 import { LoginState } from '@/states/LoginState';
+import { ChannelTalk } from '@/components';
 
 
 function NavTop(): JSX.Element {
@@ -38,6 +39,14 @@ function NavTop(): JSX.Element {
       }
     }).then(() => {
       sessionStorage.clear()
+      ChannelTalk.updateUser({
+        language: "ko",
+        profile: {
+          email: "guest@puppylink.com",
+          phone: null,
+          nickname: "guest",
+        }
+      });
       setisLoggedIn(false)
       navigate("/login")
     }

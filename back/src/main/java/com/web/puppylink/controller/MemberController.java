@@ -13,6 +13,7 @@ import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.PasswordDto;
 import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
@@ -51,6 +52,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -120,7 +122,7 @@ public class MemberController {
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
 
-     return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
+        return new ResponseEntity<>(new BasicResponseDto(
                CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
     }
 

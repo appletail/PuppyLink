@@ -11,7 +11,7 @@ import { useRecoilValue } from "recoil"
 import UploadImg from "./Components/UploadImg"
 
 import { axAuth } from "@/apis/api/axiosInstance"
-import { inputs, NavTop } from "@/components"
+import { inputs, NavTop, ChannelTalk } from "@/components"
 import { LoginState } from "@/states/LoginState"
 
 interface Review {
@@ -24,7 +24,7 @@ interface Review {
 function ReviewCreatePage() {
 
   // const [boardNo, setBoardNo] = useState("")
-
+  ChannelTalk.hideChannelButton();
   const userData = sessionStorage.getItem("userData") || ""
   const parsedUserData = JSON.parse(userData)
   const email = parsedUserData.email

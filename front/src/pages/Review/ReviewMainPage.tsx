@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom'
 import BestCarousel from './Components/BestCarousel'
 import ReviewLst from './Components/ReviewLst'
 
-import { NavTop } from '@/components'
+import { NavTop, ChannelTalk } from '@/components'
 
 
 function ReviewMainPage() {
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate()
   return (
     <div className='w-[21.875rem]'>

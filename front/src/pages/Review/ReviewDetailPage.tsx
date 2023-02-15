@@ -8,7 +8,7 @@ import CommentList from './Components/CommentList'
 
 import { axBase } from '@/apis/api/axiosInstance'
 
-import { NavTop } from '@/components'
+import { NavTop, ChannelTalk } from '@/components'
 
 interface DetailProps {
   subject: string
@@ -20,7 +20,7 @@ interface DetailProps {
 
 function ReviewDetailPage() {
 
-
+  ChannelTalk.hideChannelButton();
   const location = useLocation()
   const review = location.state.review
 

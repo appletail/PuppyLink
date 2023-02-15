@@ -9,7 +9,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import BusinessValidate from './Components/BusinessValidate';
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { inputs, buttons, ModalForm, NavTop } from '@/components';
+import { inputs, buttons, ModalForm, NavTop, ChannelTalk } from '@/components';
 
 
 interface SignupProps {
@@ -23,6 +23,7 @@ interface SignupProps {
 }
 
 function GroupSignupPage() {
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   const {
     control,

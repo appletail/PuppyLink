@@ -6,10 +6,8 @@ import useNumberCount from './CustomHook/useNumberCount';
 import DoggyImage from '@/assets/Doggy_image.png'
 import planet from '@/assets/planet.gif'
 import { NavTop } from '@/components';
-
+import { ChannelTalk } from '@/components';
 function HomePage() {
-
-
   return (
     <div>
       <NavTop.NavLogo />

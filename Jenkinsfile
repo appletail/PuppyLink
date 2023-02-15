@@ -99,29 +99,23 @@ pipeline{
                         }
                     }
                 }
-                stage('stop redis') {
-                    steps {
-                        sh 'docker ps -f name=puppy-redis -q | xargs --no-run-if-empty docker container stop'
-                        sh 'docker container ls -a -f name=puppy-redis -q | xargs -r docker container rm'
-                    }
-                    post {
-                        failure {
-                            echo 'not exist redis-container'
-                        }
-                    }
-                }
+                // stage('stop redis') {
+                //     steps {
+                //         sh 'docker ps -f name=puppy-redis -q | xargs --no-run-if-empty docker container stop'
+                //         sh 'docker container ls -a -f name=puppy-redis -q | xargs -r docker container rm'
+                //     }
+                //     post {
+                //         failure {
+                //             echo 'not exist redis-container'
+                //         }
+                //     }
+                // }
             }
         }
         stage('deploy') {
             steps {
                 script {
                     try {
-                        echo 'puppy-link database create container start'
-                        sh "docker run -d -p 6379:6379 \
-                                    --name puppy-redis \
-                                    --net puppy-net \
-                                    --rm redis:alpine \
-                                    redis-server --appendonly yes --replica-read-only no"
                         sh "docker run -d -p 3306:3306 \
                                     -v mariadb:/var/lib/mysql \
                                     -v /var/mariadb/init:/docker-entrypoint-initdb.d \
