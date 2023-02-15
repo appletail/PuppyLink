@@ -154,7 +154,7 @@ public class FoundationController {
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SUCCESS_DESCRIPTION,
-            			foundationService.createDescription(foundationDto)
+            			foundationService.createDescription(foundationDto.getMembers_email(), foundationDto.getDescription())
             	), 
             	HttpStatus.OK
             );

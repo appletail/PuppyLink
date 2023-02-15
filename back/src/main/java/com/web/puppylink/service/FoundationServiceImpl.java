@@ -129,13 +129,17 @@ public class FoundationServiceImpl implements FoundationService{
 
 	@Transactional
 	@Override
-	public Foundation createDescription(FoundationDto foundationDto) {
+	public Foundation createDescription(String email, String description) {
 
-		Foundation foundation = foundationRepository.findFoundationByBusinessNo(foundationDto.getBusinessNo()).orElseThrow(()->{
+		Member member = memberRepository.findByEmail(email).orElseThrow(()->{
+			return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+		});
+		
+		Foundation foundation = foundationRepository.findFoundationByEmail(member).orElseThrow(()->{
 			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
 		});
 		
-		foundation.setDescription(foundationDto.getDescription());
+		foundation.setDescription(description);
         
 		return foundationRepository.save(foundation);
 	}
