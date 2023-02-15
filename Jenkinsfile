@@ -16,7 +16,7 @@ pipeline{
             steps {
                 sh 'mvn -v'
                 // gitlab에서 pull 가져오기 (성공) // dev 및 main 올릴때 꼭!! 수정필요
-                git branch: '!HOTFIX/release-ocr-test',
+                git branch: 'dev',
                     credentialsId: 'ssafy_project_puppylink',
                     url: 'https://lab.ssafy.com/s08-webmobile2-sub2/S08P12C107.git'
             }
@@ -120,7 +120,8 @@ pipeline{
                         sh "docker run -d -p 6379:6379 \
                                     --name puppy-redis \
                                     --net puppy-net \
-                                    --rm redis"
+                                    --rm redis:alpine \
+                                    redis-server --appendonly yes --replica-read-only no"
                         sh "docker run -d -p 3306:3306 \
                                     -v mariadb:/var/lib/mysql \
                                     -v /var/mariadb/init:/docker-entrypoint-initdb.d \
