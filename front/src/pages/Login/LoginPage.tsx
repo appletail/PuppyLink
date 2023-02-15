@@ -146,7 +146,7 @@ function LoginPage() {
         </div>
         <div className="flex justify-between">
           <p>아직 회원이 아니신가요?</p>
-          <div className="text-main-100" onClick={goSignup}>
+          <div aria-hidden='true' className="text-main-100" onClick={goSignup}>
             회원가입
           </div>
         </div>
