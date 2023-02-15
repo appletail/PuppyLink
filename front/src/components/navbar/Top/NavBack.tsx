@@ -9,7 +9,9 @@ interface NavBack {
 
 function NavBack({ NavContent }: NavBack) {
   const navigate = useNavigate()
-  const goToBack = () => navigate(-1)
+  const goToBack = () => {
+    navigate(-1)
+  }
   return (
     <div className={NavStyle.NavBg}>
       <div className={NavStyle.Left} onClick={goToBack}>

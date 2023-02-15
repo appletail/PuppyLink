@@ -1,18 +1,28 @@
 .XLBox {
   @apply w-[18.875rem] h-[30rem]
     rounded-lg
-  bg-white
+    bg-white
     p-3
     drop-shadow-lg
     flex flex-col
     justify-between;
 }
 
+.XLContentBox{
+  @apply
+  max-h-24
+  text-ellipsis
+  overflow-hidden;
+}
+
 .XLTitle {
-  @apply mb-6
+  @apply mb-4
     text-title3-bold;
 }
 
 .XLContents {
-  @apply text-footnote;
+  @apply text-footnote
+  
+  
+
 }

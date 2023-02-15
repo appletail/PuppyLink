@@ -276,7 +276,7 @@ function GroupSignupPage() {
             <inputs.InputFormBtn
               control={control}
               name="businessNo"
-              placeholder="사업자번호 "
+              placeholder="사업자번호"
               type="number"
               button={
                 <buttons.BtnSm BtnValue="인증하기" onClick={() => { setOpenModal(!openModal) }} />
