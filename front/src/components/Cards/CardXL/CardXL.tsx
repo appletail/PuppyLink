@@ -4,7 +4,7 @@ import { imgs } from '@/components';
 
 interface CardXL extends Omit<CardProps, 'CardContents'> {
   CardImg: imgProps;
-  CardContents: string | JSX.Element | JSX.Element[];
+  CardContents?: string | JSX.Element | JSX.Element[];
 }
 
 function CardXL({
