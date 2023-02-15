@@ -12,5 +12,5 @@ public interface FoundationService {
 	List<Foundation> getFoundationAll();
 	Member signup(MemberDto member);
 	Foundation submitProfile(FileRequest file);
-	Foundation createDescription(FoundationDto foundationDto);
+	Foundation createDescription(String email, String description);
 }
