@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.web.puppylink.model.FlightTicket;
 import com.web.puppylink.repository.FlightTicketRepository;
+import com.web.puppylink.service.VolunteerServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,11 +22,12 @@ public class ScheduledTasks {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("mm:ss:SSS");
     
-    @Autowired
     private final FlightTicketRepository flightTicketRepository;
+	private final VolunteerServiceImpl volunteerService;
     
     
-    public ScheduledTasks(FlightTicketRepository flightTicketRepository) {
+    public ScheduledTasks(VolunteerServiceImpl volunteerService, FlightTicketRepository flightTicketRepository) {
+		this.volunteerService = volunteerService;
     	this.flightTicketRepository = flightTicketRepository;
     }
 
@@ -59,14 +61,19 @@ public class ScheduledTasks {
         log.info(" fixedRateAndInitialDelay 현재시간 - {}", formatter.format(LocalDateTime.now()));
     }
 
-    @Scheduled(cron = "0 0/1 * 1/1 * ?")
+//    @Scheduled(cron = "0 0/1 * 1/1 * ?")
     public void cronExpression() {
         log.info("cronExpression 1분마다 현재시간 - {}", formatter.format(LocalDateTime.now()));
         List<FlightTicket> list = flightTicketRepository.getAfterArrive();
-        for (FlightTicket a : list) {
-        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a);
-        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a.getFlight()); //찍히는거 확인함..
-        	
+        if(!list.isEmpty()) {
+	        for (FlightTicket ticket : list) {
+//	        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a);
+//	        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a.getFlight()); //찍히는거 확인함..
+	        	volunteerService.flightInfoDb(ticket.getTicketNo(), ticket.getFlight());
+	        }
+        }else {
+        	System.out.println("list없음");
+        	return;
         }
     }
 }
