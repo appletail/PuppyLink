@@ -3,9 +3,12 @@ package com.web.puppylink.service;
 import java.util.List;
 
 import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.BoardLikesDto;
+import com.web.puppylink.dto.BoardTokenDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.model.Board;
 import com.web.puppylink.model.Comment;
+import com.web.puppylink.model.Member;
 import com.web.puppylink.model.File.FileRequest;
 
 public interface BoardService {
@@ -26,4 +29,8 @@ public interface BoardService {
 	Board submitFile(FileRequest file);
 	void deleteFile(int boardNo);
 	Object getPic(int boardNo); 
+	List<Board> getBoardHistory(String nickName);
+	List<Member> getBoardLike(int boardNo);
+	List<BoardLikesDto> getBoardAllLikeNonMember();
+	List<BoardLikesDto> getBoardAllLikeMember(BoardTokenDto token) throws Exception;
 }
