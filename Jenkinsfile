@@ -121,6 +121,7 @@ pipeline{
                                     -v /var/mariadb/init:/docker-entrypoint-initdb.d \
                                     --name puppy-db \
                                     --net puppy-net \
+                                    -e TZ=Asia/Seoul \
                                     --rm qlwms221/mariadb:$ver"
                         echo 'puppy-link spring create container start'
                         sh "docker run -d -p 8085:8085 \
