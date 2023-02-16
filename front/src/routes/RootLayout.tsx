@@ -10,7 +10,7 @@ export default function RootLayout() {
   // 상황에 따른 NavTop 다르게 보여주기
   ChannelService.boot({
     "pluginKey": "bd89c55b-7bd5-44ac-b566-06372fef4c55", // fill your plugin key
-    "language":"ko",
+    "language": "ko",
 
   });
 
@@ -19,10 +19,13 @@ export default function RootLayout() {
   useEffect(() => {
     //axios 호출시 인터셉트
     axBase.interceptors.request.use((config) => {
-      setLoading(true)
+      if (!config.url?.includes('news')) {
+        setLoading(true)
+      }
       return config
     },
       (error) => {
+        setLoading(false)
         return Promise.reject(error);
       });
     axAuth.interceptors.request.use((config) => {
@@ -30,8 +33,11 @@ export default function RootLayout() {
       return config
     },
       (error) => {
+        setLoading(false)
         return Promise.reject(error);
       });
+
+
     //axios 호출 종료시 인터셉트
     axBase.interceptors.response.use((response) => {
       setLoading(false)

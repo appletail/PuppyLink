@@ -27,7 +27,7 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
     const title = (
       <div className="flex justify-between items-center text-title2-bold">
         <p>{item?.businessName}</p>
-        <img alt="foundation" className='w-14 h-14 rounded-full' src={item.profileURL} />
+        <img alt="foundation" className='w-14 h-14 rounded-full' src={item.profileURL || PawBlue} />
       </div>
     )
 
