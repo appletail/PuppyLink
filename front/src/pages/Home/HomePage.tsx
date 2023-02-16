@@ -47,6 +47,7 @@ function HomePage() {
           </div>
         </div>
 
+        <p className='text-title2-bold px-8 mb-4'>최근 뉴스</p>
         <CrawlingNews />
       </div>
     </div>
