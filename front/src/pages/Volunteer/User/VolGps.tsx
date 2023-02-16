@@ -317,7 +317,7 @@ function Location({volunteerNo}:volNo) {
     if (isNaN(lat.current) || isNaN(lng.current)) return;
     // console.log('setInterval 반복 ')
           
-    const volunteerNo = 1;
+    // const volunteerNo = 1;
     
     axBase({
       method: 'get',
@@ -343,5 +343,5 @@ function Location({volunteerNo}:volNo) {
   map.panTo({ lat: lat.current, lng: lng.current });
 
   }, 5000);
-  return (        <NavTop.NavBack NavContent='실시간 항공기 위치' />)
+  return (        <NavTop.NavBack NavContent='항공기 위치' />)
 }

@@ -218,7 +218,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 				.depDate(flightTicket.getDepDate())
 				.arriveCity(flightTicket.getArriveCity())
 				.arriveDate(flightTicket.getArriveDate())
-				.flight(flightTicket.getFlight())
+				.flight(flightTicket.getFlight().replaceAll(" ", ""))
 				.build();
 		
 		// 봉사자의 항공권 정보(ticketNo)를 업데이트한다.
@@ -268,6 +268,12 @@ public class VolunteerServiceImpl implements VolunteerService{
 		String status = volunteer.getStatus();
 		if(status.contentEquals("confirm")) {
 			volunteer.setStatus("complete");
+			
+			//flightticket 테이블에서 삭제
+			String ticketNo = volunteer.getTicketNo().getTicketNo();	
+			flightTicketRepository.deleteById(ticketNo);
+			//location 테이블에서 삭제
+			locationRepository.deleteTicket(ticketNo);
 			
 			FileRequest fileRequest = FileRequest.builder()
 					.volunteerNo(volunteerNo)
@@ -467,7 +473,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		//2. 봉자자의 해외 이동 봉사에 이용되는 항공기 편명을 가져온다. 
-		String flightNum = volunteer.getTicketNo().getFlight();
+		String flightNum = volunteer.getTicketNo().getFlight().replaceAll(" ", "");
 		System.out.println(flightNum);
 		
 		//3. AirLabs로 API 요청을 보내고 편명에 해당하는 각종 정보를 받는다.
@@ -533,7 +539,9 @@ public class VolunteerServiceImpl implements VolunteerService{
 		Double tmpLat = Double.parseDouble(String.valueOf(arr.get(0)));
 		Double tmpLng = Double.parseDouble(String.valueOf(arr.get(1)));
 		Double tmpDir = Double.parseDouble(String.valueOf(arr.get(2)));
+//		System.out.println(tmpLat + "  " + tmpLng + " " + tmpDir );
 		locationRepository.mSave(ticketNo, flight, tmpLat, tmpLng, tmpDir);
+//		System.out.println("msave 완료");
 		return;
 	}
 
@@ -599,8 +607,8 @@ public class VolunteerServiceImpl implements VolunteerService{
 			return new IllegalArgumentException("봉사 정보를 찾을 수 없습니다.");
 		});
 		//2. 봉자자의 해외 이동 봉사에 이용되는 티켓 넘버를 가져온다. 
-		String flightNum = volunteer.getTicketNo().getFlight();
-		System.out.println(flightNum);
+		String flightNum = volunteer.getTicketNo().getFlight().replaceAll(" ", "");
+//		System.out.println(flightNum);
 		
 		List<Location> pathList = locationRepository.findAllByFlight(flightNum);
 		return pathList;
