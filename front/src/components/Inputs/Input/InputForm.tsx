@@ -14,7 +14,7 @@ export type TControl<T extends FieldValues> = {
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
   >;
   type?: string;
-  placeholder?: string ;
+  placeholder?: string;
 };
 
 function InputForm({ control, name, rules, type, placeholder }: TControl<any>) {
