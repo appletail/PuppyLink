@@ -495,9 +495,6 @@ public class VolunteerServiceImpl implements VolunteerService{
 				airLabsRequest,
 				String.class
 		);
-		
-		System.out.println("response.getBody() : " + response.getBody());
-
 		return response;
 	}
 
@@ -505,10 +502,7 @@ public class VolunteerServiceImpl implements VolunteerService{
 	@Transactional
 	@Override
 	public void flightInfoDb(String ticketNo, @NotNull String flight) {
-		
-		//3. AirLabs로 API 요청을 보내고 편명에 해당하는 각종 정보를 받는다.
 		RestTemplate rt = new RestTemplate();
-		
 		//HttpHeader 오브젝트 생성
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -530,27 +524,15 @@ public class VolunteerServiceImpl implements VolunteerService{
 				HttpMethod.POST,
 				airLabsRequest,
 				List.class
-				);
+		);
 		
 		List s = response.getBody();
-//		System.out.println("=======flightInfoDB 테스트 중");
-		System.out.println("response.getBody() : " + response.getBody());
-		System.out.println("s : " + s);
-		System.out.println("s.get(0) : " + s.get(0));
 		List arr = (List) s.get(0);
-		System.out.println("arr.get(0) : " + arr.get(0));
 
 		//우선 해당 오브젝트를 String으로 변환한 후 Integer.parseInt
 		Double tmpLat = Double.parseDouble(String.valueOf(arr.get(0)));
 		Double tmpLng = Double.parseDouble(String.valueOf(arr.get(1)));
 		Double tmpDir = Double.parseDouble(String.valueOf(arr.get(2)));
-//		GpsDto gpsDto = GpsDto.builder()
-//				.lat(tmpLat)
-//				.lng(tmpLng)
-//				.dir(tmpDir)
-//				.build();
-
-//		System.out.println("=========flightInfoDB 테스트 끝");
 		locationRepository.mSave(ticketNo, flight, tmpLat, tmpLng, tmpDir);
 		return;
 	}
@@ -621,11 +603,6 @@ public class VolunteerServiceImpl implements VolunteerService{
 		System.out.println(flightNum);
 		
 		List<Location> pathList = locationRepository.findAllByFlight(flightNum);
-		System.out.println("pathList : " + pathList);
-//		for(Location l : pathList) {
-//			System.out.println("pathInfo l : " + l);
-//		}
-		
 		return pathList;
 	}
 }

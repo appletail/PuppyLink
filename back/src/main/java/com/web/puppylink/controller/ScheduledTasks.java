@@ -61,18 +61,14 @@ public class ScheduledTasks {
         log.info(" fixedRateAndInitialDelay 현재시간 - {}", formatter.format(LocalDateTime.now()));
     }
 
-//    @Scheduled(cron = "0 0/1 * 1/1 * ?")
+    @Scheduled(cron = "0 0/5 * 1/1 * ?")
     public void cronExpression() {
-        log.info("cronExpression 1분마다 현재시간 - {}", formatter.format(LocalDateTime.now()));
         List<FlightTicket> list = flightTicketRepository.getAfterArrive();
         if(!list.isEmpty()) {
 	        for (FlightTicket ticket : list) {
-//	        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a);
-//	        	log.info("flightticket의 tostring이 찍히겠지?  a : " + a.getFlight()); //찍히는거 확인함..
 	        	volunteerService.flightInfoDb(ticket.getTicketNo(), ticket.getFlight());
 	        }
         }else {
-        	System.out.println("list없음");
         	return;
         }
     }

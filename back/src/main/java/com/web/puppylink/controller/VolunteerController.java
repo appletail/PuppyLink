@@ -266,48 +266,20 @@ public class VolunteerController {
     @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
     public @ResponseBody String GPS(@PathVariable final int volunteerNo) {
     	System.out.println("gps 호출");
-        // return ResponseEntity.ok(volunteerService.ocr(volunteerNo));
     	ResponseEntity<String> ans = volunteerService.flightInfo(volunteerNo);    
     	System.out.println(" ans  : "  +  ans.getBody());
     	return ans.getBody();
-//        return new ResponseEntity(
-//            	new BasicResponseDto(
-//            			CommonCode.SELECT_GPS,
-//            			ans
-//            	), 
-//            	HttpStatus.OK
-//            );
     }
     
     //공항 정보 요청
 	@GetMapping("/airport/{volunteerNo}")
-//    @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
-//    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
     public @ResponseBody AirportDto airport(@PathVariable final int volunteerNo) {
-    	System.out.println("airport 호출");
-//    	
-//    	AirportDto airportDto = AirportDto.builder()
-//    						.depId(depId)
-//    						.arriveId(arriveId)
-//    						.build();
-//    	
+    	System.out.println("airport 호출");    	
     	AirportDto ans = volunteerService.airportInfo(volunteerNo);
-    	
-    	
-//    	System.out.println(" ans  : "  +  ans.getBody());
     	return ans;
-//        return new ResponseEntity(
-//            	new BasicResponseDto(
-//            			CommonCode.SELECT_GPS,
-//            			ans
-//            	), 
-//            	HttpStatus.OK
-//            );
     }
 
-	//지나온 경로 리스트 가져오기
 	@ApiOperation(code = 200, value = "[PATH] 항공기가 지나간 길의 위치를 가져온다.", notes = "[PATH] ")
-	@ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
 	@GetMapping("/path/{volunteerNo}")
 	public @ResponseBody List<Location> path(@PathVariable final int volunteerNo) {
 		System.out.println("path 호출");
