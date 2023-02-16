@@ -24,6 +24,7 @@ module.exports = {
         30: '#FFF0C5',
         10: '#FFFAEC',
       },
+      select: '#F2F4F8',
     },
     fontSize: {
       caption2: [
@@ -62,7 +63,7 @@ module.exports = {
       ],
 
       body: [
-        '17 px',
+        '17px',
         { fontWeight: '400', lineHeight: '22px', letterSpacing: '-0.41px' },
       ],
       'body-bold': [

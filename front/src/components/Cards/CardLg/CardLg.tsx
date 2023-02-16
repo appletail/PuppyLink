@@ -11,7 +11,7 @@ function CardLg({
         <div className={LgStyle.LgTitle}>{CardTitle}</div>
         <div className={LgStyle.LgContents}>
           {CardContents?.map((content, idx) => {
-            return <p key={`${idx}-${new Date().getTime()}`}>{content}</p>;
+            return <div key={`${idx}-${new Date().getTime()}`}>{content}</div>;
           })}
         </div>
       </div>

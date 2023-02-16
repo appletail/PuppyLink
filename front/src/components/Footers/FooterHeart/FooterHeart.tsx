@@ -1,17 +1,20 @@
-import FtStyle from './FooterHeart.module.css';
-import { FiHeart } from 'react-icons/fi';
 import { FaHeart } from 'react-icons/fa';
+import { FiHeart } from 'react-icons/fi';
+
+import FtStyle from './FooterHeart.module.css';
 
 interface FooterHeart extends FooterProps {
   Username: string;
   IsLiked: boolean;
   HeartCount: number;
+  onClick?: () => void;
 }
 
 function FooterHeart({
   Username,
   IsLiked,
   HeartCount,
+  onClick,
 }: FooterHeart): JSX.Element {
   const HeartIcon =
     IsLiked === true ? (
@@ -28,7 +31,7 @@ function FooterHeart({
           <div>@</div>
           <div>{Username}</div>
         </div>
-        <div className={FtStyle.Heart}>
+        <div aria-hidden className={FtStyle.Heart} onClick={onClick}>
           {HeartIcon}
           {HeartCount}
         </div>

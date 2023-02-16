@@ -1,29 +1,31 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import RootLayout from './RootLayout';
+import { Login, Mypage, Others, Review, SignUp, Volunteer,Social } from './route';
 
-import ComponentCollectsPage from '@/pages/ComponentCollectsPage';
+import HomePage from '@/pages/Home/HomePage';
 import NotFoundPage from '@/pages/NotFoundPage';
-import VolUserResiPage from '@/pages/Volunteer/VolUserResiPage';
-import LoginPage from '@/pages/LoginPage';
+import VolGps from '@/pages/Volunteer/User/VolGps';
 
 const routers = createBrowserRouter([
   {
-    path: '/',
     element: <RootLayout />,
     errorElement: <NotFoundPage />,
     children: [
       {
-        path: '/volunteer',
-        element: <VolUserResiPage />,
+        path: '/',
+        element: <HomePage />
       },
+      ...Login,
+      ...Mypage,
+      ...Others,
+      ...Review,
+      ...SignUp,
+      ...Volunteer,
+      ...Social,
       {
-        path: '/components',
-        element: <ComponentCollectsPage />,
-      },
-      {
-        path: '/login',
-        element: <LoginPage />,
+        path: '/gps',
+        element: <VolGps />,
       },
     ],
   },

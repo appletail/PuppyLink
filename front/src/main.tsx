@@ -1,25 +1,23 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+
 import { RouterProvider } from 'react-router-dom';
 
+import { RecoilRoot } from 'recoil';
+
 import routers from './routes/routers';
+
 import '@/styles/global.css';
 import '@/index.css';
-
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from 'recoil';
 
 const container = document.getElementById('root') as HTMLElement;
 
 createRoot(container).render(
-  <StrictMode>
-    <RecoilRoot>
-      <RouterProvider router={routers} />
-    </RecoilRoot>
-  </StrictMode>
+
+  // <StrictMode>
+  <RecoilRoot>
+    <RouterProvider router={routers} />
+  </RecoilRoot>
+  // </StrictMode>
+
 );

@@ -1,0 +1,65 @@
+version: '3.1'
+
+services:
+  web:
+    image: qlwms221/nginx:0.4
+    # image: qlwms221/vue:latest
+    build: ./front
+    # platform: linux/amd64
+    container_name: puppy
+    depends_on:
+      - was
+    ports:
+      - 3000:80
+    networks:
+      - puppy-net
+  was:
+    image: qlwms221/spring:0.4
+    build: ./back
+    restart: always
+    # platform: linux/amd64
+    container_name: puppy-spring
+    depends_on:
+      - mariadb
+      - redis
+    ports:
+      - 8085:8085
+    # expose:
+    #   - 8085
+    networks:
+      - puppy-net
+  # 마리아db 이미지 생성
+  mariadb:
+    image: mariadb:10.6.11-focal
+    container_name: puppy-db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ssafy
+      MARIADB_DATABASE: puppylink
+      MARIADB_USER: puppy
+      MARIADB_PASSWORD: ssafy
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mariadb:/var/lib/mysql
+      - ./db/data:/docker-entrypoint-initdb.d
+    networks:
+      - puppy-net
+  redis:
+    image: redis
+    container_name: puppy-redis
+    restart: always
+    ports:
+      - 6379:6379
+    expose: 
+      - 6379
+    networks:
+      - puppy-net
+
+networks:
+  puppy-net: {}
+
+volumes:
+  mariadb: {}
