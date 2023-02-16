@@ -74,7 +74,7 @@ function FooterController(status: status, volunteerNo: number, removeCard: (volu
       onClick={(e) => e.stopPropagation()} />,
     'complete': <footers.FooterBtn
       BtnLeft={<labels.Label LabelValue='봉사 완료' />}
-      BtnRight={<buttons.BtnSm BtnValue='리뷰 쓰기' />}
+      BtnRight={<Link to='/review/create'><buttons.BtnSm BtnValue='리뷰 쓰기' /></Link>}
       onClick={(e) => e.stopPropagation()} />,
   }
   const footer = Controller[status]
