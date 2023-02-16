@@ -70,7 +70,7 @@ function FoundationMyPage() {
         <div className='flex flex-col gap-2'>
           {/* 단체 소개페이지 수정 만들 것 */}
           <Link to='/mypage/manager/introduce'><p className=' h-10 flex items-center'>단체 소개</p></Link>
-          <p className='h-10 flex items-center'>내 후기</p>
+          <Link className='h-10 flex items-center' to='/mypage/myreview'>내 후기</Link>
         </div>
       </div >
       <hr className='w-screen bg-grey border-none h-[0.5px] mb-5' />
@@ -78,7 +78,7 @@ function FoundationMyPage() {
         <p className='text-title2-bold mb-8'>기타</p>
         <div className='flex flex-col gap-2'>
           <p className='h-10 flex items-center'>공지사항</p>
-          <div onClick={() => setWithdraw(!withdraw)}>
+          <div aria-hidden onClick={() => setWithdraw(!withdraw)}>
             <p className='h-10 flex items-center text-red'>탈퇴하기</p>
             {
               withdraw && <ModalForm
