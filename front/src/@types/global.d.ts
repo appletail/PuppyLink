@@ -122,3 +122,14 @@ interface Category {
   role: Array<RoleType>
   sub: Array<Category>
 }
+
+interface Reivew {
+  boardNo: number
+  contents: string
+  email: Member
+  isLikes: string | boolean
+  likes: number
+  pictureURL: string
+  regDate: string
+  subject: string
+}
