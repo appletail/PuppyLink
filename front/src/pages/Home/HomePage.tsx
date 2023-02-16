@@ -8,6 +8,7 @@ import planet from '@/assets/planet.gif'
 import { NavTop } from '@/components';
 import { ChannelTalk } from '@/components';
 function HomePage() {
+  ChannelTalk.showChannelButton();
   return (
     <div>
       <NavTop.NavLogo />
