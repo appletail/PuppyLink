@@ -34,8 +34,8 @@ public interface BoardService {
 	List<BoardLikesDto> getBoardAllLikeNonMember();
 	List<BoardLikesDto> getBoardAllLikeMember(BoardTokenDto token) throws Exception;
 	
-	List<BoardLikesDto> getBoardInfiniteNonMember(int boardNo);
-	List<BoardLikesDto> getBoardInfiniteMember(BoardTokenDto token, int boardNo) throws Exception;
+//	List<BoardLikesDto> getBoardInfiniteNonMember(int boardNo);
+//	List<BoardLikesDto> getBoardInfiniteMember(BoardTokenDto token, int boardNo) throws Exception;
 	
 	List<BoardLikesDto> getBoardBestNonMember();
 	List<BoardLikesDto> getBoardBestMember(BoardTokenDto token) throws Exception;

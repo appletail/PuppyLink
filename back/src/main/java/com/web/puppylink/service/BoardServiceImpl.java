@@ -164,85 +164,85 @@ public class BoardServiceImpl implements BoardService{
         return likesBoardList;
     }
 	
-	@Transactional
-    @Override
-    public List<BoardLikesDto> getBoardInfiniteNonMember(int boardNo) {
-    	// 비회원 접근(토큰 X)
-		List<Board> boardInfoList = boardRepository.findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(boardNo).orElseThrow(()->{
-			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
-		});
-		List<BoardLikesDto> likesBoardList = new ArrayList<>();
-    		
-    	for(Board board : boardInfoList) {
-    		BoardLikesDto boardLikesInfo = new BoardLikesDto();
-    		boardLikesInfo.setBoardNo(board.getBoardNo());
-    		boardLikesInfo.setContents(board.getContents());
-    		boardLikesInfo.setEmail(board.getEmail());
-    		boardLikesInfo.setLikes(board.getLikes());
-    		boardLikesInfo.setIsLikes("false");
-    		boardLikesInfo.setPictureURL(board.getPictureURL());
-    		boardLikesInfo.setRegDate(board.getRegDate());
-    		boardLikesInfo.setSubject(board.getSubject());
-    					
-    		likesBoardList.add(boardLikesInfo);
-    	}
-    	return likesBoardList;
-    }
+//	@Transactional
+//    @Override
+//    public List<BoardLikesDto> getBoardInfiniteNonMember(int boardNo) {
+//    	// 비회원 접근(토큰 X)
+//		List<Board> boardInfoList = boardRepository.findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(boardNo).orElseThrow(()->{
+//			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
+//		});
+//		List<BoardLikesDto> likesBoardList = new ArrayList<>();
+//    		
+//    	for(Board board : boardInfoList) {
+//    		BoardLikesDto boardLikesInfo = new BoardLikesDto();
+//    		boardLikesInfo.setBoardNo(board.getBoardNo());
+//    		boardLikesInfo.setContents(board.getContents());
+//    		boardLikesInfo.setEmail(board.getEmail());
+//    		boardLikesInfo.setLikes(board.getLikes());
+//    		boardLikesInfo.setIsLikes("false");
+//    		boardLikesInfo.setPictureURL(board.getPictureURL());
+//    		boardLikesInfo.setRegDate(board.getRegDate());
+//    		boardLikesInfo.setSubject(board.getSubject());
+//    					
+//    		likesBoardList.add(boardLikesInfo);
+//    	}
+//    	return likesBoardList;
+//    }
 	
-	@Transactional
-    @Override
-    public List<BoardLikesDto> getBoardInfiniteMember(BoardTokenDto token, int boardNo) {
-    	// 회원 접근(토큰 O)
-    	// 토큰에 있는 정보를 가져온다.
-        Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-            
-        Member member = memberRepository.findUserByEmail(principal.getUsername()).orElseThrow(()->{
-    		return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
-    	});
-            
-    	List<Likes> likesInfoList = likesRepository.findLikesByEmail(member);
-		List<Board> boardInfoList = boardRepository.findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(boardNo).orElseThrow(()->{
-			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
-		});
-    	List<BoardLikesDto> likesBoardList = new ArrayList<>();
-    		
-    	for(Board board : boardInfoList) {
-    		boolean check = true;
-    		int boardNo = board.getBoardNo();
-    		for(Likes like : likesInfoList) {
-    			if(boardNo==like.getBoardNo().getBoardNo()) {
-    				BoardLikesDto boardLikesInfo = new BoardLikesDto();
-    				boardLikesInfo.setBoardNo(board.getBoardNo());
-    				boardLikesInfo.setContents(board.getContents());
-    				boardLikesInfo.setEmail(board.getEmail());
-    				boardLikesInfo.setLikes(board.getLikes());
-    				boardLikesInfo.setIsLikes("true");
-    				boardLikesInfo.setPictureURL(board.getPictureURL());
-    				boardLikesInfo.setRegDate(board.getRegDate());
-    				boardLikesInfo.setSubject(board.getSubject());
-    					
-    				likesBoardList.add(boardLikesInfo);
-    				check = false;
-    				break;
-    			}
-    		}
-    		if(check) {
-				BoardLikesDto boardLikesInfo = new BoardLikesDto();
-				boardLikesInfo.setBoardNo(board.getBoardNo());
-				boardLikesInfo.setContents(board.getContents());
-				boardLikesInfo.setEmail(board.getEmail());
-				boardLikesInfo.setLikes(board.getLikes());
-				boardLikesInfo.setIsLikes("false");
-				boardLikesInfo.setPictureURL(board.getPictureURL());
-				boardLikesInfo.setRegDate(board.getRegDate());
-				boardLikesInfo.setSubject(board.getSubject());
-					
-				likesBoardList.add(boardLikesInfo);
-    		}
-    	}
-    	return likesBoardList;
-    }
+//	@Transactional
+//    @Override
+//    public List<BoardLikesDto> getBoardInfiniteMember(BoardTokenDto token, int boardNo) {
+//    	// 회원 접근(토큰 O)
+//    	// 토큰에 있는 정보를 가져온다.
+//        Authentication authentication = tokenProvider.getAuthentication(token.getAccessToken());
+//        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+//            
+//        Member member = memberRepository.findUserByEmail(principal.getUsername()).orElseThrow(()->{
+//    		return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+//    	});
+//            
+//    	List<Likes> likesInfoList = likesRepository.findLikesByEmail(member);
+//		List<Board> boardInfoList = boardRepository.findTop5BoardInfiniteByBoardNoLessThanOrderByBoardNoDesc(boardNo).orElseThrow(()->{
+//			return new IllegalArgumentException("무한 스크롤 게시글 목록 정보를 찾을 수 없습니다.");
+//		});
+//    	List<BoardLikesDto> likesBoardList = new ArrayList<>();
+//    		
+//    	for(Board board : boardInfoList) {
+//    		boolean check = true;
+//    		int boardNo = board.getBoardNo();
+//    		for(Likes like : likesInfoList) {
+//    			if(boardNo==like.getBoardNo().getBoardNo()) {
+//    				BoardLikesDto boardLikesInfo = new BoardLikesDto();
+//    				boardLikesInfo.setBoardNo(board.getBoardNo());
+//    				boardLikesInfo.setContents(board.getContents());
+//    				boardLikesInfo.setEmail(board.getEmail());
+//    				boardLikesInfo.setLikes(board.getLikes());
+//    				boardLikesInfo.setIsLikes("true");
+//    				boardLikesInfo.setPictureURL(board.getPictureURL());
+//    				boardLikesInfo.setRegDate(board.getRegDate());
+//    				boardLikesInfo.setSubject(board.getSubject());
+//    					
+//    				likesBoardList.add(boardLikesInfo);
+//    				check = false;
+//    				break;
+//    			}
+//    		}
+//    		if(check) {
+//				BoardLikesDto boardLikesInfo = new BoardLikesDto();
+//				boardLikesInfo.setBoardNo(board.getBoardNo());
+//				boardLikesInfo.setContents(board.getContents());
+//				boardLikesInfo.setEmail(board.getEmail());
+//				boardLikesInfo.setLikes(board.getLikes());
+//				boardLikesInfo.setIsLikes("false");
+//				boardLikesInfo.setPictureURL(board.getPictureURL());
+//				boardLikesInfo.setRegDate(board.getRegDate());
+//				boardLikesInfo.setSubject(board.getSubject());
+//					
+//				likesBoardList.add(boardLikesInfo);
+//    		}
+//    	}
+//    	return likesBoardList;
+//    }
 	
 	@Transactional
 	@Override

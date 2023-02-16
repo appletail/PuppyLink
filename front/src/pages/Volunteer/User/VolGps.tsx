@@ -321,9 +321,9 @@ function Location({ volunteerNo }: volNo) {
     if (!markerRef.current || !map) return;
     if (isNaN(lat.current) || isNaN(lng.current)) return;
     // console.log('setInterval 반복 ')
-
-    const volunteerNo = 1;
-
+          
+    // const volunteerNo = 1;
+    
     axBase({
       method: 'get',
       url: `volunteer/gps/${volunteerNo}`,

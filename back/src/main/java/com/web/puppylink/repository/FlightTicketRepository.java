@@ -12,6 +12,7 @@ import com.web.puppylink.model.FlightTicket;
 
 public interface FlightTicketRepository extends JpaRepository<FlightTicket, String> {
 	//출발시간이 지난 flightTicket 
-	@Query(value = "SELECT * FROM flightTicket a WHERE DATE(Now()) > DATE(a.depDate)",  nativeQuery = true) 
+//	@Query(value = "SELECT * FROM flightTicket a WHERE DATE(Now()) > DATE(a.depDate)",  nativeQuery = true) 
+	@Query(value = "select * from flightTicket a where now() > a.depDate",  nativeQuery = true) 
 	List<FlightTicket> getAfterArrive();
 }
