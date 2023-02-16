@@ -90,6 +90,22 @@ private final BoardServiceImpl boardService;
             );
     }
     
+    // 비회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/infinite/non/{boardNo}")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 비회원 게시글 무한스크롤 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllNonMemberInfinite(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_NON_MEMBER,
+            			boardService.getBoardInfiniteNonMember(boardN) // JPA Query상 본인 번호는 포함하지 않기 때문에, 1을 더해준다.
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
     // 회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/list/like/member")
@@ -105,16 +121,62 @@ private final BoardServiceImpl boardService;
             );
     }
     
-    // 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    // 회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/infinite/member/{boardNo}")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllNonMemberInfinite(BoardTokenDto token, @PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_MEMBER,
+            			boardService.getBoardInfiniteMember(token, boardN)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/best")
-    @ApiOperation(code = 200, value = "베스트 게시글 조회", notes = "베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    @ApiOperation(code = 200, value = "회원 베스트 게시글 조회", notes = "회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
     public Object selectBoardBest() {
         // return ResponseEntity.ok(boardService.getBestBoard());
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_BEST,
             			boardService.getBoardBest()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 비회원에 대해, 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/best/non")
+    @ApiOperation(code = 200, value = "좋아요가 반영된 비회원 베스트 게시글 조회", notes = "비회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardBestNonMember() {
+        // return ResponseEntity.ok(boardService.getBestBoard());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_BEST_NON,
+            			boardService.getBoardBestNonMember()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 회원에 대해, 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/best/member")
+    @ApiOperation(code = 200, value = "좋아요가 반영된 회원 베스트 게시글 조회", notes = "회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardBestMember(BoardTokenDto token) {
+        // return ResponseEntity.ok(boardService.getBestBoard());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_BEST_MEMBER,
+            			boardService.getBoardBestMember(token)
             	), 
             	HttpStatus.OK
             );
