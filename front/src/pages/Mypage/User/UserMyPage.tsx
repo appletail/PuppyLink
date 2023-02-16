@@ -5,11 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { buttons, NavTop, ModalForm } from '@/components'
+import { buttons, NavTop, ModalForm, ChannelTalk } from '@/components'
 import { LoginState } from '@/states/LoginState'
 
 function UserMyPage() {
-
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   // user의 이메일과 닉네임 받아오는 부분
   let useremail = ""
@@ -45,7 +45,6 @@ function UserMyPage() {
 
     })
       .catch((err) => console.log(err))
-
   }
 
 
@@ -68,7 +67,7 @@ function UserMyPage() {
         <p className='text-title2-bold mb-8'>나의 봉사 현황</p>
         <div className='flex flex-col gap-2'>
           <Link to='/mypage/user/vollist'><p className='h-10 flex items-center'>봉사 신청 내역</p></Link>
-          <p className='h-10 flex items-center'>내 후기</p>
+          <Link className='h-10 flex items-center' to='/mypage/myreview'>내 후기</Link>
         </div>
       </div>
       <hr className='w-screen bg-grey border-none h-[0.5px] mb-5' />

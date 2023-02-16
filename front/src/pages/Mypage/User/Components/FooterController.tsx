@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom'
 import { footers, buttons, labels } from '@/components'
 
 
-function FooterController({ status, volNo }: { status: status, volNo: number }) {
+function FooterController({ status, volNo, removeCard }: { status: status, volNo: number, removeCard: (volunteerNo: number) => void }) {
+
 
 
   const Controller = {
@@ -17,7 +18,7 @@ function FooterController({ status, volNo }: { status: status, volNo: number }) 
       BtnRight={<labels.Label LabelValue='접수 완료' />}
       onClick={(e) => e.stopPropagation()} />,
     'lack': <footers.FooterBtn
-      BtnLeft={<buttons.BtnSm BtnValue='서류 제출' />}
+      BtnLeft={<Link state={{ volNo }} to='/mypage/user/userfiledocs'><buttons.BtnSm BtnValue='서류 제출' /></Link>}
       BtnRight={<labels.Label LabelValue='서류 미흡' />}
       onClick={(e) => e.stopPropagation()} />,
     'docs': <footers.FooterBtn
@@ -27,7 +28,7 @@ function FooterController({ status, volNo }: { status: status, volNo: number }) 
       BtnRight={<labels.Label LabelValue='봉사 진행 중' />}
       onClick={(e) => e.stopPropagation()} />,
     'complete': <footers.FooterBtn
-      BtnLeft={<buttons.BtnSm BtnValue='리뷰 쓰기' />}
+      BtnLeft={<Link to='/review/create'><buttons.BtnSm BtnValue='리뷰 쓰기' /></Link>}
       BtnRight={<labels.Label LabelValue='봉사 완료' />}
       onClick={(e) => e.stopPropagation()} />,
     'refuse': <footers.FooterBtn

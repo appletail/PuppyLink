@@ -1,17 +1,23 @@
 package com.web.puppylink.model;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "flightTicket")
@@ -43,4 +49,9 @@ public class FlightTicket {
     @Column(name = "flight" ,length = 50)
     @NotNull
     private String  flight;
+    
+//    @OneToMany(mappedBy="ticketNo", fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+//	@JsonIgnoreProperties({"ticketNo"})
+//    @ToString.Exclude
+//    List<Location> locationList;
 }

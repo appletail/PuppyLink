@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
+import com.web.puppylink.model.redis.RefreshToken;
+import com.web.puppylink.repository.redis.AccessRedisRepository;
+import com.web.puppylink.repository.redis.AuthRedisRepository;
+import com.web.puppylink.repository.redis.RefreshRedisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +29,9 @@ import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
-import com.web.puppylink.repository.AccessRedisRepository;
-import com.web.puppylink.repository.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
-import com.web.puppylink.repository.RefreshRedisRepository;
+
 
 
 
@@ -97,6 +99,7 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Optional<Member> getMemberWithAuthorities(String email) {
+        System.out.println(email);
         return memberRepository.findAuthoritiesByEmail(email);
     }
 
@@ -115,19 +118,9 @@ public class MemberServiceImpl implements MemberService{
     	return memberRepository.existsByNickName(nickName);
 	}
 
-    @Override
-    @Transactional
-    public void updateRefresh(String email, String refresh) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> {
-            return new IllegalArgumentException("회원 찾기 실패");
-        });
-        member.setRefreshToken(refresh);
-        //더티 체킹 : 변한 부분 DB에 자동 커밋됩니다
-    }
-
-    @Override
-    @Transactional
-    public Map<String, String> refresh(Authentication authentication) {
+//    @Override
+//    @Transactional
+//    public Map<String, String> refresh(Authentication authentication) {
 //
 //        String secret = "c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK";
 //
@@ -210,11 +203,11 @@ public class MemberServiceImpl implements MemberService{
 //        }
 //        accessTokenResponseMap.put("accessToken", newAccessToken);
 //        return accessTokenResponseMap;
-
-        // redis에 refreshToken이 존재하는 검사 ( 로그아웃하지 않았는지 )
-
-        return null;
-    }
+//
+//         //redis에 refreshToken이 존재하는 검사 ( 로그아웃하지 않았는지 )
+//
+//        return null;
+//    }
 
 	@Override
 	@Transactional
@@ -259,4 +252,23 @@ public class MemberServiceImpl implements MemberService{
                 .build();
         accessRedisRepository.save(accessToken);
     }
+
+    @Override
+    public AccessToken getAccessEntityByToken(String accessToken) {
+        return  AccessToken.builder()
+                .accessToken(accessToken)
+                .expired(tokenProvider.getExpired(accessToken))
+                .build();
+    }
+
+    @Override
+    public RefreshToken getRefreshEntityByToken(String refreshToken) {
+        Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
+        return  RefreshToken.builder()
+                .email(principal.getUsername())
+                .refreshToken(refreshToken)
+                .build();
+    }
+
 }

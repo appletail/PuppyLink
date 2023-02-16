@@ -25,8 +25,7 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
     control,
     formState: { errors },
     getValues,
-    setError,
-    watch,
+
   } = useForm<ValidateProps>({
     defaultValues: {
       businessNo: businessNo
@@ -145,6 +144,7 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
 
       {/* 개업일 */}
       <inputs.InputForm
+        aria-required='true'
         control={control}
         name="startDate"
         placeholder='개업일'

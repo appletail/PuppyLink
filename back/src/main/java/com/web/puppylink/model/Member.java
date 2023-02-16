@@ -52,11 +52,5 @@ public class Member {
     @Column(name = "joinDate", length = 50)
     @NotNull
     private String              joinDate;
-    
-    @Lob
-    private String refreshToken;
-    
-    public void updateRefreshToken(String newToken) {
-        this.refreshToken = newToken;
-    }
+
 }

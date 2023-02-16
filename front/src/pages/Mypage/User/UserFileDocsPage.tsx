@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 import { useRecoilValue } from 'recoil';
@@ -9,30 +9,28 @@ import EticketUpload from './Components/EticketUpload'
 import PassportUpload from './Components/PassportUpload'
 
 import { axBase, axAuth } from '@/apis/api/axiosInstance';
-import { buttons, NavTop } from '@/components'
+import { buttons, NavTop, ChannelTalk } from '@/components'
 import "react-toastify/dist/ReactToastify.css";
 import { LoginState } from '@/states/LoginState';
 
 
 
 function UserFileDocs() {
-
+  ChannelTalk.hideChannelButton();
   let nickName = ""
+  const navigate = useNavigate()
 
-  // recoil에서 로그인 여부를 판단한다.
-  const isLoggedIn = useRecoilValue(LoginState)
-  if (isLoggedIn) {
-    // 로그인 되어있다면 userData를 가져온다
-    const userData = sessionStorage.getItem("userData") || ""
-    const parsedUserData = JSON.parse(userData)
-    nickName = parsedUserData.nickName
-  }
 
-  // 로그인이 안되어있으면 로그인 페이지로 리다이렉트 한다.
+  const userData = sessionStorage.getItem("userData") || ""
+  const parsedUserData = JSON.parse(userData)
+  nickName = parsedUserData.nickName
+
+
   const location = useLocation()
   const volunteerNo = location.state.volNo
 
-  const submitDocs = (data: FieldValues) => {
+
+  const submitDocs = async (data: FieldValues) => {
     // 여권사진 전송
     const file = data.image[0]
     const fileDto = {
@@ -48,7 +46,7 @@ function UserFileDocs() {
     file && formData.append('multipartFile', file)
     formData.append('fileDto', blob)
 
-    axAuth({
+    await axAuth({
       method: 'post',
       url: '/file/history/',
       data: formData
@@ -61,12 +59,14 @@ function UserFileDocs() {
       ...E_TicketData,
       volunteerNo
     }
-    axAuth({
+    await axAuth({
       method: 'post',
       url: '/volunteer/docs',
       data: Tdata
     })
 
+    alert('서류제출이 완료되었습니다.')
+    navigate('/mypage/user/vollist')
   }
   const [ocrData, setOcrData] = useState<ocrData>()
 

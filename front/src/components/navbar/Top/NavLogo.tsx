@@ -7,6 +7,7 @@ import NavStyle from './NavTop.module.css';
 
 import { axBase } from '@/apis/api/axiosInstance';
 import LogoWhite from '@/assets/logo-white.svg';
+import { ChannelTalk } from '@/components';
 import { LoginState } from '@/states/LoginState';
 
 
@@ -38,6 +39,14 @@ function NavTop(): JSX.Element {
       }
     }).then(() => {
       sessionStorage.clear()
+      ChannelTalk.updateUser({
+        language: "ko",
+        profile: {
+          email: "guest@puppylink.com",
+          phone: null,
+          nickname: "guest",
+        }
+      });
       setisLoggedIn(false)
       navigate("/login")
     }
@@ -49,7 +58,7 @@ function NavTop(): JSX.Element {
     <div className={NavStyle.NavBg}>
       <div className={NavStyle.Left}>
         <div className={NavStyle.Logo}>
-          <img className={NavStyle.Logo} src={LogoWhite} />
+          <img className={NavStyle.LogoImg} src={LogoWhite} />
         </div>
       </div>
       <div className={NavStyle.Right}>

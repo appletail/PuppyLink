@@ -72,25 +72,15 @@ function UserChangePassword() {
         })
       }
       else {
-        toast.success("비밀번호 변경 성공", {
-          autoClose: 3000,
-          position: toast.POSITION.BOTTOM_CENTER,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-        })
+        alert("비밀번호 변경에 성공했습니다.")
+        navigate("/")
       }
     })
       .catch((err) => console.log(err))
-    // .then(() =>
-    //   navigate("/")
-    // )
   }
 
   return (
-    <div>
+    <div className='w-[21.875rem]'>
       <div><NavTop.NavBack NavContent='비밀번호 변경' /></div>
       <div className="mt-14">
         <p className="text-title1-bold">비밀번호 변경</p>

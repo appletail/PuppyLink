@@ -1,6 +1,7 @@
 package com.web.puppylink.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.web.puppylink.dto.FoundationDto;
 import com.web.puppylink.dto.MemberDto;
@@ -12,5 +13,5 @@ public interface FoundationService {
 	List<Foundation> getFoundationAll();
 	Member signup(MemberDto member);
 	Foundation submitProfile(FileRequest file);
-	Foundation createDescription(FoundationDto foundationDto);
+	Foundation createDescription(String email, String description);
 }

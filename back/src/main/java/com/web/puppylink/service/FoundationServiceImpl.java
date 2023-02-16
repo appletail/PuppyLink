@@ -2,9 +2,9 @@ package com.web.puppylink.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,12 +16,11 @@ import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.model.Authority;
 import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
-import com.web.puppylink.model.Volunteer;
 import com.web.puppylink.model.File.FileRequest;
-import com.web.puppylink.repository.AuthRedisRepository;
+import com.web.puppylink.repository.redis.AuthRedisRepository;
 import com.web.puppylink.repository.FoundationRepository;
 import com.web.puppylink.repository.MemberRepository;
-import com.web.puppylink.repository.RefreshRedisRepository;
+import com.web.puppylink.repository.redis.RefreshRedisRepository;
 
 @Component("foundationService")
 public class FoundationServiceImpl implements FoundationService{
@@ -131,14 +130,21 @@ public class FoundationServiceImpl implements FoundationService{
 
 	@Transactional
 	@Override
-	public Foundation createDescription(FoundationDto foundationDto) {
+    public Foundation createDescription(String email, String description) {
 
-		Foundation foundation = foundationRepository.findFoundationByBusinessNo(foundationDto.getBusinessNo()).orElseThrow(()->{
-			return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
-		});
-		
-		foundation.setDescription(foundationDto.getDescription());
-        
-		return foundationRepository.save(foundation);
-	}
+        Member member = memberRepository.findByEmail(email).orElseThrow(()->{
+            return new IllegalArgumentException("회원 정보를 찾을 수 없습니다.");
+        });
+
+        Foundation foundation = foundationRepository.findFoundationByEmail(member).orElseThrow(()->{
+            return new IllegalArgumentException("단체 정보를 찾을 수 없습니다.");
+        });
+
+        foundation.setDescription(description);
+
+        return foundationRepository.save(foundation);
+
+
+    }
+
 }

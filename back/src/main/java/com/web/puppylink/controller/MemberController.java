@@ -13,6 +13,7 @@ import com.web.puppylink.dto.LoginDto;
 import com.web.puppylink.dto.MemberDto;
 import com.web.puppylink.dto.PasswordDto;
 import com.web.puppylink.dto.TokenDto;
+import com.web.puppylink.model.Foundation;
 import com.web.puppylink.model.Member;
 import com.web.puppylink.model.redis.AccessToken;
 import com.web.puppylink.model.redis.Auth;
@@ -31,6 +32,7 @@ import io.swagger.annotations.ApiResponses;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +53,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,6 +75,8 @@ public class MemberController {
     private final VolunteerServiceImpl volunteerService;
     private final JavaMailSender javaMailSender;
     private final RedisServiceImpl redisService;
+    private final String KEY;
+    private final String ADMIN_KEY;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     public MemberController(
             TokenProvider tokenProvider,
@@ -80,7 +85,9 @@ public class MemberController {
             FoundationServiceImpl foundationService,
             VolunteerServiceImpl volunteerService,
             JavaMailSender javaMailSender,
-            RedisServiceImpl redisService) {
+            RedisServiceImpl redisService,
+            @Value("${api.kaKey}") String key,
+            @Value("${api.kaAdmin}") String adminkey) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.memberService = memberService;
@@ -88,6 +95,8 @@ public class MemberController {
         this.volunteerService = volunteerService;
         this.javaMailSender = javaMailSender;
         this.redisService = redisService;
+        this.KEY = key;
+        this.ADMIN_KEY = adminkey;
     }
 
     @PostMapping("/login")
@@ -120,7 +129,7 @@ public class MemberController {
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + token.getRefreshToken());
         // FE응답
 
-     return new ResponseEntity<BasicResponseDto>(new BasicResponseDto(
+        return new ResponseEntity<>(new BasicResponseDto(
                CommonCode.SUCCESS_LOGIN,memberService.getMyMemberWithAuthorities().get()), httpHeaders, HttpStatus.OK);
     }
 
@@ -177,24 +186,15 @@ public class MemberController {
     public void logout(@RequestBody TokenDto tokenDto) {
         logger.info("토큰 확인하기 : {}", tokenDto);
         // AccessToken 객체 생성
-        AccessToken accessToken = AccessToken.builder()
-                .accessToken(tokenDto.getAccessToken())
-                .expired(tokenProvider.getExpired(tokenDto.getAccessToken()))
-                .build();
+        AccessToken accessToken = memberService.getAccessEntityByToken(tokenDto.getAccessToken());
+        // RefreshToken 객체 생성
+        RefreshToken refreshToken = memberService.getRefreshEntityByToken(tokenDto.getRefreshToken());
 
-        // 1. token에서 토큰정보 가져오기
-        Authentication authentication = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
-        PrincipalDetails principal = (PrincipalDetails) authentication.getPrincipal();
-        RefreshToken refreshToken = RefreshToken.builder()
-                        .email(principal.getUsername())
-                        .refreshToken(tokenDto.getRefreshToken())
-                        .build();
         // 카카오 이메일이면 카카오도 로그아웃되도록 처리
-        Authentication authoriztion = tokenProvider.getAuthentication(tokenDto.getRefreshToken());
-        String memberEmail = ((PrincipalDetails) authentication.getPrincipal()).getUsername();
+        String memberEmail = refreshToken.getEmail();
         if( memberEmail.contains("@kakao.com") ) {
             Optional<Member> member = memberService.getMemberWithAuthorities(memberEmail);
-            String result = KakaoUtil.logoutToKakao(member.get());
+            KakaoUtil.logoutToKakao(member.get(), ADMIN_KEY);
         }
         // 2. redis에 refresh Token 삭제
         redisService.delRefreshToken(refreshToken);
@@ -237,7 +237,7 @@ public class MemberController {
 
     @GetMapping()
     @ApiOperation(value = "회원조회")
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN', 'ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<Member> getMyInfo() {
         return ResponseEntity.ok(memberService.getMyMemberWithAuthorities().get());
     }
@@ -287,7 +287,7 @@ public class MemberController {
     @PutMapping("/{nickName}/change")
     @ApiOperation(value = "비밀번호 변경")
     public Object update(@RequestBody PasswordDto passwordDto, @PathVariable String nickName) {
-    	
+
     	return memberService.update(passwordDto, nickName);
     }
 
@@ -362,7 +362,7 @@ public class MemberController {
         logger.info("카카오 전달 코드 확인 : {}",code);
         try {
             // 인가코드에서 카카오토큰 받아오기
-            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code);
+            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code, KEY);
             // 카카오 토큰에서 회원 정보가져오기 [ 없음) 회원가입 ]
             MemberDto member = KakaoUtil.getUserByAccessToken(kakaoToken.getAccessToken());
             if ( !memberService.getMemberWithAuthorities(member.getEmail()).isPresent() ) {

@@ -9,15 +9,19 @@ import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class KakaoUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(KakaoUtil.class);
@@ -25,13 +29,15 @@ public class KakaoUtil {
     private static final String TOKENAUTH = "https://kauth.kakao.com/oauth/token";
     private static final String PROFILEAPI = "https://kapi.kakao.com/v2/user/me";
     private static final String LOGOUT = "https://kapi.kakao.com/v1/user/logout";
-    private static final String KEY = "c1a6f5a36cc3ee5bb64b3fb804e37407";
-    private static final String ADMIN_KEY = "f25ba205fb42653c1d8c426f6bf6ad5e";
+    @Value("${api.kaKey}")
+    private static String KEY;
+    @Value("${api.kaAdmin}")
+    private static String ADMIN_KEY;
 //    private static final String REQUEST = "http://localhost:3000/Social/kakao";
     private static final String REQUEST = "http://i8c107.p.ssafy.io:3000/Social/kakao";
 
     // 카카오 로그인해서 얻은 인가코드롤 AccessToken 및 refresh 토큰 얻는 함수
-    public static TokenDto getAccessTokenByKakao(String code) {
+    public static TokenDto getAccessTokenByKakao(String code, String key) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -39,7 +45,7 @@ public class KakaoUtil {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
 
         params.add("grant_type","authorization_code");
-        params.add("client_id", KEY);
+        params.add("client_id", key);
         params.add("redirect_uri", REQUEST);
         params.add("code", code);
 
@@ -94,22 +100,27 @@ public class KakaoUtil {
         member.setEmail(kakao_account.get("email").getAsString());
         member.setPassword("social_" + kakaoUser.get("id").getAsString());
         member.setPhone("00000000000");
-        member.setName(properties.get("nickname").getAsString());
+        member.setName(properties.get("nickname").getAsString() + kakaoUser.get("id").getAsString());
         member.setNickName(properties.get("nickname").getAsString());
 
         return member;
     }
 
-    public static String logoutToKakao(Member member) {
+    public static String logoutToKakao(Member member, String adminKey) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK  " + ADMIN_KEY);
+        headers.set("Authorization", "KakaoAK " + adminKey);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
 
-        params.add("target_id_type",member.getEmail());
-        params.add("target_id", member.getPassword().replace("social_",""));
+        params.add("target_id_type","user_id");
+        params.add("target_id", member.getName().replace(member.getNickName(),""));
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity(LOGOUT, request, String.class);
 
         return "SUCCESS";
     }

@@ -14,3 +14,14 @@ input::-webkit-inner-spin-button {
   appearance: none;
   margin: 0;
 }
+
+.ck-editor__editable {
+  min-height: 400px;
+  border-radius: 10px;
+}
+
+/* Toolbar */
+
+.ck-editor__top {
+}
+

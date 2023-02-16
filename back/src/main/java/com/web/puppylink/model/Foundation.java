@@ -39,6 +39,6 @@ public class Foundation {
 //    @JoinColumn(name = "email")
     private Member          email;
     @Column(name = "description", length = 500)
-    private String  description;
+    private String          description;
 
 }

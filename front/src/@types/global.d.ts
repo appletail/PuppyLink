@@ -101,9 +101,9 @@ interface ocrData {
   passengerName: string
   bookingReference: string
   depCity: string
-  depDate: Date
+  depDate: string
   arriveCity: string
-  arriveDate: Date
+  arriveDate: string
   flight: string
 }
 
@@ -121,4 +121,15 @@ interface Category {
   path: string
   role: Array<RoleType>
   sub: Array<Category>
+}
+
+interface Reivew {
+  boardNo: number
+  contents: string
+  email: Member
+  isLikes: string | boolean
+  likes: number
+  pictureURL: string
+  regDate: string
+  subject: string
 }

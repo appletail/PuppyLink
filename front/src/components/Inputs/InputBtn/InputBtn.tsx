@@ -6,14 +6,14 @@ function InputBtn({
   InputType,
   button,
 }: InputProps): JSX.Element {
-  let helpermessage = helper ? helper : '';
+  const helpermessage = helper ? helper : '';
   return (
     <div className={InputStyle.Div}>
       <div className={InputStyle.BoxDiv}>
         <input
           className={InputStyle.InputBox}
-          type={InputType}
           placeholder={placeholder}
+          type={InputType}
         />
         <div>{button}</div>
       </div>

@@ -39,6 +39,7 @@ import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.BoardDto;
 import com.web.puppylink.dto.FileDto;
 import com.web.puppylink.model.File.FileRequest;
+import com.web.puppylink.service.BoardServiceImpl;
 import com.web.puppylink.service.FoundationServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
@@ -61,13 +62,16 @@ public class FileController {
 	private @Value("${cloud.aws.s3.bucket}") String S3Bucket;
 	private final VolunteerServiceImpl volunteerService;
 	private final FoundationServiceImpl foundationService;
+	private final BoardServiceImpl boardService;
 	private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 	
 	public FileController(
 			VolunteerServiceImpl volunteerService,
-			 FoundationServiceImpl foundationService) {
+			 FoundationServiceImpl foundationService,
+			 BoardServiceImpl boardService) {
 		this.volunteerService = volunteerService;
 		this.foundationService = foundationService;
+		this.boardService = boardService;
 	}
 	
 	@Autowired
@@ -75,10 +79,10 @@ public class FileController {
 	
 	// postman에서 테스트 
 	@PostMapping(value= "/history")
-	@ApiOperation(value = "봉사자 필수서류 제출")
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@ApiOperation(value = "파일 업로드 : 봉사자 필수서류 제출)")
+//	@PreAuthorize("hasRole('ROLE_USER')")
 	@ApiResponses(value = {
-            @ApiResponse(code=200, message="성공적으로 필수서류를 업로드했습니다.", response = ResponseEntity.class)
+            @ApiResponse(code=200, message="성공적으로 업로드했습니다.", response = ResponseEntity.class)
         })
 	public Object upload(@RequestPart("multipartFile") MultipartFile multipartFile, @RequestPart FileDto fileDto) throws Exception {
 		
@@ -214,7 +218,7 @@ public class FileController {
 	
 	@PostMapping(value = "/profile", consumes = {"multipart/form-data" })
 	@ApiOperation(value = "단체 프로필 등록")
-	@PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+//	@PreAuthorize("hasAnyRole('ROLE_MANAGER')")
 	@ApiResponses(value = {
             @ApiResponse(code=200, message="성공적으로 단체프로필을 등록했습니다.", response = ResponseEntity.class)
         })
@@ -260,4 +264,52 @@ public class FileController {
                     CommonCode.FAILED_S3_UPLOAD, foundationService.submitProfile(fileRequest)), HttpStatus.OK);
 		}
 	}
+	
+	//postman
+	@PostMapping(value= "/board")
+	@ApiOperation(value = "파일 업로드 - 게시판 사진")
+	@ApiResponses(value = {
+            @ApiResponse(code=200, message="성공적으로 업로드했습니다.", response = ResponseEntity.class)
+        })
+	public Object uploadPic(@RequestPart("multipartFile") MultipartFile multipartFile, @RequestParam String boardNo) throws Exception {
+		
+		String imagePath = "";
+		FileRequest fileRequest = null;
+		
+		try {
+			// 파일 이름 : 랜덤숫자로 변경
+			String fileName = multipartFile.getOriginalFilename(); 
+			UUID uuid = UUID.randomUUID();
+			// 파일 크기
+			long size = multipartFile.getSize(); 
+			
+			ObjectMetadata objectMetaData = new ObjectMetadata();
+			objectMetaData.setContentType(multipartFile.getContentType());
+			objectMetaData.setContentLength(size);
+			
+			fileName = "board/" + uuid;
+
+			// S3에 업로드
+			amazonS3Client.putObject(
+				new PutObjectRequest(S3Bucket, fileName, multipartFile.getInputStream(), objectMetaData)
+					.withCannedAcl(CannedAccessControlList.PublicRead)
+			);
+			
+			// 접근가능한 URL 가져오기
+			imagePath = amazonS3Client.getUrl(S3Bucket, fileName).toString(); 
+			
+			fileRequest = FileRequest.builder()
+					.imagePath(imagePath)
+					.boardNo(Integer.parseInt(boardNo))
+					.build();
+			
+			return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+	                CommonCode.SUCCESS_S3_UPLOAD, boardService.submitFile(fileRequest)), HttpStatus.OK);
+			
+		} catch(Exception e) {
+			return new ResponseEntity<>(new BasicResponseDto<CommonCode>(
+	                CommonCode.FAILED_S3_UPLOAD, boardService.submitFile(fileRequest)), HttpStatus.OK);
+		}
+	}
+	
 }

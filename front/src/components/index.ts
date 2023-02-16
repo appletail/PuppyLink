@@ -25,6 +25,7 @@ import NavCreate from './navbar/Top/NavCreate';
 import NavDetail from './navbar/Top/NavDetail';
 import NavLogo from './navbar/Top/NavLogo';
 
+
 export const buttons = { BtnBsm, BtnSm, BtnMd, BtnLg };
 export const cards = { CardSm, CardMd, CardLg, CardXL };
 export const footers = { FooterBtn, FooterHeart };
@@ -37,3 +38,5 @@ export { default as NavBottom } from './navbar/bottom/NavBottom';
 export { default as Detail } from './Detail/Detail';
 export { default as ModalCard } from './Modal/ModalCard';
 export { default as ModalForm } from './Modal/ModalForm/ModalForm';
+export { default as ChannelTalk } from './ChannelTalk/ChannelService';
+export { default as LoadingBase } from './Loading/LoadingBase';

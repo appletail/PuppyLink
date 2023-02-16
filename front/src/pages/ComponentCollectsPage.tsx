@@ -73,13 +73,8 @@ function ComponentCollectsPage() {
         }
       />
       <cards.CardXL
+        CardContents={'asdf'}
         CardTitle="Title"
-        CardContents={[
-          'Lorem ipsum dolor sit amet, elit.',
-          'Lorem ipsum dolor sit amet, elit.',
-          'Lorem ipsum dolor sit amet, elit.',
-          'Lorem ipsum dolor sit amet, elit.',
-        ]}
         CardImg={{
           src: 'https://cdn.pixabay.com/photo/2020/06/02/06/52/cat-5249722__480.jpg',
         }}

@@ -8,7 +8,11 @@ import { ErrorMessage } from '@hookform/error-message';
 
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { NavTop, inputs, buttons } from '@/components';
+
+import { ReactComponent as Google } from '@/assets/SocialLogos/Login/Google.svg'
+import { ReactComponent as Kakao } from '@/assets/SocialLogos/Login/KakaoTalk.svg'
+import { ReactComponent as Naver } from '@/assets/SocialLogos/Login/Naver.svg'
+import { NavTop, inputs, buttons, ChannelTalk } from '@/components';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -19,7 +23,8 @@ interface LoginProps {
 }
 
 function LoginPage() {
-
+  
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
@@ -50,8 +55,6 @@ function LoginPage() {
 
         // session storage에 access token과 refresh token을 저장합니다
         if (access_token) {
-          // localStorage.setItem('access-token', access_token);
-          // localStorage.setItem('refresh-token', refresh_token);
           sessionStorage.setItem('access-token', access_token);
           sessionStorage.setItem('refresh-token', refresh_token);
 
@@ -67,14 +70,20 @@ function LoginPage() {
             joinDate: resData.joinDate,
             role: resData.authorities[0].authorityName
           }
-          // localStorage.setItem('userData', JSON.stringify(LoginData))
           sessionStorage.setItem('userData', JSON.stringify(LoginData))
-
+          // 챗봇 프로필 정보 삽입
+          ChannelTalk.updateUser({
+            language: 'ko',
+            profile: {
+              email: resData.email,
+              phone: resData.phone,
+              nickName: resData.nickName,
+            }
+          });
         }
       })
-      .catch((err) => {
-
-        toast.error(err, {
+      .catch(() => {
+        toast.error('아이디 또는 비밀번호를 잘못 입력했습니다.', {
           autoClose: 3000,
           position: toast.POSITION.BOTTOM_CENTER,
           closeOnClick: true,
@@ -85,6 +94,21 @@ function LoginPage() {
         })
       });
   };
+
+    // Kakao restapi key
+    const KAKAO_KEY = 'abc501edb920accef066a054e7659254';
+    // 인가코드가 리턴되는 서버주소
+    const REDIRECT_URL = "http://i8c107.p.ssafy.io:3000/Social/kakao";
+    // const REDIRECT_URL = "http://localhost:3000/Social/kakao";
+  
+  
+    const KakaoLogin = () => {
+      const url = "https://kauth.kakao.com/oauth/authorize"
+        + `?client_id=${KAKAO_KEY}`
+        + `&redirect_uri=${REDIRECT_URL}`
+        + `&response_type=code`;
+        location.href = url;
+    };
 
   return (
     <div className='w-[21.875rem]'>
@@ -129,7 +153,13 @@ function LoginPage() {
       {/* 소셜 로그인 */}
       <div className="mb-32">
         <p className="text-body mb-4">소셜로 로그인 하기</p>
-        <div></div>
+        <div className="flex gap-4">
+          {/* 소셜 아이콘 */}
+          <Kakao onClick={KakaoLogin}/>
+          <Google />
+          <Naver />
+
+        </div>
       </div>
 
       {/* 비밀번호 찾기, 회원가입 */}
@@ -141,7 +171,7 @@ function LoginPage() {
         </div>
         <div className="flex justify-between">
           <p>아직 회원이 아니신가요?</p>
-          <div className="text-main-100" onClick={goSignup}>
+          <div aria-hidden='true' className="text-main-100" onClick={goSignup}>
             회원가입
           </div>
         </div>

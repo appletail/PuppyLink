@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.BoardTokenDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.service.BoardServiceImpl;
 
@@ -47,12 +48,13 @@ private final BoardServiceImpl boardService;
 	@GetMapping("/{boardNo}")
     @ApiOperation(code = 200, value = "게시글 단일 조회", notes = "특정 게시글 하나를 조회하여 반환한다.", response = ResponseEntity.class)
 	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1")
-    public Object selectBoard(@PathVariable final int boardNo) {
+    public Object selectBoard(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
         // return ResponseEntity.ok(boardService.getBoard(boardNo));
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_ONE,
-            			boardService.getBoard(boardNo)
+            			boardService.getBoard(boardN)
             	), 
             	HttpStatus.OK
             );
@@ -73,16 +75,137 @@ private final BoardServiceImpl boardService;
             );
     }
     
-    // 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    // 비회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/list/like/non")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 비회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllNonMember() {
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_NON_MEMBER,
+            			boardService.getBoardAllLikeNonMember()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+//    // 비회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.
+//    @SuppressWarnings({ "unchecked", "rawtypes" })
+//	@GetMapping("/infinite/non/{boardNo}")
+//    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 비회원 게시글 무한스크롤 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.", response = ResponseEntity.class)
+//    public Object selectBoardLikesAllNonMemberInfinite(@PathVariable final String boardNo) {
+//    	int boardN = Integer.parseInt(boardNo);
+//        // return ResponseEntity.ok(boardService.getBoardAll());
+//        return new ResponseEntity<BasicResponseDto>(
+//            	new BasicResponseDto(
+//            			CommonCode.SELECT_BOARD_ALL_LIKE_NON_MEMBER,
+//            			boardService.getBoardInfiniteNonMember(boardN) // JPA Query상 본인 번호는 포함하지 않기 때문에, 1을 더해준다.
+//            	), 
+//            	HttpStatus.OK
+//            );
+//    }
+    
+    // 회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/list/like/member")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllMember(BoardTokenDto token) {
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_MEMBER,
+            			boardService.getBoardAllLikeMember(token)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+//    // 회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 무한스크롤로 조회하여 반환한다.
+//    @SuppressWarnings({ "unchecked", "rawtypes" })
+//	@GetMapping("/infinite/member/{boardNo}")
+//    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+//    public Object selectBoardLikesAllNonMemberInfinite(BoardTokenDto token, @PathVariable final String boardNo) {
+//    	int boardN = Integer.parseInt(boardNo);
+//        // return ResponseEntity.ok(boardService.getBoardAll());
+//        return new ResponseEntity<BasicResponseDto>(
+//            	new BasicResponseDto(
+//            			CommonCode.SELECT_BOARD_ALL_LIKE_MEMBER,
+//            			boardService.getBoardInfiniteMember(token, boardN)
+//            	), 
+//            	HttpStatus.OK
+//            );
+//    }
+    
+    // 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/best")
-    @ApiOperation(code = 200, value = "베스트 게시글 조회", notes = "베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    @ApiOperation(code = 200, value = "회원 베스트 게시글 조회", notes = "회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
     public Object selectBoardBest() {
         // return ResponseEntity.ok(boardService.getBestBoard());
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_BEST,
             			boardService.getBoardBest()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 비회원에 대해, 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/best/non")
+    @ApiOperation(code = 200, value = "좋아요가 반영된 비회원 베스트 게시글 조회", notes = "비회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardBestNonMember() {
+        // return ResponseEntity.ok(boardService.getBestBoard());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_BEST_NON,
+            			boardService.getBoardBestNonMember()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 회원에 대해, 좋아요 여부가 반영된 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/best/member")
+    @ApiOperation(code = 200, value = "좋아요가 반영된 회원 베스트 게시글 조회", notes = "회원 베스트 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardBestMember(BoardTokenDto token) {
+        // return ResponseEntity.ok(boardService.getBestBoard());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_BEST_MEMBER,
+            			boardService.getBoardBestMember(token)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 특정 유저가 작성한 게시글 목록을 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/history/{nickName}")
+    @ApiOperation(code = 200, value = "사용자가 작성한 게시글 목록 조회", notes = "특정 사용자가 작성한 게시글 목록을 조회한다.", response = ResponseEntity.class)
+    public Object selectBoardHistory(@PathVariable final String nickName) {
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_HISTORY,
+            			boardService.getBoardHistory(nickName)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 특정 게시글을 좋아요한 사용자 목록을 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/like/{boardNo}")
+    @ApiOperation(code = 200, value = "특정 게시글에 좋아요한 사용자 목록 조회", notes = "특정 게시글에 좋아요한 사용자 목록을 반환한다.", response = ResponseEntity.class)
+    public Object select(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_LIKE,
+            			boardService.getBoardLike(boardN)
             	), 
             	HttpStatus.OK
             );
@@ -106,11 +229,12 @@ private final BoardServiceImpl boardService;
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/infinite/{boardNo}")
     @ApiOperation(code = 200, value = "무한 스크롤 게시글 조회", notes = "현재 전달된 게시글보다 이전에 작성된 게시글 5개를 조회하여 반환한다.", response = ResponseEntity.class)
-    public Object selectBoardInfinite(@PathVariable final int boardNo) {
+    public Object selectBoardInfinite(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_INFINITE,
-            			boardService.getBoardInfinite(boardNo)
+            			boardService.getBoardInfinite(boardN)
             	), 
             	HttpStatus.OK
             );
@@ -130,6 +254,7 @@ private final BoardServiceImpl boardService;
             );
     }
     
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PutMapping
     @ApiOperation(code = 200, value = "게시글 수정", notes = "게시글을 수정한다.", response = ResponseEntity.class)
@@ -147,8 +272,9 @@ private final BoardServiceImpl boardService;
     @DeleteMapping
     @ApiOperation(value = "게시글 삭제", notes = "게시글을 삭제한다.")
     @ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1")
-    public void delete(@RequestParam(required = true) final int boardNo) {
-    	boardService.delete(boardNo);
+    public void delete(@RequestParam(required = true) final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	boardService.delete(boardN);
     }
     
     @PutMapping("/like/{boardNo}/{nickName}")
@@ -157,14 +283,17 @@ private final BoardServiceImpl boardService;
     	@ApiImplicitParam(name = "boardNo", value = "게시글 번호(PK)", required = true, dataType = "int", example = "1"),    	
     	@ApiImplicitParam(name = "nickName", value = "회원 닉네임(Unique)", required = true, dataType = "string", defaultValue = "tom")
     })
-    public void like(@PathVariable final int boardNo, @PathVariable final String nickName) {
-    	boardService.like(boardNo, nickName);
+    public void like(@PathVariable final String boardNo, @PathVariable final String nickName) {
+    	int boardN = Integer.parseInt(boardNo);
+    	boardService.like(boardN, nickName);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @PostMapping("/comment")
     @ApiOperation(code = 200, value = "댓글 작성", notes = "게시글에 댓글을 작성한다.", response = ResponseEntity.class)
     public Object comment(@RequestBody CommentDto comment) {
+    	// boardNo integer처리
+//    	int boardN = Integer.parseInt(comment.getBoardNo());
     	// return boardService.comment(comment);
         return new ResponseEntity<BasicResponseDto>(
             	new BasicResponseDto(
@@ -218,6 +347,20 @@ private final BoardServiceImpl boardService;
             	new BasicResponseDto(
             			CommonCode.SELECT_COMMENT_ALL,
             			boardService.getCommentAll(boardNo)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/{boardNo}/pic")
+    @ApiOperation(code = 200, value = "게시글 사진 조회", notes = "게시글에 작성된 사진을 조회한다.", response = ResponseEntity.class)
+    public Object selectPic(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_PIC,
+            			boardService.getPic(boardN)
             	), 
             	HttpStatus.OK
             );

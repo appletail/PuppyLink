@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import UserSortedVol from './Components/UserSortedVol'
 
-import { NavTop } from '@/components'
+import { NavTop, ChannelTalk } from '@/components'
 
 function UserVolLst() {
 
   const [status, setStatus] = useState<status>("submit")
   const [count, setCount] = useState(0)
-
+  ChannelTalk.hideChannelButton();
 
   return (
     <div>
