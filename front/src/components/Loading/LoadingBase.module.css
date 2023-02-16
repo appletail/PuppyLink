@@ -18,7 +18,7 @@
   @apply
     rotate-12 ml-14 animate-ping;
 
-    animation: fadein-top 3s;
+    animation: fadein-top 1350ms;
     animation-iteration-count: infinite;
     animation-fill-mode: both;
   }
@@ -27,7 +27,7 @@
     @apply
     -rotate-12 mr-14;
     
-    animation: fadein-middle 3s;
+    animation: fadein-middle 1350ms;
     animation-iteration-count: infinite;
     animation-fill-mode: both;
   }
@@ -36,7 +36,7 @@
     @apply
     rotate-12 ml-14;
     
-    animation: fadein-low 3s;
+    animation: fadein-low 1350ms;
     animation-iteration-count: infinite;
     animation-fill-mode: both;    
   }
