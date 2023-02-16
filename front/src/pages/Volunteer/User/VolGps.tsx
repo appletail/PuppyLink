@@ -348,6 +348,6 @@ function Location({ volunteerNo }: volNo) {
     markerRef.current.setIcon(icons[direction(dir.current)].icon);
     map.panTo({ lat: lat.current, lng: lng.current });
 
-  }, 5000);
+  }, 30000);
   return (<NavTop.NavBack NavContent='항공기 위치' />)
 }
