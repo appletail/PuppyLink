@@ -19,7 +19,7 @@ function NavCreate({ onClick }: ReviewProps): JSX.Element {
   const goToBack = () => navigate(-1)
   return (
     <div className={NavStyle.NavBg}>
-      <div className={NavStyle.Left} onClick={goToBack}>
+      <div className={NavStyle.Left} onClick={goToBack} >
         <FiChevronLeft color="white" />
         <div> 이전 </div>
       </div>

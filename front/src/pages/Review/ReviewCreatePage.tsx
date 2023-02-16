@@ -20,8 +20,6 @@ interface Review {
 
 function ReviewCreatePage() {
 
-  // const [boardNo, setBoardNo] = useState("")
-  
   const userData = sessionStorage.getItem("userData") || ""
   const parsedUserData = JSON.parse(userData)
   const email = parsedUserData.email
