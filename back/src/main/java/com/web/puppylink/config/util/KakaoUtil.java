@@ -16,10 +16,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+@Service
 public class KakaoUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(KakaoUtil.class);
@@ -35,7 +37,7 @@ public class KakaoUtil {
     private static final String REQUEST = "http://i8c107.p.ssafy.io:3000/Social/kakao";
 
     // 카카오 로그인해서 얻은 인가코드롤 AccessToken 및 refresh 토큰 얻는 함수
-    public static TokenDto getAccessTokenByKakao(String code) {
+    public static TokenDto getAccessTokenByKakao(String code, String key) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -43,7 +45,7 @@ public class KakaoUtil {
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
 
         params.add("grant_type","authorization_code");
-        params.add("client_id", KEY);
+        params.add("client_id", key);
         params.add("redirect_uri", REQUEST);
         params.add("code", code);
 
@@ -104,10 +106,10 @@ public class KakaoUtil {
         return member;
     }
 
-    public static String logoutToKakao(Member member) {
+    public static String logoutToKakao(Member member, String adminKey) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + ADMIN_KEY);
+        headers.set("Authorization", "KakaoAK " + adminKey);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();

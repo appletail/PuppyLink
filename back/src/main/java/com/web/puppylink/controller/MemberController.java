@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiResponses;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +75,8 @@ public class MemberController {
     private final VolunteerServiceImpl volunteerService;
     private final JavaMailSender javaMailSender;
     private final RedisServiceImpl redisService;
+    private final String KEY;
+    private final String ADMIN_KEY;
     private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
     public MemberController(
             TokenProvider tokenProvider,
@@ -82,7 +85,9 @@ public class MemberController {
             FoundationServiceImpl foundationService,
             VolunteerServiceImpl volunteerService,
             JavaMailSender javaMailSender,
-            RedisServiceImpl redisService) {
+            RedisServiceImpl redisService,
+            @Value("${api.kaKey}") String key,
+            @Value("${api.kaAdmin}") String adminkey) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.memberService = memberService;
@@ -90,6 +95,8 @@ public class MemberController {
         this.volunteerService = volunteerService;
         this.javaMailSender = javaMailSender;
         this.redisService = redisService;
+        this.KEY = key;
+        this.ADMIN_KEY = adminkey;
     }
 
     @PostMapping("/login")
@@ -187,7 +194,7 @@ public class MemberController {
         String memberEmail = refreshToken.getEmail();
         if( memberEmail.contains("@kakao.com") ) {
             Optional<Member> member = memberService.getMemberWithAuthorities(memberEmail);
-            KakaoUtil.logoutToKakao(member.get());
+            KakaoUtil.logoutToKakao(member.get(), ADMIN_KEY);
         }
         // 2. redis에 refresh Token 삭제
         redisService.delRefreshToken(refreshToken);
@@ -355,7 +362,7 @@ public class MemberController {
         logger.info("카카오 전달 코드 확인 : {}",code);
         try {
             // 인가코드에서 카카오토큰 받아오기
-            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code);
+            TokenDto kakaoToken = KakaoUtil.getAccessTokenByKakao(code, KEY);
             // 카카오 토큰에서 회원 정보가져오기 [ 없음) 회원가입 ]
             MemberDto member = KakaoUtil.getUserByAccessToken(kakaoToken.getAccessToken());
             if ( !memberService.getMemberWithAuthorities(member.getEmail()).isPresent() ) {
