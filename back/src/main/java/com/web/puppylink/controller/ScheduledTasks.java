@@ -64,8 +64,10 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0/5 * 1/1 * ?")
     public void cronExpression() {
         List<FlightTicket> list = flightTicketRepository.getAfterArrive();
+        System.out.println(list);
         if(!list.isEmpty()) {
 	        for (FlightTicket ticket : list) {
+	        	System.out.println(ticket);
 	        	volunteerService.flightInfoDb(ticket.getTicketNo(), ticket.getFlight());
 	        }
         }else {
