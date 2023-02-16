@@ -28,7 +28,7 @@ function FooterController({ status, volNo, removeCard }: { status: status, volNo
       BtnRight={<labels.Label LabelValue='봉사 진행 중' />}
       onClick={(e) => e.stopPropagation()} />,
     'complete': <footers.FooterBtn
-      BtnLeft={<buttons.BtnSm BtnValue='리뷰 쓰기' />}
+      BtnLeft={<Link to='/review/create'><buttons.BtnSm BtnValue='리뷰 쓰기' /></Link>}
       BtnRight={<labels.Label LabelValue='봉사 완료' />}
       onClick={(e) => e.stopPropagation()} />,
     'refuse': <footers.FooterBtn
