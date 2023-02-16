@@ -78,9 +78,8 @@ function LoginPage() {
           });
         }
       })
-      .catch((err) => {
-
-        toast.error(err, {
+      .catch(() => {
+        toast.error('아이디 또는 비밀번호를 잘못 입력했습니다.', {
           autoClose: 3000,
           position: toast.POSITION.BOTTOM_CENTER,
           closeOnClick: true,

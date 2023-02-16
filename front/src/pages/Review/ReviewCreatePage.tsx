@@ -24,7 +24,7 @@ interface Review {
 function ReviewCreatePage() {
 
   // const [boardNo, setBoardNo] = useState("")
-  ChannelTalk.hideChannelButton();
+  
   const userData = sessionStorage.getItem("userData") || ""
   const parsedUserData = JSON.parse(userData)
   const email = parsedUserData.email
@@ -71,6 +71,7 @@ function ReviewCreatePage() {
     register('contents')
   })
 
+  ChannelTalk.hideChannelButton();
 
   return (
     <div>

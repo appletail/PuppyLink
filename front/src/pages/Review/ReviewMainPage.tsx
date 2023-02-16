@@ -9,8 +9,10 @@ import { NavTop, ChannelTalk } from '@/components'
 
 
 function ReviewMainPage() {
-  ChannelTalk.hideChannelButton();
+
   const navigate = useNavigate()
+  ChannelTalk.hideChannelButton();
+
   return (
     <div className='w-[21.875rem]'>
       <NavTop.NavLogo />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useController } from 'react-hook-form';
 import { BsFillPlusCircleFill } from "react-icons/bs";
-
+import { ChannelTalk } from '@/components'
 interface PassPortProps extends UCProps {
   setImageData: (img: string | FileList) => void
 }
@@ -14,7 +14,7 @@ function UploadImg({ name, rules, control, setImageData }: PassPortProps) {
   const [imgPreview, setImgPreview] = useState<any>()
   const [image, setImage] = useState<any>()
   const { field: { onChange } } = useController({ name, rules, control });
-
+  ChannelTalk.hideChannelButton()
   const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
     onChange(e.target.files);

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil';
 
 import { axAuth, axBase } from '@/apis/api/axiosInstance'
-import { inputs, buttons } from '@/components'
+import { inputs, buttons, ChannelTalk } from '@/components'
 import { LoginState } from '@/states/LoginState';
 
 interface CommentProps {
@@ -15,7 +15,7 @@ interface CommentProps {
 function CommentList() {
   const [commentList, setCommentList] = useState<any[]>([])
   const boardNo = useParams().boardNo
-
+  ChannelTalk.hideChannelButton()
   const auth = sessionStorage.getItem('access-token')
 
 

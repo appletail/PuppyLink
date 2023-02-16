@@ -7,13 +7,13 @@ import { Link } from 'react-router-dom'
 import HTMLReactParser from 'html-react-parser'
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { cards } from '@/components'
+import { cards, ChannelTalk } from '@/components'
 
 
 function ReviewLst() {
 
   const [reviews, setReviews] = useState<any[]>([])
-
+  ChannelTalk.hideChannelButton()
   useEffect(() => {
     axBase({
       url: '/board/list'
