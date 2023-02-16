@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useController } from 'react-hook-form'
 
+import PawBlue from '@/assets/PawBlue.png'
 import { ModalCard } from '@/components'
 
 
@@ -40,7 +41,7 @@ function FoundationSelect({ name, control, rules, foundations }: FoundationProps
             }, []))
           } />
         <label htmlFor={item?.businessNo}>
-          <img alt="foundation" className={`w-14 h-14 rounded-full ${isChecked(item?.businessNo) ? 'bg-white rounded-full brightness-[.60]' : ''}`} src={item.profileURL} />
+          <img alt="foundation" className={`w-14 h-14 rounded-full ${isChecked(item?.businessNo) ? 'bg-white rounded-full brightness-[.60]' : ''}`} src={item.profileURL || PawBlue} />
 
         </label>
         {modalOn[idx]

@@ -1,0 +1,60 @@
+.Wrapper {
+  @apply 
+    fixed
+    top-0 left-0
+    w-full h-full
+    bg-black bg-opacity-40
+    flex flex-col justify-center 
+    items-center
+    z-[51] gap-3;
+}
+
+.Paw {
+  @apply
+    w-14 h-14
+}
+
+.TopPaw {
+  @apply
+    rotate-12 ml-14 animate-ping;
+
+    animation: fadein-top 3s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+  
+  .MiddlePaw {
+    @apply
+    -rotate-12 mr-14;
+    
+    animation: fadein-middle 3s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+  }
+  
+  .LowPaw {
+    @apply
+    rotate-12 ml-14;
+    
+    animation: fadein-low 3s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;    
+  }
+
+
+@keyframes fadein-top {
+  0% {opacity: 0;}
+  66% {opacity: 0;}
+  100% {opacity: 1;}
+}
+@keyframes fadein-middle {
+  0% {opacity: 0;}
+  33% {opacity: 0;}
+  66% {opacity: 1;}
+  100% {opacity: 1;}
+}
+@keyframes fadein-low {
+  0% {opacity: 0;}
+  33% {opacity: 1;}
+  100% {opacity: 1;}
+}
