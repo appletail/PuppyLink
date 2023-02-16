@@ -1,9 +1,15 @@
-import { FiChevronLeft, FiMoreVertical } from 'react-icons/fi';
+import { FiChevronLeft } from 'react-icons/fi';
+import { TiDelete } from 'react-icons/ti'
 import { useNavigate } from 'react-router-dom';
 
 import NavStyle from './NavTop.module.css';
 
-function NavDetail() {
+interface DetailProps {
+  onClick: React.MouseEventHandler
+  IsHidden: boolean
+}
+
+function NavDetail({ onClick, IsHidden }: DetailProps) {
   const navigate = useNavigate()
 
 
@@ -15,8 +21,8 @@ function NavDetail() {
       </div>
       <div className={NavStyle.Center}></div>
 
-      <div className={NavStyle.Right}>
-        <FiMoreVertical size={25} />
+      <div aria-hidden className={NavStyle.Right} hidden={IsHidden} onClick={onClick}>
+        <TiDelete size={25} />
       </div>
     </div>
   );
