@@ -218,7 +218,7 @@ public class FileController {
 	
 	@PostMapping(value = "/profile", consumes = {"multipart/form-data" })
 	@ApiOperation(value = "단체 프로필 등록")
-	@PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+//	@PreAuthorize("hasAnyRole('ROLE_MANAGER')")
 	@ApiResponses(value = {
             @ApiResponse(code=200, message="성공적으로 단체프로필을 등록했습니다.", response = ResponseEntity.class)
         })

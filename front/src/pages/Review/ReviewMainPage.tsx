@@ -16,13 +16,10 @@ function ReviewMainPage() {
   return (
     <div className='w-[21.875rem]'>
       <NavTop.NavLogo />
-      <div className='mt-6 mb-9 min-h-[100px]'>
+      <div className='mt-6 mb-9 '>
         <p className='text-title2-bold mb-4'>이번 주의 BEST 후기</p>
-
         {/* BEST Carousel */}
-
         <BestCarousel />
-
 
       </div>
 
@@ -35,7 +32,7 @@ function ReviewMainPage() {
           </div>
 
           {/* Review Create Button */}
-          <div className='flex justify-end sticky bottom-20' onClick={() => navigate('/review/create')}>
+          <div aria-hidden className='flex justify-end sticky bottom-20' onClick={() => navigate('/review/create')}>
             <AiFillPlusCircle className='fill-main-100' size={'2.5rem'} />
           </div>
 

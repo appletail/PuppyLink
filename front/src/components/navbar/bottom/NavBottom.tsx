@@ -40,7 +40,7 @@ function NavBottom(): JSX.Element {
     },
     { id: 'Review', link: '/review', fill: IoNewspaperSharp, empty: IoNewspaperOutline },
     { id: 'MyPage', link: roles == roleIdentify.manager ? '/mypage/manager' : '/mypage/user', fill: IoPerson, empty: IoPersonOutline },
-    { id: 'ComponentCollect', link: '/components', fill: FaGrinWink, empty: FaRegGrin },
+    // { id: 'ComponentCollect', link: '/components', fill: FaGrinWink, empty: FaRegGrin },
   ]
 
   const NavBtns = icons.map((icon) => {

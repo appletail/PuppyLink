@@ -8,6 +8,10 @@ import { ErrorMessage } from '@hookform/error-message';
 
 
 import { axBase } from '@/apis/api/axiosInstance'
+
+import { ReactComponent as Google } from '@/assets/SocialLogos/Login/Google.svg'
+import { ReactComponent as Kakao } from '@/assets/SocialLogos/Login/KakaoTalk.svg'
+import { ReactComponent as Naver } from '@/assets/SocialLogos/Login/Naver.svg'
 import { NavTop, inputs, buttons, ChannelTalk } from '@/components';
 
 
@@ -134,7 +138,13 @@ function LoginPage() {
       {/* 소셜 로그인 */}
       <div className="mb-32">
         <p className="text-body mb-4">소셜로 로그인 하기</p>
-        <div></div>
+        <div className="flex gap-4">
+          {/* 소셜 아이콘 */}
+          <Kakao />
+          <Google />
+          <Naver />
+
+        </div>
       </div>
 
       {/* 비밀번호 찾기, 회원가입 */}

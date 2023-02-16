@@ -7,8 +7,8 @@ import NavStyle from './NavTop.module.css';
 
 import { axBase } from '@/apis/api/axiosInstance';
 import LogoWhite from '@/assets/logo-white.svg';
-import { LoginState } from '@/states/LoginState';
 import { ChannelTalk } from '@/components';
+import { LoginState } from '@/states/LoginState';
 
 
 function NavTop(): JSX.Element {
@@ -58,7 +58,7 @@ function NavTop(): JSX.Element {
     <div className={NavStyle.NavBg}>
       <div className={NavStyle.Left}>
         <div className={NavStyle.Logo}>
-          <img className={NavStyle.Logo} src={LogoWhite} />
+          <img className={NavStyle.LogoImg} src={LogoWhite} />
         </div>
       </div>
       <div className={NavStyle.Right}>
