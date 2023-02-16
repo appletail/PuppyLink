@@ -5,11 +5,11 @@ import ProtectRoute from './ProtectRoute';
 import FoundationInfoChangePage from '@/pages/Mypage/Fountadation/Components/FoundationInfoChangePage';
 import FoundationMyPage from '@/pages/Mypage/Fountadation/FoundationMyPage';
 
+import MyReviewPage from '@/pages/Mypage/MyReviewPage';
 import UserFileDocs from '@/pages/Mypage/User/UserFileDocsPage';
 import UserMyPage from '@/pages/Mypage/User/UserMyPage';
 import UserVolLst from '@/pages/Mypage/User/UserVolLstPage';
 import UserChangePassword from '@/pages/Mypage/UserChangePassword';
-
 
 const Mypage = [
   {
@@ -35,14 +35,17 @@ const Mypage = [
             element: <UserFileDocs />,
           },
           {
-            path: '/mypage/changepassword',
-            element: <UserChangePassword />
-          },
-          {
             path: '/mypage/manager/introduce',
             element: <FoundationInfoChangePage />
           },
-
+          {
+            path: '/mypage/myreview',
+            element: <MyReviewPage />
+          },
+          {
+            path: '/mypage/changepassword',
+            element: <UserChangePassword />
+          },
         ]
       },
     ]

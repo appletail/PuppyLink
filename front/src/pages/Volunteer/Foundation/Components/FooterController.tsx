@@ -68,9 +68,9 @@ function FooterController(status: status, volunteerNo: number, removeCard: (volu
       BtnRight={<Link state={{ volunteerNo }} to='/volunteer/manager/docs'><buttons.BtnSm BtnValue='서류 확인' /></Link>}
       onClick={(e) => e.stopPropagation()} />,
     'confirm': <footers.FooterBtn
-      BtnLeft={<labels.Label LabelValue='봉사 진행 중' />}
+      BtnLeft={<labels.Label LabelValue='진행 중' />}
       BtnMiddle={<buttons.BtnSm BtnValue='봉사 종료' onClick={complete} />}
-      BtnRight={<Link state={{ volunteerNo }} to='/gps' ><buttons.BtnSm BtnValue='비행기 경로 확인' /></Link>}
+      BtnRight={<Link state={{ volunteerNo }} to='/gps' ><buttons.BtnSm BtnValue='위치 확인' /></Link>}
       onClick={(e) => e.stopPropagation()} />,
     'complete': <footers.FooterBtn
       BtnLeft={<labels.Label LabelValue='봉사 완료' />}

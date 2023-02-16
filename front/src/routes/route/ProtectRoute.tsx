@@ -28,7 +28,7 @@ const category: Array<Category> = [
         , role: [role.MANAGER]
         , sub: [
           {
-            idx: 11
+            idx: 4
             , name: "단체 회원 서류 확인페이지"
             , path: "/docs"
             , role: [role.MANAGER]
@@ -40,26 +40,26 @@ const category: Array<Category> = [
 
   },
   {
-    idx: 4
+    idx: 5
     , name: "마이페이지"
     , path: "/mypage"
     , role: [role.USER, role.MANAGER]
     , sub: [
       {
-        idx: 5
+        idx: 6
         , name: "일반 회원 마이페이지"
         , path: "/user"
         , role: [role.USER]
         , sub: [
           {
-            idx: 6
+            idx: 7
             , name: "일반 회원 봉사 관리페이지"
             , path: "/vollist"
             , role: [role.USER]
             , sub: []
           },
           {
-            idx: 7
+            idx: 8
             , name: "일반 회원 파일 제출 페이지"
             , path: "/userfiledocs"
             , role: [role.USER]
@@ -68,13 +68,13 @@ const category: Array<Category> = [
         ]
       },
       {
-        idx: 8
+        idx: 9
         , name: "단체 회원 단체페이지"
         , path: "/manager"
         , role: [role.MANAGER]
         , sub: [
           {
-            idx: 9
+            idx: 10
             , name: "단체 회원 인포 수정페이지"
             , path: "/introduce"
             , role: [role.MANAGER]
@@ -83,9 +83,16 @@ const category: Array<Category> = [
         ]
       },
       {
-        idx: 10
+        idx: 11
         , name: "비밀번호 변경페이지"
         , path: "/changepassword"
+        , role: [role.USER, role.MANAGER]
+        , sub: []
+      },
+      {
+        idx: 12
+        , name: "내 후기 모음 페이지"
+        , path: "/myreview"
         , role: [role.USER, role.MANAGER]
         , sub: []
       },

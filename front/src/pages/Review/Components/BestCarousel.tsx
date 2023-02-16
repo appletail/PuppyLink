@@ -25,7 +25,6 @@ function BestCarousel() {
         .then((res) => {
           setBestReviews(res.data.data)
         })
-        .catch((err) => console.log(err.response.data))
     } else {
       axBase({
         url: '/board/best/non',
@@ -33,7 +32,6 @@ function BestCarousel() {
         .then((res) => {
           setBestReviews(res.data.data)
         })
-        .catch((err) => console.log(err.response.data))
     }
   }, [])
 

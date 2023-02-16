@@ -19,7 +19,8 @@ export default function RootLayout() {
   useEffect(() => {
     //axios 호출시 인터셉트
     axBase.interceptors.request.use((config) => {
-      if (!config.url?.includes('news') || !config.url.includes('gps')) {
+      if (!config.url?.includes('news') && !config.url?.includes('gps') &&
+        !config.url?.includes('airport') && !config.url?.includes('path')) {
         setLoading(true)
       }
       return config
@@ -28,8 +29,12 @@ export default function RootLayout() {
         setLoading(false)
         return Promise.reject(error);
       });
+
     axAuth.interceptors.request.use((config) => {
-      setLoading(true)
+      if (!config.url?.includes('news') && !config.url?.includes('gps') &&
+        !config.url?.includes('airport') && !config.url?.includes('path')) {
+        setLoading(true)
+      }
       return config
     },
       (error) => {
