@@ -9,6 +9,7 @@ import com.web.puppylink.dto.TokenDto;
 import com.web.puppylink.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,8 +27,10 @@ public class KakaoUtil {
     private static final String TOKENAUTH = "https://kauth.kakao.com/oauth/token";
     private static final String PROFILEAPI = "https://kapi.kakao.com/v2/user/me";
     private static final String LOGOUT = "https://kapi.kakao.com/v1/user/logout";
-    private static final String KEY = "c1a6f5a36cc3ee5bb64b3fb804e37407";
-    private static final String ADMIN_KEY = "f25ba205fb42653c1d8c426f6bf6ad5e";
+    @Value("${api.kaKey}")
+    private static String KEY;
+    @Value("${api.kaAdmin}")
+    private static String ADMIN_KEY;
 //    private static final String REQUEST = "http://localhost:3000/Social/kakao";
     private static final String REQUEST = "http://i8c107.p.ssafy.io:3000/Social/kakao";
 

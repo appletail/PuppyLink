@@ -95,6 +95,21 @@ function LoginPage() {
       });
   };
 
+    // Kakao restapi key
+    const KAKAO_KEY = 'abc501edb920accef066a054e7659254';
+    // 인가코드가 리턴되는 서버주소
+    const REDIRECT_URL = "http://i8c107.p.ssafy.io:3000/Social/kakao";
+    // const REDIRECT_URL = "http://localhost:3000/Social/kakao";
+  
+  
+    const KakaoLogin = () => {
+      const url = "https://kauth.kakao.com/oauth/authorize"
+        + `?client_id=${KAKAO_KEY}`
+        + `&redirect_uri=${REDIRECT_URL}`
+        + `&response_type=code`;
+        location.href = url;
+    };
+
   return (
     <div className='w-[21.875rem]'>
       <NavTop.NavBack NavContent='로그인' />
@@ -140,7 +155,7 @@ function LoginPage() {
         <p className="text-body mb-4">소셜로 로그인 하기</p>
         <div className="flex gap-4">
           {/* 소셜 아이콘 */}
-          <Kakao />
+          <Kakao onClick={KakaoLogin}/>
           <Google />
           <Naver />
 
