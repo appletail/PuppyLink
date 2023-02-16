@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { AiFillHome, AiOutlineHome, } from "react-icons/ai";
+import { AiFillHome, AiFillHeart, AiOutlineHeart, AiOutlineHome, } from "react-icons/ai";
 import { FaGrinWink, FaRegGrin } from "react-icons/fa";
 import { IoNewspaperSharp, IoNewspaperOutline, IoPerson, IoPersonOutline } from "react-icons/io5";
-import { RiHandHeartFill, RiHandHeartLine } from "react-icons/ri";
 
 import { NavLink } from "react-router-dom";
 
@@ -21,22 +20,14 @@ function NavBottom(): JSX.Element {
     const userData = sessionStorage.getItem("userData") || ""
     const { role } = JSON.parse(userData)
     roles = role
-    // console.log(role)
   }
-
-  const IsLoggedIn = useRecoilValue(LoginState)
-  useEffect(() => {
-
-    // console.log(roles)
-
-  }, [IsLoggedIn])
 
   const icons = [
     { id: 'Home', link: '/', fill: AiFillHome, empty: AiOutlineHome },
     {
       id: 'Volunteer',
       link: roles == roleIdentify.manager ? '/volunteer/manager' : '/volunteer/user',
-      fill: RiHandHeartFill, empty: RiHandHeartLine
+      fill: AiFillHeart, empty: AiOutlineHeart
     },
     { id: 'Review', link: '/review', fill: IoNewspaperSharp, empty: IoNewspaperOutline },
     { id: 'MyPage', link: roles == roleIdentify.manager ? '/mypage/manager' : '/mypage/user', fill: IoPerson, empty: IoPersonOutline },

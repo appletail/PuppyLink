@@ -26,7 +26,6 @@ function CommentList() {
       .then((res) => {
         setCommentList(res.data.data)
       })
-      .catch((err) => console.log(err.response.data))
   }, [])
 
   const comment = commentList.map((comment) => {
@@ -114,7 +113,7 @@ function CommentList() {
             }
 
             {/* 작성버튼 */}
-            <div className='min-w-[50px] flex justify-end' onClick={() => handleSubmit(onSubmit)()}>
+            <div aria-hidden className='min-w-[50px] flex justify-end' onClick={() => handleSubmit(onSubmit)()}>
               <buttons.BtnSm BtnValue={"작성"} />
             </div>
           </div>
