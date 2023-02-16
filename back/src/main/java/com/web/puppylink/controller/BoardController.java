@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.BoardDto;
+import com.web.puppylink.dto.BoardTokenDto;
 import com.web.puppylink.dto.CommentDto;
 import com.web.puppylink.service.BoardServiceImpl;
 
@@ -76,6 +75,36 @@ private final BoardServiceImpl boardService;
             );
     }
     
+    // 비회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/list/like/non")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 비회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllNonMember() {
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_NON_MEMBER,
+            			boardService.getBoardAllLikeNonMember()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 회원에 대해, 좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@GetMapping("/list/like/member")
+    @ApiOperation(code = 200, value = "좋아요 여부가 반영된 회원 게시글 전체 조회", notes = "좋아요 여부가 반영된 전체 게시글 목록을 조회하여 반환한다.", response = ResponseEntity.class)
+    public Object selectBoardLikesAllMember(BoardTokenDto token) {
+        // return ResponseEntity.ok(boardService.getBoardAll());
+        return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_ALL_LIKE_MEMBER,
+            			boardService.getBoardAllLikeMember(token)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
     // 게시글을 좋아요가 높은 순서대로 반환한다. (게시글 좋아요 내림차순)
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	@GetMapping("/best")
@@ -86,6 +115,35 @@ private final BoardServiceImpl boardService;
             	new BasicResponseDto(
             			CommonCode.SELECT_BOARD_BEST,
             			boardService.getBoardBest()
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 특정 유저가 작성한 게시글 목록을 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/history/{nickName}")
+    @ApiOperation(code = 200, value = "사용자가 작성한 게시글 목록 조회", notes = "특정 사용자가 작성한 게시글 목록을 조회한다.", response = ResponseEntity.class)
+    public Object selectBoardHistory(@PathVariable final String nickName) {
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_HISTORY,
+            			boardService.getBoardHistory(nickName)
+            	), 
+            	HttpStatus.OK
+            );
+    }
+    
+    // 특정 게시글을 좋아요한 사용자 목록을 반환한다.
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @GetMapping("/like/{boardNo}")
+    @ApiOperation(code = 200, value = "특정 게시글에 좋아요한 사용자 목록 조회", notes = "특정 게시글에 좋아요한 사용자 목록을 반환한다.", response = ResponseEntity.class)
+    public Object select(@PathVariable final String boardNo) {
+    	int boardN = Integer.parseInt(boardNo);
+    	return new ResponseEntity<BasicResponseDto>(
+            	new BasicResponseDto(
+            			CommonCode.SELECT_BOARD_LIKE,
+            			boardService.getBoardLike(boardN)
             	), 
             	HttpStatus.OK
             );

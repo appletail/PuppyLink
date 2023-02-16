@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FoundationDto {
 
-    @ApiModelProperty(value = "사업자번호",required = true)
-    private String businessNo;
-
     @ApiModelProperty(value = "단체 소개글", required = true)
     private String description;
+
+    @ApiModelProperty(value = "단체 이메일", required = true)
+    private String members_email;
 
 }

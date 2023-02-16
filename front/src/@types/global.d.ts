@@ -101,9 +101,9 @@ interface ocrData {
   passengerName: string
   bookingReference: string
   depCity: string
-  depDate: Date
+  depDate: string
   arriveCity: string
-  arriveDate: Date
+  arriveDate: string
   flight: string
 }
 

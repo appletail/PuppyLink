@@ -25,8 +25,7 @@ function BusinessValidate({ businessNo, setOpenModal, setNotbusinessNoValidateCh
     control,
     formState: { errors },
     getValues,
-    setError,
-    watch,
+
   } = useForm<ValidateProps>({
     defaultValues: {
       businessNo: businessNo

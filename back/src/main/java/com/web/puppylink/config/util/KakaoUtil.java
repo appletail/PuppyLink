@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -94,7 +95,7 @@ public class KakaoUtil {
         member.setEmail(kakao_account.get("email").getAsString());
         member.setPassword("social_" + kakaoUser.get("id").getAsString());
         member.setPhone("00000000000");
-        member.setName(properties.get("nickname").getAsString());
+        member.setName(properties.get("nickname").getAsString() + kakaoUser.get("id").getAsString());
         member.setNickName(properties.get("nickname").getAsString());
 
         return member;
@@ -103,13 +104,18 @@ public class KakaoUtil {
     public static String logoutToKakao(Member member) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK  " + ADMIN_KEY);
+        headers.set("Authorization", "KakaoAK " + ADMIN_KEY);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap();
 
-        params.add("target_id_type",member.getEmail());
-        params.add("target_id", member.getPassword().replace("social_",""));
+        params.add("target_id_type","user_id");
+        params.add("target_id", member.getName().replace(member.getNickName(),""));
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForEntity(LOGOUT, request, String.class);
 
         return "SUCCESS";
     }

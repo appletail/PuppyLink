@@ -9,7 +9,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import BusinessValidate from './Components/BusinessValidate';
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { inputs, buttons, ModalForm, NavTop } from '@/components';
+import { inputs, buttons, ModalForm, NavTop, ChannelTalk } from '@/components';
 
 
 interface SignupProps {
@@ -23,6 +23,7 @@ interface SignupProps {
 }
 
 function GroupSignupPage() {
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   const {
     control,
@@ -276,7 +277,7 @@ function GroupSignupPage() {
             <inputs.InputFormBtn
               control={control}
               name="businessNo"
-              placeholder="사업자번호 "
+              placeholder="사업자번호"
               type="number"
               button={
                 <buttons.BtnSm BtnValue="인증하기" onClick={() => { setOpenModal(!openModal) }} />

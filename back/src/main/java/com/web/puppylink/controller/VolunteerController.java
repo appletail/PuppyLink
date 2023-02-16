@@ -1,5 +1,7 @@
 package com.web.puppylink.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +19,9 @@ import com.web.puppylink.config.code.CommonCode;
 import com.web.puppylink.dto.AirportDto;
 import com.web.puppylink.dto.BasicResponseDto;
 import com.web.puppylink.dto.FlightTicketDto;
+import com.web.puppylink.dto.GpsDto;
 import com.web.puppylink.dto.VolunteerDto;
+import com.web.puppylink.model.Location;
 import com.web.puppylink.service.FlightTicketServiceImpl;
 import com.web.puppylink.service.VolunteerServiceImpl;
 
@@ -260,46 +264,27 @@ public class VolunteerController {
 	@GetMapping("/gps/{volunteerNo}")
     @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
     @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
-    public @ResponseBody String GPS(@RequestParam final int volunteerNo) {
+    public @ResponseBody String GPS(@PathVariable final int volunteerNo) {
     	System.out.println("gps 호출");
-        // return ResponseEntity.ok(volunteerService.ocr(volunteerNo));
     	ResponseEntity<String> ans = volunteerService.flightInfo(volunteerNo);    
     	System.out.println(" ans  : "  +  ans.getBody());
     	return ans.getBody();
-//        return new ResponseEntity(
-//            	new BasicResponseDto(
-//            			CommonCode.SELECT_GPS,
-//            			ans
-//            	), 
-//            	HttpStatus.OK
-//            );
     }
     
     //공항 정보 요청
 	@GetMapping("/airport/{volunteerNo}")
-//    @ApiOperation(code = 200, value = "[GPS] 항공기 실시간 위치 정보를 포함한 항공 정보를 가져온다.", notes = "[GPS] 봉사자의 편명에 해당하는 실시간 위치 정보를 포함한 항공 정보를 가져온다.", response = ResponseEntity.class)
-//    @ApiImplicitParam(name = "volunteerNo", value = "봉사 번호(PK)", required = true, dataType = "int", example = "1")
     public @ResponseBody AirportDto airport(@PathVariable final int volunteerNo) {
-    	System.out.println("airport 호출");
-//    	
-//    	AirportDto airportDto = AirportDto.builder()
-//    						.depId(depId)
-//    						.arriveId(arriveId)
-//    						.build();
-//    	
+    	System.out.println("airport 호출");    	
     	AirportDto ans = volunteerService.airportInfo(volunteerNo);
-    	
-    	
-//    	System.out.println(" ans  : "  +  ans.getBody());
     	return ans;
-//        return new ResponseEntity(
-//            	new BasicResponseDto(
-//            			CommonCode.SELECT_GPS,
-//            			ans
-//            	), 
-//            	HttpStatus.OK
-//            );
     }
+
+	@ApiOperation(code = 200, value = "[PATH] 항공기가 지나간 길의 위치를 가져온다.", notes = "[PATH] ")
+	@GetMapping("/path/{volunteerNo}")
+	public @ResponseBody List<Location> path(@PathVariable final int volunteerNo) {
+		System.out.println("path 호출");
+		return volunteerService.pathInfo(volunteerNo);
+	}
     
 	@SuppressWarnings("unchecked")
 	@GetMapping("/foundation/docs")

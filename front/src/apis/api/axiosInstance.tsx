@@ -34,7 +34,7 @@ const axiosAuthApi = (url: string, options?: object) => {
 const axioskakao = (url: string, options?: object) => {
   const instance = axios.create({ baseURL: url, ...options });
   return instance;
-}
+};
 
 export const axBase = axiosApi(BASE_URL);
 export const axAuth = axiosAuthApi(BASE_URL);

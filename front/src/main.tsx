@@ -11,9 +11,11 @@ import { RecoilRoot } from 'recoil';
 const container = document.getElementById('root') as HTMLElement;
 
 createRoot(container).render(
-  // <StrictMode>
-    <RecoilRoot>
-      <RouterProvider router={routers} />
-    </RecoilRoot>
-  // </StrictMode>
+  
+    // <StrictMode>
+      <RecoilRoot>
+          <RouterProvider router={routers} />
+      </RecoilRoot>
+    // </StrictMode>
+  
 );

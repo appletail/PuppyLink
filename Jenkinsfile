@@ -35,6 +35,7 @@ pipeline{
                 sh 'cp /var/jenkins_home/workspace/initfile/application-dev.yml ./back/src/main/resources/application-dev.yml'
                 sh 'mvn -v'
                 dir("back") {
+                    sh 'export GOOGLE_APPLICATION_CREDENTIALS="/var/jenkins_home/workspace/puppylink/back/key.json"'
                     sh 'mvn clean compile install'
                     script {
                         springImg = docker.build registCredential + "/spring:$ver"
@@ -98,28 +99,23 @@ pipeline{
                         }
                     }
                 }
-                stage('stop redis') {
-                    steps {
-                        sh 'docker ps -f name=puppy-redis -q | xargs --no-run-if-empty docker container stop'
-                        sh 'docker container ls -a -f name=puppy-redis -q | xargs -r docker container rm'
-                    }
-                    post {
-                        failure {
-                            echo 'not exist redis-container'
-                        }
-                    }
-                }
+                // stage('stop redis') {
+                //     steps {
+                //         sh 'docker ps -f name=puppy-redis -q | xargs --no-run-if-empty docker container stop'
+                //         sh 'docker container ls -a -f name=puppy-redis -q | xargs -r docker container rm'
+                //     }
+                //     post {
+                //         failure {
+                //             echo 'not exist redis-container'
+                //         }
+                //     }
+                // }
             }
         }
         stage('deploy') {
             steps {
                 script {
                     try {
-                        echo 'puppy-link database create container start'
-                        sh "docker run -d -p 6379:6379 \
-                                    --name puppy-redis \
-                                    --net puppy-net \
-                                    --rm redis"
                         sh "docker run -d -p 3306:3306 \
                                     -v mariadb:/var/lib/mysql \
                                     -v /var/mariadb/init:/docker-entrypoint-initdb.d \

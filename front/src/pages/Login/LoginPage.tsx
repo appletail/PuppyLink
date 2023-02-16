@@ -8,7 +8,7 @@ import { ErrorMessage } from '@hookform/error-message';
 
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { NavTop, inputs, buttons } from '@/components';
+import { NavTop, inputs, buttons, ChannelTalk } from '@/components';
 
 
 // typescript이기 때문에 interface를 지정해줘야 한다.
@@ -19,7 +19,8 @@ interface LoginProps {
 }
 
 function LoginPage() {
-
+  
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   const goSignup = () => {
     navigate('/signup/userTab');
@@ -66,7 +67,15 @@ function LoginPage() {
             role: resData.authorities[0].authorityName
           }
           sessionStorage.setItem('userData', JSON.stringify(LoginData))
-
+          // 챗봇 프로필 정보 삽입
+          ChannelTalk.updateUser({
+            language: 'ko',
+            profile: {
+              email: resData.email,
+              phone: resData.phone,
+              nickName: resData.nickName,
+            }
+          });
         }
       })
       .catch((err) => {
@@ -138,7 +147,7 @@ function LoginPage() {
         </div>
         <div className="flex justify-between">
           <p>아직 회원이 아니신가요?</p>
-          <div className="text-main-100" onClick={goSignup}>
+          <div aria-hidden='true' className="text-main-100" onClick={goSignup}>
             회원가입
           </div>
         </div>

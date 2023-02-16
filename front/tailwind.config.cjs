@@ -63,7 +63,7 @@ module.exports = {
       ],
 
       body: [
-        '17 px',
+        '17px',
         { fontWeight: '400', lineHeight: '22px', letterSpacing: '-0.41px' },
       ],
       'body-bold': [
