@@ -129,6 +129,7 @@ public class BoardServiceImpl implements BoardService{
     	List<BoardLikesDto> likesBoardList = new ArrayList<>();
     		
     	for(Board board : boardInfoList) {
+    		boolean check = true;
     		int boardNo = board.getBoardNo();
     		for(Likes like : likesInfoList) {
     			if(boardNo==like.getBoardNo().getBoardNo()) {
@@ -143,20 +144,22 @@ public class BoardServiceImpl implements BoardService{
     				boardLikesInfo.setSubject(board.getSubject());
     					
     				likesBoardList.add(boardLikesInfo);
+    				check = false;
+    				break;
     			}
-    			else {
-    				BoardLikesDto boardLikesInfo = new BoardLikesDto();
-    				boardLikesInfo.setBoardNo(board.getBoardNo());
-    				boardLikesInfo.setContents(board.getContents());
-    				boardLikesInfo.setEmail(board.getEmail());
-    				boardLikesInfo.setLikes(board.getLikes());
-    				boardLikesInfo.setIsLikes("false");
-    				boardLikesInfo.setPictureURL(board.getPictureURL());
-    				boardLikesInfo.setRegDate(board.getRegDate());
-    				boardLikesInfo.setSubject(board.getSubject());
-    					
-    				likesBoardList.add(boardLikesInfo);
-    			}
+    		}
+    		if(check) {
+				BoardLikesDto boardLikesInfo = new BoardLikesDto();
+				boardLikesInfo.setBoardNo(board.getBoardNo());
+				boardLikesInfo.setContents(board.getContents());
+				boardLikesInfo.setEmail(board.getEmail());
+				boardLikesInfo.setLikes(board.getLikes());
+				boardLikesInfo.setIsLikes("false");
+				boardLikesInfo.setPictureURL(board.getPictureURL());
+				boardLikesInfo.setRegDate(board.getRegDate());
+				boardLikesInfo.setSubject(board.getSubject());
+					
+				likesBoardList.add(boardLikesInfo);
     		}
     	}
     	return likesBoardList;

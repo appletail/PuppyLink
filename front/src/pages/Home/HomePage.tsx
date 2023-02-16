@@ -1,12 +1,10 @@
-import { useRef } from 'react'
-
 import CrawlingNews from './Components/CrawlingNews';
 import useNumberCount from './CustomHook/useNumberCount';
 
 import DoggyImage from '@/assets/Doggy_image.png'
 import planet from '@/assets/planet.gif'
-import { NavTop } from '@/components';
-import { ChannelTalk } from '@/components';
+import { NavTop, ChannelTalk } from '@/components';
+
 function HomePage() {
   ChannelTalk.showChannelButton();
   return (
@@ -30,7 +28,6 @@ function HomePage() {
           </div>
         </div>
 
-
         <img alt='planet' className='mb-8' src={planet} />
         <div className='mb-6 flex justify-center' id='mainTitle'>
           <p className='text-title2-bold'>미국 혹은 캐나다로 출국 하시나요?</p>
@@ -52,7 +49,8 @@ function HomePage() {
 
         <CrawlingNews />
       </div>
-    </div >
+    </div>
+
   )
 }
 

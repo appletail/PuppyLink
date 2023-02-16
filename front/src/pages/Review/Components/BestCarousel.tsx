@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { Link } from 'react-router-dom'
+
 import HTMLReactParser from 'html-react-parser'
 
 import { axBase } from '@/apis/api/axiosInstance'
@@ -15,6 +17,7 @@ function BestCarousel() {
     })
       .then((res) => {
         setBestReviews(res.data.data)
+
       })
       .catch((err) => console.log(err))
   }, [])
@@ -24,14 +27,16 @@ function BestCarousel() {
     const parsedHtml = HTMLReactParser(review.contents)
 
     const bestReview = (
-      <div key={review.boardNo} className="min-w-[21.875rem] min-h-[12rem] rounded-lg bg-white pt-5 pb-3 px-5 drop-shadow-lg flex flex-col gap-2 justify-between">
+      <Link key={review.boardNo} className="min-w-[21.875rem]  rounded-lg bg-white pt-5 pb-4 px-5 mb-2 drop-shadow-lg flex flex-col gap-2 justify-between" state={{ review }} to={`/review/${review.boardNo}`}>
         <div>
           <div className="mb-3 text-title2-bold">{review.subject}</div>
-          <div className="text-body">{parsedHtml}</div>
+          <div className=' max-h-10 text-ellipsis overflow-hidden'>
+            <div className="text-body overflow-hidden">{parsedHtml}</div>
+          </div>
         </div>
-        <div>{<footers.FooterHeart HeartCount={123} IsLiked={false} Username="무웅" />}</div>
+        <div>{<footers.FooterHeart HeartCount={123} IsLiked={false} Username={review.email.nickName} />}</div>
 
-      </div>
+      </Link>
     )
 
     return bestReview
@@ -41,7 +46,7 @@ function BestCarousel() {
   })
 
   return (
-    <div className='flex gap-4 overflow-y-scroll h-48'>
+    <div className='flex gap-4 h-[10.1rem]  overflow-y-clip overflow-x-scroll'>
       {bestReviewList}
     </div>
   )

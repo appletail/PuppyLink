@@ -1,0 +1,24 @@
+.InputBox {
+  @apply w-[21.875rem]
+  p-4
+  appearance-none
+  border
+  border-main-30
+  rounded-lg
+  text-body
+  focus:border-none focus:outline-main-50 focus:shadow
+  invalid:border-red invalid:text-red;
+}
+
+.TextBox{
+  @apply
+  w-[21.875rem]
+  min-h-[15rem]
+  p-4
+  appearance-none
+  border
+  border-main-30
+  rounded-lg
+  text-body
+  focus:border-none focus:outline-main-50 focus:shadow;
+}

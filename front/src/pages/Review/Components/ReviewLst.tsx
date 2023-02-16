@@ -6,56 +6,95 @@ import { Link } from 'react-router-dom'
 
 import HTMLReactParser from 'html-react-parser'
 
-import { axBase } from '@/apis/api/axiosInstance'
-import { cards, ChannelTalk } from '@/components'
+import { axBase, axAuth } from '@/apis/api/axiosInstance'
+import { cards, footers } from '@/components'
+
+
+interface Reivew {
+  boardNo: number
+  contents: string
+  email: Member
+  isLikes: string | boolean
+  likes: number
+  pictureURL: string
+  regDate: string
+  subject: string
+}
 
 
 function ReviewLst() {
 
-  const [reviews, setReviews] = useState<any[]>([])
-  ChannelTalk.hideChannelButton()
+  const accessToken = sessionStorage.getItem('access-token')
+  const refreshToken = sessionStorage.getItem('refresh-token')
+  const useData = sessionStorage.getItem('userData')
+  const nickName = useData != null ? JSON.parse(useData).nickName : undefined
+  const [reviews, setReviews] = useState<Reivew[]>([])
+
   useEffect(() => {
-    axBase({
-      url: '/board/list'
-    })
-      .then((res) => {
-        setReviews(res.data.data)
+    if (accessToken) {
+      axAuth({
+        url: '/board/list/like/member',
+        params: { accessToken, refreshToken }
       })
-      .catch((err) => console.log(err.response.data))
+        .then((res) => {
+          setReviews(res.data.data)
+        })
+        .catch((err) => console.log(err.response.data))
+    } else {
+      axBase({
+        url: '/board/list/like/non',
+      })
+        .then((res) => {
+          setReviews(res.data.data)
+        })
+        .catch((err) => console.log(err.response.data))
+    }
   }, [])
 
 
+
+  const likeUpdate = (boardNo: number) => setReviews(reviews.map((review: Reivew) => {
+    if (review.boardNo === boardNo) {
+      if (review.isLikes == true || review.isLikes == 'true') {
+        review.isLikes = false;
+        review.likes--;
+      } else {
+        review.isLikes = true;
+        review.likes++;
+      }
+    }
+
+    return review
+  }))
+
+  const likeBoard = (boardNo: number, nickName: string) => {
+    if (nickName) {
+      axAuth({
+        method: 'put',
+        url: `/board/like/${boardNo}/${nickName}`
+      })
+      likeUpdate(boardNo)
+    }
+  }
+
   const reviewLst = reviews.map((review) => {
-
-    const reviewFooter = (
-      <div>
-        <hr className='bg-grey h-[1px] border-none mb-2' />
-        <div className='flex justify-between'>
-          <p className='text-caption1 text-grey'>@ {review.email.nickName}</p>
-          <div className='flex gap-1'>
-            <AiFillEye className='fill-grey' />
-            <p className='text-caption2 text-grey leading-4'>{review.boardNo}</p>
-          </div>
-        </div>
-
-      </div>
-    )
 
     const parsedHtml = HTMLReactParser(review.contents)
 
     return (
-      <Link key={review.boardNo} className='mb-4 flex flex-col items-center' state={{ review }} to={`/review/${review.boardNo}`}>
+      <div key={`board-${review.boardNo}`} className='mb-4 flex flex-col items-center'>
         <cards.CardXL
-          CardContents={parsedHtml}
-          CardFooter={reviewFooter}
+          CardContents={<Link state={{ review }} to={`/review/${review.boardNo}`}>{parsedHtml}</Link>}
+          CardImg={{ src: review.pictureURL, alt: '리뷰사진' }}
           CardTitle={review.subject}
-          CardImg={
-            {
-              src: review.pictureURL,
-              alt: '리뷰사진'
-            }}
+          CardFooter={<footers.FooterHeart
+            HeartCount={review.likes}
+            IsLiked={JSON.parse(review.isLikes as string)}
+            Username={review.email.nickName}
+            onClick={() => likeBoard(review.boardNo, nickName)}
+          />}
         />
-      </Link>
+      </div>
     )
   })
 

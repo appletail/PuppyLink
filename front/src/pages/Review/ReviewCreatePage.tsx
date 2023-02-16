@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react"
-import { FieldValues, useForm, SubmitHandler } from 'react-hook-form'
-
+import { useForm } from 'react-hook-form'
 import { useNavigate } from "react-router-dom"
+import { toast, ToastContainer } from "react-toastify"
 
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic"
 import { CKEditor } from "@ckeditor/ckeditor5-react"
-import { useRecoilValue } from "recoil"
-
 
 import UploadImg from "./Components/UploadImg"
 
 import { axAuth } from "@/apis/api/axiosInstance"
 import { inputs, NavTop, ChannelTalk } from "@/components"
-import { LoginState } from "@/states/LoginState"
 
 interface Review {
   contents: string
@@ -30,8 +27,7 @@ function ReviewCreatePage() {
   const email = parsedUserData.email
 
   const [imgValue, setImgValue] = useState<FileList | string>('')
-  const { control, handleSubmit, formState: { isValid }, register, setValue } = useForm<Review>({
-  })
+  const { control, handleSubmit, formState: { isValid }, register, setValue } = useForm<Review>({})
   const navigate = useNavigate()
 
   const onSubmit = async (data: Review) => {
@@ -43,7 +39,8 @@ function ReviewCreatePage() {
       data: {
         email: email,
         contents: data.contents,
-        subject: data.subject
+        subject: data.subject,
+        likes: 0,
       }
     })
       .then((res) => {
@@ -62,7 +59,7 @@ function ReviewCreatePage() {
       })
       .then(() => {
         alert('게시물이 작성되었습니다.')
-        navigate('/review')
+        navigate('/review', { replace: true })
       })
       .catch((err) => console.log(err))
   }
@@ -74,25 +71,34 @@ function ReviewCreatePage() {
   ChannelTalk.hideChannelButton();
 
   return (
-    <div>
+    <div className="w-[21.875rem]">
       <div>
-        <NavTop.NavCreate onClick={() => handleSubmit(onSubmit)()} />
+        <NavTop.NavCreate onClick={() => {
+          if (!isValid) {
+            toast.error('모든 항목을 작성해주세요.', {
+              position: "bottom-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: 0,
+              theme: "colored",
+            })
+            return
+          }
+          handleSubmit(onSubmit)()
+        }} />
       </div>
       <div className="mt-6 mb-6">
         <p className='text-title2-bold'> 봉사 후기를 남겨주세요! </p>
       </div>
       <div>
-
-      </div>
-
-      <div>
         <form className="flex flex-col gap-2" >
-
           <inputs.InputForm control={control}
             name="subject"
             placeholder="제목을 입력하세요."
             type="text" />
-
           <CKEditor
             // class="ck-editor__editable "
             editor={ClassicEditor}
@@ -100,14 +106,11 @@ function ReviewCreatePage() {
               placeholder: "여기에 내용을 입력하세요.",
               toolbar: [],
               width: 100,
-
             }}
             onChange={(event, editor) => {
               setValue('contents', editor.getData())
               // trigger('contents')
             }}
-
-
           />
           <UploadImg
             control={control}
@@ -115,10 +118,9 @@ function ReviewCreatePage() {
             rules={{ validate: (v: any) => v != undefined && v != '', }}
             setImageData={(img: FileList | string) => setImgValue(img)}
           />
-
-          {/* <button ref={btnSubmit} style={{ display: "none" }} type="submit" /> */}
         </form>
       </div>
+      <ToastContainer />
     </div >
   )
 }

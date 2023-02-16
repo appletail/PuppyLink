@@ -17,9 +17,15 @@
 }
 
 .Logo {
-  @apply pt-1
+  @apply pt-2
   w-full h-full
-  object-cover;
+  
+  ;
+}
+
+.LogoImg{
+  @apply
+  w-4/5
 }
 
 .Center {

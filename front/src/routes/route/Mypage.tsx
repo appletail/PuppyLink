@@ -2,7 +2,7 @@ import PrivateRouter from './PrivateRouter';
 
 import ProtectRoute from './ProtectRoute';
 
-import FoundationInfoPage from '@/pages/Mypage/Fountadation/Components/FoundationInfoPage';
+import FoundationInfoChangePage from '@/pages/Mypage/Fountadation/Components/FoundationInfoChangePage';
 import FoundationMyPage from '@/pages/Mypage/Fountadation/FoundationMyPage';
 
 import UserFileDocs from '@/pages/Mypage/User/UserFileDocsPage';
@@ -40,7 +40,7 @@ const Mypage = [
           },
           {
             path: '/mypage/manager/introduce',
-            element: <FoundationInfoPage />
+            element: <FoundationInfoChangePage />
           },
 
         ]
