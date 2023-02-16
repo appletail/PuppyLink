@@ -5,11 +5,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRecoilValue, useRecoilState } from 'recoil'
 
 import { axBase } from '@/apis/api/axiosInstance'
-import { buttons, NavTop, ModalForm } from '@/components'
+import { buttons, NavTop, ModalForm, ChannelTalk } from '@/components'
 import { LoginState } from '@/states/LoginState'
 
 function UserMyPage() {
-
+  ChannelTalk.hideChannelButton();
   const navigate = useNavigate();
   // user의 이메일과 닉네임 받아오는 부분
   let useremail = ""

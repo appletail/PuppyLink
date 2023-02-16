@@ -9,14 +9,14 @@ import EticketUpload from './Components/EticketUpload'
 import PassportUpload from './Components/PassportUpload'
 
 import { axBase, axAuth } from '@/apis/api/axiosInstance';
-import { buttons, NavTop } from '@/components'
+import { buttons, NavTop, ChannelTalk } from '@/components'
 import "react-toastify/dist/ReactToastify.css";
 import { LoginState } from '@/states/LoginState';
 
 
 
 function UserFileDocs() {
-
+  ChannelTalk.hideChannelButton();
   let nickName = ""
   const navigate = useNavigate()
 

@@ -20,7 +20,7 @@ interface DetailProps {
 
 function ReviewDetailPage() {
 
-  ChannelTalk.hideChannelButton();
+  ChannelTalk.hideChannelButton()
   const location = useLocation()
   const review = location.state.review
 
