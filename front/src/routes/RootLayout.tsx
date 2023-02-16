@@ -19,7 +19,7 @@ export default function RootLayout() {
   useEffect(() => {
     //axios 호출시 인터셉트
     axBase.interceptors.request.use((config) => {
-      if (!config.url?.includes('news')) {
+      if (!config.url?.includes('news') || !config.url.includes('gps')) {
         setLoading(true)
       }
       return config
