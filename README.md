@@ -21,6 +21,7 @@ https://harimchung.notion.site/PuppyLink-5f704cc87531409b96124b2c11a4bd1c
 6. 플랫폼 서비스 이용 편의를 위한 챗봇
 7. 봉사후기를 작성할 수 있는 후기 게시판 작성, 댓글 작성, 좋아요
 8. 단체의 봉사자 관리
+9. 해외 이동 봉사 키워드 관련 뉴스 크롤링
 
 ## 1. 개발환경
 
@@ -59,14 +60,6 @@ https://harimchung.notion.site/PuppyLink-5f704cc87531409b96124b2c11a4bd1c
 
 ## 4. 사용자 인터페이스
 
-- F01. 회원가입 & 로그인 (이메일 인증)
-  ![회원가입로그인](/uploads/eaf6d1d14108de2f86413bb8ef8e4594/회원가입로그인.gif)
+![First](/uploads/c492f896294fd93b9bf80b625bdfbbdd/First.gif)
 
-- F02. 단체회원가입 (사업자인증API)
-  ![단체회원가입](/uploads/9d28c2b40293231b5b2c3826042a451b/단체회원가입.gif)
-
-- F03. 봉사신청
-  ![봉사신청](/uploads/08a52a5aabca979dbe29677a6c2c70cd/봉사신청.gif)
-
-- F04. 챗봇
-  ![챗봇](/uploads/9393427dc06e9beec7f6768fca3c55c6/챗봇.gif)
+![Second](/uploads/6dfece0856f23c1cf69c32835f0005e2/Second.gif)
